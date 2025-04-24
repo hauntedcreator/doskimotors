@@ -19,24 +19,19 @@ const promos = [
 
 export function PromoSection() {
   return (
-    <div className="grid gap-6 sm:grid-cols-2">
-      {promos.map((promo) => (
-        <div
-          key={promo.id}
-          className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-900 to-gray-800 p-6 transition-transform hover:scale-[1.02]"
-        >
-          <div className="flex items-center gap-4">
-            <div className={`rounded-lg ${promo.color} p-3`}>
-              <promo.icon className="h-6 w-6 text-white" aria-hidden="true" />
-            </div>
-            <div>
-              <h3 className="font-display text-lg font-semibold text-white">{promo.title}</h3>
-              <p className="mt-1 text-sm text-gray-300">{promo.description}</p>
-            </div>
-          </div>
-          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-white/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-        </div>
-      ))}
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="rounded-xl bg-blue-50 p-6">
+        <h3 className="text-xl font-semibold text-blue-900">Quality Assurance</h3>
+        <p className="mt-2 text-blue-700">Every vehicle undergoes thorough inspection and certification.</p>
+      </div>
+      <div className="rounded-xl bg-blue-50 p-6">
+        <h3 className="text-xl font-semibold text-blue-900">Financing Options</h3>
+        <p className="mt-2 text-blue-700">Flexible financing solutions to fit your budget.</p>
+      </div>
+      <div className="rounded-xl bg-blue-50 p-6">
+        <h3 className="text-xl font-semibold text-blue-900">Expert Support</h3>
+        <p className="mt-2 text-blue-700">Professional guidance throughout your car buying journey.</p>
+      </div>
     </div>
-  )
+  );
 } 

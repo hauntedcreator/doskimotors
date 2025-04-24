@@ -38,82 +38,15 @@ export function SearchBar() {
   }
 
   return (
-    <form onSubmit={handleSearch} className="grid gap-4 md:grid-cols-4">
-      <div className="relative md:col-span-2">
-        <input
-          type="text"
-          placeholder="Search by model, year, or features..."
-          className="input-field"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-
-      <Listbox value={selectedBrand} onChange={setSelectedBrand}>
-        <div className="relative">
-          <Listbox.Button className="input-field flex items-center justify-between">
-            <span>{selectedBrand.name}</span>
-            <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-          </Listbox.Button>
-          <Transition
-            enter="transition duration-100 ease-out"
-            enterFrom="transform scale-95 opacity-0"
-            enterTo="transform scale-100 opacity-100"
-            leave="transition duration-75 ease-out"
-            leaveFrom="transform scale-100 opacity-100"
-            leaveTo="transform scale-95 opacity-0"
-          >
-            <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {brands.map((brand) => (
-                <Listbox.Option
-                  key={brand.id}
-                  value={brand}
-                  className={({ active }) =>
-                    `relative cursor-pointer select-none py-2 px-4 ${
-                      active ? 'bg-primary-100 text-primary-900' : 'text-gray-900'
-                    }`
-                  }
-                >
-                  {brand.name}
-                </Listbox.Option>
-              ))}
-            </Listbox.Options>
-          </Transition>
-        </div>
-      </Listbox>
-
-      <Listbox value={selectedPrice} onChange={setSelectedPrice}>
-        <div className="relative">
-          <Listbox.Button className="input-field flex items-center justify-between">
-            <span>{selectedPrice.name}</span>
-            <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-          </Listbox.Button>
-          <Transition
-            enter="transition duration-100 ease-out"
-            enterFrom="transform scale-95 opacity-0"
-            enterTo="transform scale-100 opacity-100"
-            leave="transition duration-75 ease-out"
-            leaveFrom="transform scale-100 opacity-100"
-            leaveTo="transform scale-95 opacity-0"
-          >
-            <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {priceRanges.map((price) => (
-                <Listbox.Option
-                  key={price.id}
-                  value={price}
-                  className={({ active }) =>
-                    `relative cursor-pointer select-none py-2 px-4 ${
-                      active ? 'bg-primary-100 text-primary-900' : 'text-gray-900'
-                    }`
-                  }
-                >
-                  {price.name}
-                </Listbox.Option>
-              ))}
-            </Listbox.Options>
-          </Transition>
-        </div>
-      </Listbox>
-    </form>
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+      <input
+        type="text"
+        placeholder="Search by make, model, or year..."
+        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+      />
+      <button className="rounded-lg bg-blue-600 px-6 py-2 text-white transition hover:bg-blue-700">
+        Search
+      </button>
+    </div>
   )
 } 

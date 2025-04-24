@@ -8,30 +8,22 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
       {/* Hero Section */}
-      <section className="relative h-[80vh] w-full">
-        <Image
-          src="/hero-car.jpg"
-          alt="Luxury car on mountain road"
-          fill
-          className="object-cover brightness-75"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50" />
+      <section className="relative h-[80vh] w-full bg-gradient-to-br from-gray-900 to-blue-900">
         <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-white">
           <h1 className="font-display text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
-            Buy Smarter.
+            Welcome to
             <br />
-            Drive Better.
+            Doski Motors
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-300">
             Find your perfect luxury vehicle with our curated selection
           </p>
           <div className="mt-10 flex items-center gap-6">
-            <Link href="/cars" className="btn-primary">
+            <Link href="/cars" className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700">
               Browse Cars
             </Link>
-            <Link href="/sell" className="btn-secondary text-white ring-white/20 hover:bg-white/10">
-              Sell Your Car
+            <Link href="/contact" className="rounded-lg bg-white/10 px-6 py-3 font-semibold text-white ring-1 ring-white/20 transition hover:bg-white/20">
+              Contact Us
             </Link>
           </div>
         </div>

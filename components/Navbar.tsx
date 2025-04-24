@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -15,7 +16,15 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center">
-            <span className="text-2xl font-bold text-blue-600">CarHub</span>
+            <div className="relative w-32 h-8">
+              <Image
+                src="/doski-logo.png"
+                alt="Doski Motors Logo"
+                fill
+                style={{ objectFit: 'contain' }}
+                priority
+              />
+            </div>
           </Link>
 
           <div className="hidden md:flex space-x-8">

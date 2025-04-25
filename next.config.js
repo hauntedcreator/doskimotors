@@ -4,6 +4,14 @@ const nextConfig = {
   swcMinify: false,
   experimental: {
     forceSwcTransforms: false,
+    swcTraceProfiling: false,
+    swcPlugins: false,
+    serverComponentsExternalPackages: ['@next/swc-win32-x64-msvc']
+  },
+  webpack: (config, { isServer }) => {
+    // Force webpack to ignore @next/swc-win32-x64-msvc
+    config.resolve.alias['@next/swc-win32-x64-msvc'] = false;
+    return config;
   },
   compiler: {
     styledComponents: true

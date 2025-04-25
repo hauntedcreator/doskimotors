@@ -29,14 +29,11 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0 flex items-center">
-            <Image
-              src="/images/doski-logo.png"
-              alt="Doski Motors"
-              width={600}
-              height={300}
-              className="w-auto h-44"
-              priority
-            />
+            <span className={`text-2xl font-bold ${
+              isScrolled ? 'text-gray-900' : 'text-white'
+            }`}>
+              JUICY
+            </span>
           </Link>
 
           {/* Desktop Navigation */}

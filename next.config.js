@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  serverExternalPackages: ['@next/swc-win32-x64-msvc'],
   images: {
     remotePatterns: [
       {

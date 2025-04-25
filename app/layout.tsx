@@ -1,22 +1,13 @@
-import { Inter, Playfair_Display } from 'next/font/google'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import './globals.css'
-import { Providers } from './providers'
+import Navbar from '@/components/Navbar'
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-})
+const inter = Inter({ subsets: ['latin'] })
 
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-playfair-display',
-  display: 'swap',
-})
-
-export const metadata = {
-  title: 'Premium Auto Sales',
-  description: 'Find your perfect luxury vehicle',
+export const metadata: Metadata = {
+  title: 'CarHub - Premium Car Sales',
+  description: 'Find your perfect luxury and performance vehicle',
 }
 
 export default function RootLayout({
@@ -25,9 +16,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
-      <body className="min-h-screen bg-white font-sans">
-        <Providers>{children}</Providers>
+    <html lang="en">
+      <body className={inter.className}>
+        <Navbar />
+        {children}
       </body>
     </html>
   )

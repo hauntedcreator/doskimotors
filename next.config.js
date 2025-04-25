@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  serverExternalPackages: ['@next/swc-win32-x64-msvc'],
   images: {
     remotePatterns: [
       {
@@ -16,7 +15,9 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    domains: ['images.unsplash.com'],
   },
+  transpilePackages: ['framer-motion'],
 }
 
 module.exports = nextConfig 

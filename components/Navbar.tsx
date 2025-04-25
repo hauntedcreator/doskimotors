@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useScroll } from 'framer-motion'
+import Logo from './Logo'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -18,7 +18,7 @@ const Navbar = () => {
 
   return (
     <motion.nav
-      className={`fixed w-full z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md' : 'bg-transparent'
       }`}
       initial={{ y: -100 }}
@@ -28,49 +28,57 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0 flex items-center">
-            <span className={`text-2xl font-bold ${
-              isScrolled ? 'text-gray-900' : 'text-white'
-            }`}>
-              JUICY
-            </span>
+          <Link href="/" className="flex items-center">
+            <Logo size="large" textColor={isScrolled ? 'black' : 'white'} />
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <Link 
               href="/vehicles" 
-              className={`text-sm font-medium transition-colors ${
-                isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-400'
+              className={`text-sm font-medium hover:text-blue-600 transition-colors ${
+                isScrolled ? 'text-gray-900' : 'text-white'
               }`}
+              style={{
+                textShadow: isScrolled ? 'none' : '2px 2px 4px rgba(0, 0, 0, 0.5)'
+              }}
             >
               Vehicles
             </Link>
             <Link 
               href="/about" 
-              className={`text-sm font-medium transition-colors ${
-                isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-400'
+              className={`text-sm font-medium hover:text-blue-600 transition-colors ${
+                isScrolled ? 'text-gray-900' : 'text-white'
               }`}
+              style={{
+                textShadow: isScrolled ? 'none' : '2px 2px 4px rgba(0, 0, 0, 0.5)'
+              }}
             >
               About
             </Link>
             <Link 
               href="/services" 
-              className={`text-sm font-medium transition-colors ${
-                isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-400'
+              className={`text-sm font-medium hover:text-blue-600 transition-colors ${
+                isScrolled ? 'text-gray-900' : 'text-white'
               }`}
+              style={{
+                textShadow: isScrolled ? 'none' : '2px 2px 4px rgba(0, 0, 0, 0.5)'
+              }}
             >
               Services
             </Link>
             <Link 
               href="/contact" 
-              className={`text-sm font-medium transition-colors ${
-                isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-400'
+              className={`text-sm font-medium hover:text-blue-600 transition-colors ${
+                isScrolled ? 'text-gray-900' : 'text-white'
               }`}
+              style={{
+                textShadow: isScrolled ? 'none' : '2px 2px 4px rgba(0, 0, 0, 0.5)'
+              }}
             >
               Contact
             </Link>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-lg hover:shadow-xl">
               Get Started
             </button>
           </div>
@@ -140,7 +148,7 @@ const Navbar = () => {
           >
             Contact
           </Link>
-          <button className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+          <button className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-lg">
             Get Started
           </button>
         </div>

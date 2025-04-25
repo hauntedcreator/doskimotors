@@ -6,7 +6,7 @@ import Navbar from '@/components/Navbar'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'CarHub - Premium Car Sales',
+  title: 'Doski Motors - Premium Car Sales',
   description: 'Find your perfect luxury and performance vehicle',
 }
 
@@ -16,10 +16,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={inter.className}>
+      <body className="min-h-screen bg-white text-gray-900 antialiased">
         <Navbar />
-        {children}
+        <main>
+          {children}
+        </main>
       </body>
     </html>
   )

@@ -7,21 +7,21 @@ const Hero = () => {
   return (
     <div className="relative h-screen w-full overflow-hidden">
       {/* Background video with gradient overlay */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/50 z-[1]" />
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/50 z-10" />
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover z-0"
         >
           <source src="/videos/backgroundtesladoski.mp4" type="video/mp4" />
         </video>
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex h-full items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="relative z-20 flex h-full items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}

@@ -5,7 +5,7 @@ const nextConfig = {
   experimental: {
     forceSwcTransforms: false,
     swcTraceProfiling: false,
-    swcPlugins: false,
+    swcPlugins: [],
     serverComponentsExternalPackages: ['@next/swc-win32-x64-msvc']
   },
   webpack: (config, { isServer }) => {

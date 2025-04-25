@@ -6,13 +6,19 @@ import Link from 'next/link'
 const Hero = () => {
   return (
     <div className="relative h-screen w-full overflow-hidden">
-      {/* Background with gradient overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('/images/hero-bg.jpg')"
-        }}
-      />
+      {/* Background video with gradient overlay */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/50 z-[1]" />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover"
+        >
+          <source src="/videos/backgroundtesladoski.mp4" type="video/mp4" />
+        </video>
+      </div>
 
       {/* Content */}
       <div className="relative z-10 flex h-full items-center justify-center px-4 sm:px-6 lg:px-8">

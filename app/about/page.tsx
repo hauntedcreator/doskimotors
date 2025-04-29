@@ -3,6 +3,48 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
+import Link from 'next/link'
+import { FaLeaf, FaBolt, FaHandshake } from 'react-icons/fa'
+
+const values = [
+  {
+    icon: FaLeaf,
+    title: 'Sustainability',
+    description: 'Committed to promoting eco-friendly transportation through electric vehicles.',
+  },
+  {
+    icon: FaBolt,
+    title: 'Innovation',
+    description: 'Embracing the latest technology to provide the best rental experience.',
+  },
+  {
+    icon: FaHandshake,
+    title: 'Customer Focus',
+    description: 'Dedicated to exceptional service and customer satisfaction.',
+  },
+]
+
+const team = [
+  {
+    name: 'Sarah Johnson',
+    role: 'CEO & Founder',
+    image: 'https://i.pravatar.cc/300?img=1',
+    bio: 'Former Tesla executive with 15 years of experience in the electric vehicle industry.',
+  },
+  {
+    name: 'Michael Chen',
+    role: 'Operations Director',
+    image: 'https://i.pravatar.cc/300?img=2',
+    bio: 'Automotive industry veteran specializing in luxury vehicle rentals and fleet management.',
+  },
+  {
+    name: 'Emily Davis',
+    role: 'Customer Experience Manager',
+    image: 'https://i.pravatar.cc/300?img=3',
+    bio: 'Dedicated to ensuring every rental experience exceeds customer expectations.',
+  },
+]
 
 export default function AboutPage() {
   return (

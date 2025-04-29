@@ -1,55 +1,50 @@
-import Link from 'next/link'
-import { FaFacebookF, FaInstagram } from 'react-icons/fa'
-import Logo from './Logo'
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import Link from 'next/link';
 
 const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Logo and Description */}
-          <div className="col-span-1 md:col-span-2">
-            <Logo size="large" className="mb-4" />
-            <p className="text-gray-400 mt-4 max-w-md">
-              Your premier destination for luxury and performance vehicles. We pride ourselves on exceptional service and unbeatable deals.
+      <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Company Info */}
+          <div>
+            <h3 className="text-xl font-bold mb-4">AutoMarket</h3>
+            <p className="text-gray-400 mb-4">
+              Your trusted destination for premium vehicles. Experience excellence in automotive retail.
             </p>
-            <div className="flex space-x-4 mt-6">
-              <a
-                href="https://www.facebook.com/DoskiMotors/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-blue-500 transition-colors"
-              >
-                <FaFacebookF size={24} />
+            <div className="flex space-x-4">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <FaFacebook size={24} />
               </a>
-              <a
-                href="https://www.instagram.com/doskimotors/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-pink-500 transition-colors"
-              >
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <FaTwitter size={24} />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <FaInstagram size={24} />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <FaLinkedin size={24} />
               </a>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-xl font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="text-gray-400 hover:text-white transition-colors">
-                  Home
+                <Link href="/browse" className="text-gray-400 hover:text-white transition-colors">
+                  Browse Vehicles
+                </Link>
+              </li>
+              <li>
+                <Link href="/how-it-works" className="text-gray-400 hover:text-white transition-colors">
+                  How It Works
                 </Link>
               </li>
               <li>
                 <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
                   About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/services" className="text-gray-400 hover:text-white transition-colors">
-                  Services
                 </Link>
               </li>
               <li>
@@ -60,47 +55,71 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* Services */}
+          <div>
+            <h3 className="text-xl font-bold mb-4">Services</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/new-vehicles" className="text-gray-400 hover:text-white transition-colors">
+                  New Vehicles
+                </Link>
+              </li>
+              <li>
+                <Link href="/used-vehicles" className="text-gray-400 hover:text-white transition-colors">
+                  Used Vehicles
+                </Link>
+              </li>
+              <li>
+                <Link href="/financing" className="text-gray-400 hover:text-white transition-colors">
+                  Financing
+                </Link>
+              </li>
+              <li>
+                <Link href="/trade-in" className="text-gray-400 hover:text-white transition-colors">
+                  Trade-In
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
-            <address className="not-italic">
-              <p className="text-gray-400">7490 Opportunity Rd STE 2900</p>
-              <p className="text-gray-400">San Diego, CA 92111</p>
-              <a
-                href="tel:+16197843791"
-                className="text-gray-400 hover:text-white transition-colors block mt-2"
-              >
-                (619) 784-3791
-              </a>
+            <h3 className="text-xl font-bold mb-4">Contact Us</h3>
+            <address className="not-italic text-gray-400">
+              <p className="mb-2">123 Auto Drive</p>
+              <p className="mb-2">Los Angeles, CA 90001</p>
+              <p className="mb-2">
+                Phone: <a href="tel:+1234567890" className="hover:text-white transition-colors">123-456-7890</a>
+              </p>
+              <p>
+                Email: <a href="mailto:info@automarket.com" className="hover:text-white transition-colors">info@automarket.com</a>
+              </p>
             </address>
-            <Link
-              href="/dealer-login"
-              className="inline-block mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Dealer Sign In
-            </Link>
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-gray-800">
+        {/* Bottom Section */}
+        <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} Doski Motors. All rights reserved.
+              © {new Date().getFullYear()} AutoMarket. All rights reserved.
             </p>
-            <div className="mt-4 md:mt-0">
+            <div className="flex space-x-6 mt-4 md:mt-0">
               <Link href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">
                 Privacy Policy
               </Link>
-              <span className="mx-2 text-gray-600">|</span>
               <Link href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
                 Terms of Service
+              </Link>
+              <Link href="/sitemap" className="text-gray-400 hover:text-white text-sm transition-colors">
+                Sitemap
               </Link>
             </div>
           </div>
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer 
+export default Footer; 

@@ -9,17 +9,77 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ImageCarousel from '../components/ImageCarousel'
 import { FaStar, FaCheckCircle, FaClock, FaLock } from 'react-icons/fa'
+import Link from 'next/link'
+
+const vehicles = [
+  {
+    id: 1,
+    name: 'Tesla Model S',
+    image: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    description: 'Luxury sedan with incredible performance and range.',
+    price: '250',
+    category: 'Sedan',
+    specs: {
+      range: '405 miles',
+      acceleration: '2.4s 0-60',
+      topSpeed: '200 mph'
+    }
+  },
+  {
+    id: 2,
+    name: 'Tesla Model 3',
+    image: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    description: 'The most popular Tesla model, perfect for daily driving.',
+    price: '180',
+    category: 'Sedan',
+    specs: {
+      range: '358 miles',
+      acceleration: '3.1s 0-60',
+      topSpeed: '162 mph'
+    }
+  },
+  {
+    id: 3,
+    name: 'Tesla Model X',
+    image: 'https://images.unsplash.com/photo-1566274360936-69fae8dc1700?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    description: 'Luxury SUV with falcon-wing doors and spacious interior.',
+    price: '300',
+    category: 'SUV',
+    specs: {
+      range: '348 miles',
+      acceleration: '2.5s 0-60',
+      topSpeed: '163 mph'
+    }
+  },
+  {
+    id: 4,
+    name: 'Tesla Model Y',
+    image: 'https://images.unsplash.com/photo-1619867079739-d576b1d1d6ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    description: 'Compact SUV combining versatility with performance.',
+    price: '220',
+    category: 'SUV',
+    specs: {
+      range: '330 miles',
+      acceleration: '3.5s 0-60',
+      topSpeed: '155 mph'
+    }
+  }
+]
+
+const categories = ['All', 'Sedan', 'SUV']
 
 export default function VehiclesPage() {
-  const { vehicles, toggleFavorite, incrementViews } = useVehicleStore()
-  const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>(vehicles)
+  const { vehicles: vehicleStoreVehicles, toggleFavorite, incrementViews } = useVehicleStore()
+  const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>(vehicleStoreVehicles)
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null)
   const [showEmailPrompt, setShowEmailPrompt] = useState(false)
   const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(null)
   const [email, setEmail] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('All')
+  const [searchQuery, setSearchQuery] = useState('')
 
   const handleFilterChange = (filters: any) => {
-    let filtered = [...vehicles].filter(vehicle => vehicle.status !== 'sold') // Show all vehicles except sold ones
+    let filtered = [...vehicleStoreVehicles].filter(vehicle => vehicle.status !== 'sold') // Show all vehicles except sold ones
 
     // Apply search filter
     if (filters.search) {
@@ -101,7 +161,7 @@ export default function VehiclesPage() {
       fuelType: [],
       make: []
     })
-  }, [vehicles])
+  }, [vehicleStoreVehicles])
 
   const handleFavorite = (vehicleId: string) => {
     if (!localStorage.getItem('userEmail')) {
@@ -196,6 +256,13 @@ export default function VehiclesPage() {
     return highlights.sort((a, b) => a.priority - b.priority).slice(0, 2)
   }
 
+  const filteredVehiclesByCategory = filteredVehicles.filter(vehicle => {
+    const matchesCategory = selectedCategory === 'All' || vehicle.category === selectedCategory
+    const matchesSearch = vehicle.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         vehicle.description.toLowerCase().includes(searchQuery.toLowerCase())
+    return matchesCategory && matchesSearch
+  })
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
@@ -206,7 +273,7 @@ export default function VehiclesPage() {
             {/* Filters Sidebar */}
             <div className="md:w-1/4">
               <VehicleFilters 
-                vehicles={vehicles}
+                vehicles={vehicleStoreVehicles}
                 onFilterChange={handleFilterChange}
               />
             </div>
@@ -215,12 +282,38 @@ export default function VehiclesPage() {
             <div className="md:w-3/4">
               <div className="mb-6 flex justify-between items-center">
                 <h1 className="text-2xl font-bold text-gray-900">
-                  Available Vehicles ({filteredVehicles.length})
+                  Available Vehicles ({filteredVehiclesByCategory.length})
                 </h1>
               </div>
 
+              {/* Filters */}
+              <div className="mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div className="flex gap-4">
+                  {categories.map(category => (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedCategory(category)}
+                      className={`px-4 py-2 rounded-full ${
+                        selectedCategory === category
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search vehicles..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-64"
+                />
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredVehicles.map(vehicle => (
+                {filteredVehiclesByCategory.map(vehicle => (
                   <div
                     key={vehicle.id}
                     className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100"
@@ -340,16 +433,12 @@ export default function VehiclesPage() {
                         <span className="text-2xl font-bold text-blue-600">
                           ${vehicle.price.toLocaleString()}
                         </span>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedVehicle(vehicle);
-                            incrementViews(vehicle.id);
-                          }}
+                        <Link 
+                          href={`/vehicles/${vehicle.id}`}
                           className="inline-flex items-center px-4 py-1 rounded-full text-sm font-medium bg-blue-600 text-white hover:bg-blue-700"
                         >
                           View Details
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </div>

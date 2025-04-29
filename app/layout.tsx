@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Navbar from '@/components/Navbar'
 import { FavoritesProvider } from '@/context/FavoritesContext'
+import Layout from '@/components/layout/Layout'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Doski Motors - Premium Car Sales',
-  description: 'Find your perfect luxury and performance vehicle',
+  title: 'TeslaRent - Premium Tesla Rentals',
+  description: 'Experience luxury electric driving with our premium Tesla rental service.',
 }
 
 export default function RootLayout({
@@ -20,10 +20,9 @@ export default function RootLayout({
     <html lang="en" className={inter.className}>
       <body className="min-h-screen bg-white text-gray-900 antialiased overflow-x-hidden">
         <FavoritesProvider>
-          <Navbar />
-          <main className="w-full">
+          <Layout>
             {children}
-          </main>
+          </Layout>
         </FavoritesProvider>
       </body>
     </html>

@@ -285,6 +285,7 @@ export default function DealerDashboard() {
     } finally {
       setIsLoading(false)
     }
+    return Promise.resolve();
   }
 
   const handleDeleteVehicle = async (id: string) => {

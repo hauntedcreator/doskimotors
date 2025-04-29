@@ -716,31 +716,36 @@ export default function VehicleForm({ vehicle, onSubmit, onCancel, onChange }: V
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     
     // Ensure we have all required fields
-    const requiredFields = ['make', 'model', 'year', 'price', 'mileage']
-    const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData])
+    const requiredFields = ['make', 'model', 'year', 'price', 'mileage'];
+    const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData]);
     
     if (missingFields.length > 0) {
-      console.error('Missing required fields:', missingFields)
-      return
+      console.error('Missing required fields:', missingFields);
+      return;
     }
 
-    // Submit the form data
-    onSubmit({
-      ...formData,
-      specifications: { ...formData.specifications, trim: selectedTrim },
-      title: formData.title,
-      images: images,
-      image: images[0] || ''
-    })
+    try {
+      // Submit the form data
+      await onSubmit({
+        ...formData,
+        specifications: { ...formData.specifications, trim: selectedTrim },
+        title: formData.title,
+        images: images,
+        image: images[0] || ''
+      });
 
-    // Handle social media posting separately
-    if (socialPosts.twitter || socialPosts.facebook || socialPosts.instagram) {
-      await handleSocialMediaPost();
+      // Handle social media posting separately
+      if (socialPosts.twitter || socialPosts.facebook || socialPosts.instagram) {
+        await handleSocialMediaPost();
+      }
+    } catch (error) {
+      console.error('Error submitting vehicle:', error);
+      // You might want to show an error message to the user here
     }
-  }
+  };
 
   const handleSocialMediaPost = async () => {
     // Validate required fields before posting

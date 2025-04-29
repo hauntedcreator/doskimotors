@@ -59,6 +59,7 @@ export default function AdminVehiclesPage() {
       addVehicle(newVehicle)
     }
     setIsModalOpen(false)
+    return Promise.resolve();
   }
 
   const handleToggleFeatured = (id: string) => {

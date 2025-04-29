@@ -144,7 +144,8 @@ export default function ServicesPage() {
       if (!response.ok) throw new Error('Failed to send email');
       toast.success('Message sent successfully!');
     } catch (error) {
-      toast.error(error.message || 'Failed to send message. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to send message. Please try again.';
+      toast.error(errorMessage);
       throw error;
     } finally {
       setEmailSending(false);

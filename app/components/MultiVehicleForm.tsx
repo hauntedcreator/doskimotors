@@ -24,8 +24,10 @@ const emptyVehicle = (): Partial<Vehicle> & { key: number } => ({
   specifications: { trim: '' },
 });
 
-export default function MultiVehicleForm({ onSubmit }: { onSubmit: (vehicles: any[]) => void }) {
-  const [vehicles, setVehicles] = useState<Array<Partial<Vehicle> & { key: number }>>([emptyVehicle()]);
+type VehicleWithKey = Partial<Vehicle> & { key: number };
+
+export default function MultiVehicleForm({ onSubmit }: { onSubmit: (vehicles: any[]) => Promise<void> }) {
+  const [vehicles, setVehicles] = useState<VehicleWithKey[]>([emptyVehicle()]);
 
   const handleVehicleChange = (index: number, data: Partial<Vehicle>) => {
     setVehicles(prev => prev.map((v, i) => (i === index ? { ...v, ...data } : v)));
@@ -39,11 +41,10 @@ export default function MultiVehicleForm({ onSubmit }: { onSubmit: (vehicles: an
     setVehicles(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Filter out incomplete vehicles (e.g., missing make/model/year/trim)
     const validVehicles = vehicles.filter(v => v.make && v.model && v.year && v.specifications?.trim);
-    onSubmit(validVehicles);
+    await onSubmit(validVehicles);
   };
 
   return (
@@ -59,7 +60,13 @@ export default function MultiVehicleForm({ onSubmit }: { onSubmit: (vehicles: an
             <div className="flex-1 min-w-[600px]">
               <VehicleForm
                 vehicle={vehicle}
-                onSubmit={data => handleVehicleChange(idx, data)}
+                onSubmit={(data) => {
+  handleVehicleChange(idx, data);
+  return Promise.resolve();
+}}
+
+}}
+
                 onCancel={() => handleRemoveVehicle(idx)}
               />
             </div>

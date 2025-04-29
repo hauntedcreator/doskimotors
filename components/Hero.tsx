@@ -1,13 +1,38 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 const Hero = () => {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isReversing, setIsReversing] = useState(false)
   const reverseIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const router = useRouter()
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      router.push(`/vehicles?search=${encodeURIComponent(searchQuery.trim())}`)
+    }
+  }
+
+  const handleLocationClick = () => {
+    // Check if the user is on iOS
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+      window.location.href = 'maps://maps.apple.com/?q=Doski+Motors+San+Diego'
+    }
+    // Check if the user is on Android
+    else if (/Android/.test(navigator.userAgent)) {
+      window.location.href = 'geo:0,0?q=Doski+Motors+San+Diego'
+    }
+    // Default to web version
+    else {
+      window.open('https://www.google.com/maps/search/Doski+Motors+San+Diego', '_blank')
+    }
+  }
 
   useEffect(() => {
     const video = videoRef.current
@@ -95,7 +120,14 @@ const Hero = () => {
             <span className="inline-flex items-center rounded-full bg-blue-600/10 px-4 py-1.5 text-sm font-medium text-blue-400 ring-1 ring-inset ring-blue-400/30 mb-6">
               Premium Auto Dealer
             </span>
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1 
+              className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
+              style={{ 
+                textShadow: '0 2px 4px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.1)',
+                position: 'relative',
+                zIndex: 1
+              }}
+            >
               Find Your Perfect Car
             </h1>
           </motion.div>
@@ -105,6 +137,10 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mx-auto mt-4 max-w-xl text-xl text-gray-300 sm:text-2xl"
+            style={{ 
+              textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+              WebkitTextStroke: '0.5px rgba(0,0,0,0.5)'
+            }}
           >
             Experience luxury and performance like never before
           </motion.p>
@@ -115,12 +151,22 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="mt-8 flex flex-col sm:flex-row justify-center gap-4"
           >
-            <div className="relative flex-1 max-w-md">
+            <form onSubmit={handleSearch} className="relative flex-1 max-w-md flex items-center">
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by brand or model..."
                 className="w-full px-6 py-4 text-lg rounded-lg text-gray-900 bg-white/95 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-lg"
               />
+              <button
+                type="submit"
+                className="absolute right-2 p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </button>
               <motion.span 
                 className="absolute inset-0 -z-10 bg-blue-500/20 rounded-lg blur-xl"
                 animate={{ 
@@ -133,10 +179,13 @@ const Hero = () => {
                   repeatType: "reverse"
                 }}
               />
-            </div>
-            <button className="px-8 py-4 text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg">
-              Search Now
-            </button>
+            </form>
+            <Link 
+              href="/vehicles" 
+              className="px-8 py-4 text-lg font-semibold text-white bg-blue-600/20 backdrop-blur-sm rounded-lg hover:bg-blue-600 transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg border border-blue-400/30"
+            >
+              See All Vehicles
+            </Link>
           </motion.div>
 
           <motion.div
@@ -145,7 +194,7 @@ const Hero = () => {
             transition={{ duration: 1, delay: 0.8 }}
             className="mt-12 flex justify-center gap-12 sm:gap-16"
           >
-            <div className="text-center group cursor-pointer">
+            <div className="text-center group cursor-pointer hover:scale-105 transition-transform">
               <div className="mb-2 relative">
                 <h3 className="text-4xl font-bold text-white group-hover:text-blue-400 transition-colors">500+</h3>
                 <motion.div
@@ -156,18 +205,18 @@ const Hero = () => {
               </div>
               <p className="text-gray-300 font-medium">Premium Vehicles</p>
             </div>
-            <div className="text-center group cursor-pointer">
+            <div className="text-center group cursor-pointer hover:scale-105 transition-transform">
               <div className="mb-2 relative">
-                <h3 className="text-4xl font-bold text-white group-hover:text-blue-400 transition-colors">24/7</h3>
+                <h3 className="text-4xl font-bold text-white group-hover:text-blue-400 transition-colors">4.7</h3>
                 <motion.div
                   className="absolute -inset-1 bg-blue-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
                   animate={{ scale: [1, 1.1, 1] }}
                   transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
                 />
               </div>
-              <p className="text-gray-300 font-medium">Expert Support</p>
+              <p className="text-gray-300 font-medium">Google Rating</p>
             </div>
-            <div className="text-center group cursor-pointer">
+            <div className="text-center group cursor-pointer hover:scale-105 transition-transform">
               <div className="mb-2 relative">
                 <h3 className="text-4xl font-bold text-white group-hover:text-blue-400 transition-colors">100%</h3>
                 <motion.div
@@ -185,16 +234,97 @@ const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1 }}
-            className="mt-12 flex justify-center items-center gap-8"
+            className="mt-12 flex flex-wrap justify-center items-center gap-6 sm:gap-8"
           >
-            <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg">
-              <span className="text-sm font-medium text-white">BBB Accredited</span>
+            <div 
+              onClick={() => window.open('https://www.bbb.org/', '_blank')}
+              className="group flex items-center gap-3 px-4 py-3 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 transition-all duration-300 cursor-pointer border border-white/10 hover:border-white/20"
+            >
+              <svg
+                className="w-8 h-8 text-blue-400 group-hover:text-blue-300 transition-colors"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
+              </svg>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-white group-hover:text-blue-300 transition-colors">BBB Accredited</span>
+                <span className="text-xs text-gray-300 group-hover:text-gray-200">A+ Rating</span>
+              </div>
             </div>
-            <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg">
-              <span className="text-sm font-medium text-white">5-Star Rated</span>
+
+            <div 
+              onClick={() => window.open('https://www.google.com/maps/place/Doski+Motors/@32.7157,-117.1611,15z', '_blank')}
+              className="group flex items-center gap-3 px-4 py-3 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 transition-all duration-300 cursor-pointer border border-white/10 hover:border-white/20"
+            >
+              <svg
+                className="w-8 h-8 text-blue-400 group-hover:text-blue-300 transition-colors"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 2L14.4 9.6H22L16 14.4L18.4 22L12 17.2L5.6 22L8 14.4L2 9.6H9.6L12 2Z"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-white group-hover:text-blue-300 transition-colors">Google Rating</span>
+                <span className="text-xs text-gray-300 group-hover:text-gray-200">4.7/5 (47 Reviews)</span>
+              </div>
             </div>
-            <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg">
-              <span className="text-sm font-medium text-white">Licensed Dealer</span>
+
+            <div 
+              onClick={() => window.open('https://www.dmv.ca.gov/portal/', '_blank')}
+              className="group flex items-center gap-3 px-4 py-3 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 transition-all duration-300 cursor-pointer border border-white/10 hover:border-white/20"
+            >
+              <svg
+                className="w-8 h-8 text-blue-400 group-hover:text-blue-300 transition-colors"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 12L11 14L15 10"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-white group-hover:text-blue-300 transition-colors">Licensed Dealer</span>
+                <span className="text-xs text-gray-300 group-hover:text-gray-200">CA DMV Verified</span>
+              </div>
             </div>
           </motion.div>
         </div>

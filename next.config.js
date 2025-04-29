@@ -2,7 +2,14 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
+    domains: ['localhost', 'images.unsplash.com', 'placehold.co', 'res.cloudinary.com'],
     remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname: '/uploads/**',
+      },
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
@@ -10,12 +17,15 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'placehold.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
       }
     ],
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    domains: ['images.unsplash.com'],
   },
   transpilePackages: ['framer-motion'],
 }

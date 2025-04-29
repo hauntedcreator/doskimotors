@@ -1,106 +1,131 @@
-import React from 'react';
+'use client'
 
-export default function AdminDashboard() {
+import { useVehicleStore } from '@/app/store/vehicleStore'
+import Link from 'next/link'
+import { FiUpload, FiDollarSign, FiStar, FiBarChart2, FiPackage, FiHeart, FiEye } from 'react-icons/fi'
+
+export default function AdminPage() {
+  const { vehicles, totalValue, totalViews, totalLikes } = useVehicleStore()
+
+  const stats = [
+    {
+      name: 'Total Inventory',
+      value: vehicles.length,
+      change: '+2 this week',
+      icon: FiPackage,
+      href: '/admin/vehicles'
+    },
+    {
+      name: 'Total Value',
+      value: `$${totalValue.toLocaleString()}`,
+      change: '+12% vs last month',
+      icon: FiDollarSign,
+      href: '/admin/analytics'
+    },
+    {
+      name: 'Total Likes',
+      value: totalLikes,
+      change: '+8% vs last week',
+      icon: FiHeart,
+      href: '/admin/analytics'
+    },
+    {
+      name: 'Total Views',
+      value: totalViews,
+      change: '+23% vs last week',
+      icon: FiEye,
+      href: '/admin/analytics'
+    }
+  ]
+
+  const quickActions = [
+    {
+      name: 'Upload Photos',
+      href: '/admin/vehicles',
+      icon: FiUpload,
+      description: 'Add new vehicle photos'
+    },
+    {
+      name: 'Update Prices',
+      href: '/admin/vehicles',
+      icon: FiDollarSign,
+      description: 'Adjust vehicle pricing'
+    },
+    {
+      name: 'Manage Featured',
+      href: '/admin/vehicles',
+      icon: FiStar,
+      description: 'Update featured vehicles'
+    },
+    {
+      name: 'View Reports',
+      href: '/admin/analytics',
+      icon: FiBarChart2,
+      description: 'See detailed analytics'
+    }
+  ]
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8">Admin Dashboard</h1>
-      
-      <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Add New Vehicle</h2>
-        <form className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="make" className="block text-sm font-medium text-gray-700">Make</label>
-              <input
-                type="text"
-                id="make"
-                name="make"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="model" className="block text-sm font-medium text-gray-700">Model</label>
-              <input
-                type="text"
-                id="model"
-                name="model"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="year" className="block text-sm font-medium text-gray-700">Year</label>
-              <input
-                type="number"
-                id="year"
-                name="year"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price</label>
-              <input
-                type="number"
-                id="price"
-                name="price"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              rows={4}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            ></textarea>
-          </div>
-          <div>
-            <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image Upload</label>
-            <input
-              type="file"
-              id="image"
-              name="image"
-              accept="image/*"
-              className="mt-1 block w-full"
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
+    <div className="space-y-8">
+      {/* Stats */}
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat) => (
+          <Link
+            key={stat.name}
+            href={stat.href}
+            className="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow hover:bg-gray-50 transition-colors duration-200"
           >
-            Add Vehicle
-          </button>
-        </form>
+            <dt>
+              <div className="absolute rounded-md bg-indigo-500 p-3">
+                <stat.icon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
+              <p className="ml-16 truncate text-sm font-medium text-gray-500">{stat.name}</p>
+            </dt>
+            <dd className="ml-16 flex items-baseline pb-6">
+              <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
+              <p className="ml-2 flex items-baseline text-sm font-semibold text-green-600">
+                {stat.change}
+              </p>
+            </dd>
+          </Link>
+        ))}
       </div>
 
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h2 className="text-2xl font-semibold mb-4">Vehicle Inventory</h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {/* Sample row - will be replaced with actual data */}
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">Toyota Camry</td>
-                <td className="px-6 py-4 whitespace-nowrap">2023</td>
-                <td className="px-6 py-4 whitespace-nowrap">$25,000</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <button className="text-blue-600 hover:text-blue-900 mr-4">Edit</button>
-                  <button className="text-red-600 hover:text-red-900">Delete</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      {/* Quick Actions */}
+      <div>
+        <h2 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {quickActions.map((action) => (
+            <Link
+              key={action.name}
+              href={action.href}
+              className="relative group rounded-lg bg-white p-6 shadow hover:bg-gray-50 transition-colors duration-200"
+            >
+              <div>
+                <span className="inline-flex rounded-lg p-3 bg-indigo-50 text-indigo-700 ring-4 ring-white">
+                  <action.icon className="h-6 w-6" aria-hidden="true" />
+                </span>
+              </div>
+              <div className="mt-4">
+                <h3 className="text-lg font-medium text-gray-900">
+                  {action.name}
+                </h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  {action.description}
+                </p>
+              </div>
+              <span
+                className="pointer-events-none absolute top-6 right-6 text-gray-300 group-hover:text-gray-400"
+                aria-hidden="true"
+              >
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20 4h1a1 1 0 00-1-1v1zm-1 12a1 1 0 102 0h-2zM8 3a1 1 0 000 2V3zM3.293 19.293a1 1 0 101.414 1.414l-1.414-1.414zM19 4v12h2V4h-2zm1-1H8v2h12V3zm-.707.293l-16 16 1.414 1.414 16-16-1.414-1.414z" />
+                </svg>
+              </span>
+            </Link>
+          ))}
         </div>
       </div>
     </div>
-  );
+  )
 } 

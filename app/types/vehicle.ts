@@ -1,0 +1,1 @@
+// This file is being deleted as we're using the Vehicle type from vehicleStore.ts

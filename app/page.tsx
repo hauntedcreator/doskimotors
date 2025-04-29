@@ -2,7 +2,7 @@ import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
 import Reviews from '@/components/Reviews'
 import Footer from '@/components/Footer'
-import { FeaturedVehicles } from '@/components/FeaturedVehicles'
+import FeaturedVehicles from '@/components/FeaturedVehicles'
 
 export default function Home() {
   return (

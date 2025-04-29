@@ -16,6 +16,21 @@ const Navbar = () => {
     })
   }, [scrollY])
 
+  const handleLocationClick = () => {
+    // Check if the user is on iOS
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+      window.location.href = 'maps://maps.apple.com/?q=7490+Opportunity+Rd+STE+2900+San+Diego+CA+92111'
+    }
+    // Check if the user is on Android
+    else if (/Android/.test(navigator.userAgent)) {
+      window.location.href = 'geo:0,0?q=7490+Opportunity+Rd+STE+2900+San+Diego+CA+92111'
+    }
+    // Default to web version
+    else {
+      window.open('https://www.google.com/maps/place/7490+Opportunity+Rd+STE+2900,+San+Diego,+CA+92111', '_blank')
+    }
+  }
+
   return (
     <motion.nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -46,7 +61,7 @@ const Navbar = () => {
               Vehicles
             </Link>
             <Link 
-              href="/about" 
+              href="/financing" 
               className={`text-sm font-medium hover:text-blue-600 transition-colors ${
                 isScrolled ? 'text-gray-900' : 'text-white'
               }`}
@@ -54,7 +69,7 @@ const Navbar = () => {
                 textShadow: isScrolled ? 'none' : '2px 2px 4px rgba(0, 0, 0, 0.5)'
               }}
             >
-              About
+              Financing
             </Link>
             <Link 
               href="/services" 
@@ -68,6 +83,17 @@ const Navbar = () => {
               Services
             </Link>
             <Link 
+              href="/about" 
+              className={`text-sm font-medium hover:text-blue-600 transition-colors ${
+                isScrolled ? 'text-gray-900' : 'text-white'
+              }`}
+              style={{
+                textShadow: isScrolled ? 'none' : '2px 2px 4px rgba(0, 0, 0, 0.5)'
+              }}
+            >
+              About
+            </Link>
+            <Link 
               href="/contact" 
               className={`text-sm font-medium hover:text-blue-600 transition-colors ${
                 isScrolled ? 'text-gray-900' : 'text-white'
@@ -78,8 +104,11 @@ const Navbar = () => {
             >
               Contact
             </Link>
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-lg hover:shadow-xl">
-              Get Started
+            <button
+              onClick={handleLocationClick}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Dealership Location
             </button>
           </div>
 
@@ -125,12 +154,12 @@ const Navbar = () => {
             Vehicles
           </Link>
           <Link
-            href="/about"
+            href="/financing"
             className={`block px-3 py-2 rounded-md text-base font-medium ${
               isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-400'
             }`}
           >
-            About
+            Financing
           </Link>
           <Link
             href="/services"
@@ -141,6 +170,14 @@ const Navbar = () => {
             Services
           </Link>
           <Link
+            href="/about"
+            className={`block px-3 py-2 rounded-md text-base font-medium ${
+              isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-400'
+            }`}
+          >
+            About
+          </Link>
+          <Link
             href="/contact"
             className={`block px-3 py-2 rounded-md text-base font-medium ${
               isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-400'
@@ -148,8 +185,11 @@ const Navbar = () => {
           >
             Contact
           </Link>
-          <button className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-lg">
-            Get Started
+          <button 
+            onClick={handleLocationClick}
+            className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-lg"
+          >
+            Dealership Location
           </button>
         </div>
       </motion.div>

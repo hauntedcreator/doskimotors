@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
+import { FavoritesProvider } from '@/context/FavoritesContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,11 +18,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.className}>
-      <body className="min-h-screen bg-white text-gray-900 antialiased">
-        <Navbar />
-        <main>
-          {children}
-        </main>
+      <body className="min-h-screen bg-white text-gray-900 antialiased overflow-x-hidden">
+        <FavoritesProvider>
+          <Navbar />
+          <main className="w-full">
+            {children}
+          </main>
+        </FavoritesProvider>
       </body>
     </html>
   )

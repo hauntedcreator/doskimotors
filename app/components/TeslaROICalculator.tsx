@@ -173,8 +173,9 @@ export default function TeslaROICalculator({ isOpen, onClose, initialData }: ROI
   
   // Update repair costs when damage type or severity changes
   useEffect(() => {
-    if (REPAIR_COSTS[damageType]) {
-      setRepairCost(REPAIR_COSTS[damageType][damageSeverity]);
+    if (REPAIR_COSTS[damageType as keyof typeof REPAIR_COSTS]) {
+      const severity = damageSeverity as 'minor' | 'moderate' | 'severe';
+      setRepairCost(REPAIR_COSTS[damageType as keyof typeof REPAIR_COSTS][severity]);
     }
   }, [damageType, damageSeverity]);
   

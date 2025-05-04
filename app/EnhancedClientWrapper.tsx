@@ -1,19 +1,19 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, Suspense } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 
 interface EnhancedClientWrapperProps {
   children: React.ReactNode
 }
 
-/**
- * A wrapper component that enhances client-side navigation behavior
- * - Forces full page refreshes for problematic routes
- * - Tracks and optimizes page transitions
- * - Ensures components are properly loaded before displaying
- */
-export default function EnhancedClientWrapper({ children }: EnhancedClientWrapperProps) {
+// Simple loading fallback
+function LoadingFallback() {
+  return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+}
+
+// Inner component that uses useSearchParams
+function EnhancedClientInner({ children }: EnhancedClientWrapperProps) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   
@@ -58,4 +58,18 @@ export default function EnhancedClientWrapper({ children }: EnhancedClientWrappe
   }, [pathname, searchParams])
   
   return <>{children}</>
+}
+
+/**
+ * A wrapper component that enhances client-side navigation behavior
+ * - Forces full page refreshes for problematic routes
+ * - Tracks and optimizes page transitions
+ * - Ensures components are properly loaded before displaying
+ */
+export default function EnhancedClientWrapper({ children }: EnhancedClientWrapperProps) {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <EnhancedClientInner>{children}</EnhancedClientInner>
+    </Suspense>
+  )
 } 

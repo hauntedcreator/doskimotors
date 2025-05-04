@@ -5,6 +5,22 @@ import path from 'path';
 
 const leadsFile = path.join(process.cwd(), 'data', 'leads.json');
 
+// Define interface for the JSON lead format
+interface JsonLead {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  subject: string;
+  source: string;
+  date: string;
+  read: boolean;
+  viewedAt: null;
+  vehicleId?: string;
+  vehicleTitle?: string;
+  files?: any[];
+}
+
 export async function POST(request: Request) {
   try {
     const data = await request.json();
@@ -38,7 +54,7 @@ export async function POST(request: Request) {
     // Append to leads.json file (this is the primary storage used by the dashboard)
     try {
       // Read existing leads file or create new array
-      let leads = [];
+      let leads: JsonLead[] = [];
       try {
         const fileData = await fs.readFile(leadsFile, 'utf-8');
         leads = JSON.parse(fileData);
@@ -48,7 +64,7 @@ export async function POST(request: Request) {
       }
 
       // Create the new lead entry
-      const newLead = {
+      const newLead: JsonLead = {
         name: data.name || 'No Name',
         email: data.email || '',
         phone: data.phone || '',

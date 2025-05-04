@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 const GOOGLE_PLACE_ID = 'ChIJ_____ZFv2oARM2Hm5lZL3ngx'
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY
 
-// Google review type
+// Google review type definition
 export type GoogleReview = {
   author_name: string
   profile_photo_url: string
@@ -98,6 +98,7 @@ const fallbackReviews: GoogleReview[] = [
   }
 ];
 
+// Main API handler function
 export async function GET() {
   if (!GOOGLE_MAPS_API_KEY) {
     // Return fallback reviews if no API key is available

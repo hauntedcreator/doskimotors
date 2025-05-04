@@ -2,8 +2,24 @@
 
 import Link from 'next/link';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-export default function FinanceConfirmation() {
+// Wrapper component with Suspense boundary
+export default function FinanceConfirmationPage() {
+  return (
+    <Suspense fallback={<ConfirmationSkeleton />}>
+      <FinanceConfirmation />
+    </Suspense>
+  );
+}
+
+// Main component that uses useSearchParams
+function FinanceConfirmation() {
+  // Even if we don't directly see useSearchParams in the code,
+  // Next.js error indicates it's being used
+  const searchParams = useSearchParams();
+  
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
@@ -83,6 +99,47 @@ export default function FinanceConfirmation() {
           >
             Return to Homepage
           </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Skeleton component for loading state
+function ConfirmationSkeleton() {
+  return (
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
+        <div className="animate-pulse">
+          <div className="flex justify-center">
+            <div className="h-16 w-16 bg-gray-200 rounded-full"></div>
+          </div>
+          <div className="mt-6 h-8 bg-gray-200 rounded w-3/4 mx-auto"></div>
+          <div className="mt-2 h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
+          
+          <div className="mt-10">
+            <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+            <div className="mt-4 space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="flex items-start">
+                  <div className="h-8 w-8 bg-gray-200 rounded-full"></div>
+                  <div className="ml-4 flex-1">
+                    <div className="h-5 bg-gray-200 rounded w-1/3"></div>
+                    <div className="mt-1 h-4 bg-gray-200 rounded w-full"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="mt-10 pt-6">
+            <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+            <div className="mt-4 h-24 bg-gray-200 rounded"></div>
+          </div>
+          
+          <div className="mt-10 flex justify-center">
+            <div className="h-10 w-40 bg-gray-200 rounded"></div>
+          </div>
         </div>
       </div>
     </div>

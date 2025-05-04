@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { z } from 'zod'
 
 // This would typically use environment variables
 const GOOGLE_PLACE_ID = 'ChIJ_____ZFv2oARM2Hm5lZL3ngx'

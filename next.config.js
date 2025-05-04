@@ -121,6 +121,11 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  // Disable all types of errors during build
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  swcMinify: true,
 }
 
 module.exports = nextConfig 

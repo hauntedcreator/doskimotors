@@ -237,7 +237,7 @@ export default function AuctionWatch() {
       } else if (alternateData.source === 'cache') {
         toast.success('Using cached auction data');
       } else if (alternateData.source === 'simulated') {
-        toast.info('Using simulated auction data');
+        toast.success('Using simulated auction data');
       }
       
     } catch (err) {
@@ -258,7 +258,7 @@ export default function AuctionWatch() {
           const goodDeals = data.data.filter((auction: AuctionVehicle) => auction.isGoodDeal);
           setGoodDealsCount(goodDeals.length);
           
-          toast.info('Using data from direct API');
+          toast.success('Using data from direct API');
           setError(null);
         } else {
           // If all else fails, use demo data
@@ -396,7 +396,7 @@ export default function AuctionWatch() {
         window.open(fallbackUrl, '_blank', 'noopener,noreferrer');
         
         // Notify user that we're using a fallback URL
-        toast.info('Using direct link to auction site');
+        toast.success('Using direct link to auction site');
       }
     } catch (err) {
       console.error('Error opening auction URL:', err);

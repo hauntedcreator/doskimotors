@@ -145,8 +145,8 @@ export default function TeslaROICalculator({ isOpen, onClose, initialData }: ROI
   
   // Update available years when model changes
   useEffect(() => {
-    if (model && TESLA_VALUES[model]) {
-      const years = Object.keys(TESLA_VALUES[model]).map(year => parseInt(year));
+    if (model && TESLA_VALUES[model as keyof typeof TESLA_VALUES]) {
+      const years = Object.keys(TESLA_VALUES[model as keyof typeof TESLA_VALUES]).map(year => parseInt(year));
       setAvailableYears(years.sort((a, b) => b - a)); // Sort descending
       
       // Set year to most recent if current year isn't available
@@ -180,8 +180,9 @@ export default function TeslaROICalculator({ isOpen, onClose, initialData }: ROI
   
   // Get base market value 
   const getBaseMarketValue = () => {
-    if (TESLA_VALUES[model] && TESLA_VALUES[model][year]) {
-      const baseValue = TESLA_VALUES[model][year][trim];
+    if (TESLA_VALUES[model as keyof typeof TESLA_VALUES] && 
+        TESLA_VALUES[model as keyof typeof TESLA_VALUES][year]) {
+      const baseValue = TESLA_VALUES[model as keyof typeof TESLA_VALUES][year][trim];
       
       // Adjust for mileage (rough estimate: -$0.20 per mile over 10k/year)
       const expectedMileage = (new Date().getFullYear() - year) * 10000;

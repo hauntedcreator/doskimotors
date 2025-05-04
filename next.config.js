@@ -110,7 +110,6 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '10mb',
     },
-    runtime: 'edge',
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',

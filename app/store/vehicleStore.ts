@@ -706,24 +706,46 @@ export const useVehicleStore = create<VehicleState>()(
     {
       name: 'vehicle-store',
       version: 3,
-      onRehydrateStorage: () => (state) => {
-        // Perform data validation on rehydration
-        if (state && (!state.vehicles || !Array.isArray(state.vehicles))) {
-          console.error('Invalid state structure detected');
-          // Attempt to recover from backup
-          const backups = Object.keys(localStorage)
-            .filter(key => key.startsWith('vehicle-backup-'))
-            .sort()
-            .reverse();
-          
-          if (backups.length > 0) {
-            const latestBackup = localStorage.getItem(backups[0]);
-            if (latestBackup) {
-              state.vehicles = JSON.parse(latestBackup);
+      onRehydrateStorage: (state) => {
+        return (rehydratedState) => {
+          if (!rehydratedState || !Array.isArray(rehydratedState.vehicles) || rehydratedState.vehicles.length === 0) {
+            console.log('Restoring vehicles from backup due to empty or invalid state');
+            // Try to restore from backup if available
+            const backups = Object.keys(localStorage)
+              .filter(key => key.startsWith('vehicle-backup-'))
+              .sort()
+              .reverse();
+            
+            if (backups.length > 0) {
+              const latestBackup = localStorage.getItem(backups[0]);
+              if (latestBackup) {
+                try {
+                  const restoredVehicles = JSON.parse(latestBackup);
+                  if (Array.isArray(restoredVehicles) && restoredVehicles.length > 0) {
+                    console.log('Successfully restored vehicles from backup', restoredVehicles.length);
+                    rehydratedState.vehicles = restoredVehicles;
+                    
+                    // Recalculate derived values
+                    rehydratedState.totalValue = calculateTotalValue(restoredVehicles);
+                    rehydratedState.totalViews = restoredVehicles.reduce((sum, v) => sum + v.views, 0);
+                    rehydratedState.totalLikes = restoredVehicles.filter(v => v.favorites).length;
+                    rehydratedState.salesMetrics = calculateSalesMetrics(restoredVehicles);
+                    rehydratedState.inventoryMetrics = calculateInventoryMetrics(restoredVehicles);
+                  }
+                } catch (error) {
+                  console.error('Failed to parse backup', error);
+                }
+              }
             }
           }
-        }
-      }
+        };
+      },
+      partialize: (state) => ({
+        vehicles: state.vehicles,
+        deletedVehicles: state.deletedVehicles,
+        draftVehicles: state.draftVehicles,
+        draftVehicle: state.draftVehicle
+      }),
     }
   )
 ) 

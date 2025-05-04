@@ -56,4 +56,20 @@
   .card {
     @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200;
   }
+}
+
+/* Basic mobile optimizations - detailed styles are in public/mobile.css */
+@media (max-width: 767px) {
+  /* Ensure buttons have enough tap target size on mobile */
+  button, 
+  .btn-primary,
+  .btn-secondary {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Improve form elements on mobile */
+  input, select, textarea {
+    font-size: 16px !important; /* Prevents iOS zoom on input focus */
+  }
 } 

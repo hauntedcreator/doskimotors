@@ -1,0 +1,91 @@
+/* Mobile-only styling for Doski Motors website */
+
+/* Mobile hero section adjustments */
+.h-screen {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+}
+
+/* Main text adjustments */
+.text-4xl {
+  font-size: 2.5rem !important;
+}
+
+/* Layout adjustments */
+.py-16 {
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
+}
+
+.px-12 {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+/* Better mobile navigation */
+.md\:flex {
+  display: none !important;
+}
+
+/* Make sure buttons are easier to tap */
+button, 
+a[class*="px-"], 
+a[class*="py-"] {
+  padding: 0.75rem !important;
+  touch-action: manipulation;
+}
+
+/* Adjust image boxes */
+[class*="aspect-"] {
+  aspect-ratio: 4/3 !important;
+}
+
+/* Make all vehicle cards stack for mobile */
+.grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+}
+
+/* Fix text sizing on cards */
+.text-lg {
+  font-size: 1.125rem !important;
+}
+
+/* Make price text larger */
+.font-bold.text-lg {
+  font-size: 1.5rem !important;
+}
+
+/* Better form controls for mobile */
+input,
+textarea,
+select {
+  font-size: 16px !important; /* Prevents iOS zoom */
+  padding: 0.875rem !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Improve modal experience on mobile */
+div[role="dialog"] {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 1rem !important;
+  max-width: 100% !important;
+  border-radius: 0 !important;
+}
+
+/* Fix scrolling issues on iOS */
+.overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Reduce motion on mobile for better performance */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0 !important;
+  }
+} 

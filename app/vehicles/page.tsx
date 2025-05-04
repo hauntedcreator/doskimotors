@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { useVehicleStore, Vehicle } from '../store/vehicleStore'
 import VehicleModal from '../components/VehicleModal'
@@ -8,84 +9,74 @@ import VehicleFilters from '../components/VehicleFilters'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ImageCarousel from '../components/ImageCarousel'
-import { FaStar, FaCheckCircle, FaClock, FaLock } from 'react-icons/fa'
-import Link from 'next/link'
-
-const vehicles = [
-  {
-    id: 1,
-    name: 'Tesla Model S',
-    image: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    description: 'Luxury sedan with incredible performance and range.',
-    price: '250',
-    category: 'Sedan',
-    specs: {
-      range: '405 miles',
-      acceleration: '2.4s 0-60',
-      topSpeed: '200 mph'
-    }
-  },
-  {
-    id: 2,
-    name: 'Tesla Model 3',
-    image: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    description: 'The most popular Tesla model, perfect for daily driving.',
-    price: '180',
-    category: 'Sedan',
-    specs: {
-      range: '358 miles',
-      acceleration: '3.1s 0-60',
-      topSpeed: '162 mph'
-    }
-  },
-  {
-    id: 3,
-    name: 'Tesla Model X',
-    image: 'https://images.unsplash.com/photo-1566274360936-69fae8dc1700?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    description: 'Luxury SUV with falcon-wing doors and spacious interior.',
-    price: '300',
-    category: 'SUV',
-    specs: {
-      range: '348 miles',
-      acceleration: '2.5s 0-60',
-      topSpeed: '163 mph'
-    }
-  },
-  {
-    id: 4,
-    name: 'Tesla Model Y',
-    image: 'https://images.unsplash.com/photo-1619867079739-d576b1d1d6ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    description: 'Compact SUV combining versatility with performance.',
-    price: '220',
-    category: 'SUV',
-    specs: {
-      range: '330 miles',
-      acceleration: '3.5s 0-60',
-      topSpeed: '155 mph'
-    }
-  }
-]
-
-const categories = ['All', 'Sedan', 'SUV']
+import { FaStar, FaCheckCircle, FaClock, FaLock, FaHeart, FaRegHeart } from 'react-icons/fa'
+import VehicleContactForm from '../components/VehicleContactForm'
+import { HeartIcon } from '@heroicons/react/24/outline'
+import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid'
 
 export default function VehiclesPage() {
-  const { vehicles: vehicleStoreVehicles, toggleFavorite, incrementViews } = useVehicleStore()
-  const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>(vehicleStoreVehicles)
+  const searchParams = useSearchParams()
+  const { vehicles, toggleFavorite, incrementViews } = useVehicleStore()
+  const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>(vehicles)
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null)
   const [showEmailPrompt, setShowEmailPrompt] = useState(false)
   const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(null)
   const [email, setEmail] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('All')
-  const [searchQuery, setSearchQuery] = useState('')
+  const [contactVehicle, setContactVehicle] = useState<Vehicle | null>(null)
+  const [initialFilters, setInitialFilters] = useState({
+    search: '',
+    priceRange: { min: '', max: '' },
+    year: { min: '', max: '' },
+    condition: [] as string[],
+    bodyStyle: [] as string[],
+    transmission: [] as string[],
+    fuelType: [] as string[],
+    make: [] as string[]
+  })
+
+  // Extract search params on initial load
+  useEffect(() => {
+    const query = searchParams.get('search')
+    const brand = searchParams.get('brand')
+    const price = searchParams.get('price')
+    
+    if (query || brand || price) {
+      const newFilters = { ...initialFilters }
+      
+      if (query) {
+        newFilters.search = query
+      }
+      
+      if (brand && brand !== 'all') {
+        newFilters.make = [brand]
+      }
+      
+      if (price && price !== 'all') {
+        const [min, max] = price.split('-')
+        if (min && max) {
+          newFilters.priceRange = { min, max }
+        } else if (min === '0' && max) {
+          newFilters.priceRange = { min: '0', max }
+        } else if (min && max === 'plus') {
+          newFilters.priceRange = { min, max: '' }
+        }
+      }
+      
+      setInitialFilters(newFilters)
+      handleFilterChange(newFilters)
+    } else {
+      handleFilterChange(initialFilters)
+    }
+  }, [searchParams])
 
   const handleFilterChange = (filters: any) => {
-    let filtered = [...vehicleStoreVehicles].filter(vehicle => vehicle.status !== 'sold') // Show all vehicles except sold ones
+    let filtered = [...vehicles].filter(vehicle => vehicle.status !== 'sold') // Show all vehicles except sold ones
 
     // Apply search filter
     if (filters.search) {
       const searchTerm = filters.search.toLowerCase()
       filtered = filtered.filter(vehicle => 
-        vehicle.title.toLowerCase().includes(searchTerm) ||
+        vehicle.title?.toLowerCase().includes(searchTerm) ||
         vehicle.make?.toLowerCase().includes(searchTerm) ||
         vehicle.model?.toLowerCase().includes(searchTerm)
       )
@@ -149,21 +140,17 @@ export default function VehiclesPage() {
     setFilteredVehicles(filtered)
   }
 
-  // Update filtered vehicles when vehicles change
+  // Apply initial filters when vehicles change
   useEffect(() => {
-    handleFilterChange({
-      search: '',
-      priceRange: { min: '', max: '' },
-      year: { min: '', max: '' },
-      condition: [],
-      bodyStyle: [],
-      transmission: [],
-      fuelType: [],
-      make: []
-    })
-  }, [vehicleStoreVehicles])
+    if (vehicles.length > 0) {
+      handleFilterChange(initialFilters)
+    }
+  }, [vehicles])
 
-  const handleFavorite = (vehicleId: string) => {
+  const handleFavorite = (vehicleId: string, e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
     if (!localStorage.getItem('userEmail')) {
       setSelectedVehicleId(vehicleId)
       setShowEmailPrompt(true)
@@ -256,13 +243,6 @@ export default function VehiclesPage() {
     return highlights.sort((a, b) => a.priority - b.priority).slice(0, 2)
   }
 
-  const filteredVehiclesByCategory = filteredVehicles.filter(vehicle => {
-    const matchesCategory = selectedCategory === 'All' || vehicle.category === selectedCategory
-    const matchesSearch = vehicle.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         vehicle.description.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
-
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
@@ -273,8 +253,9 @@ export default function VehiclesPage() {
             {/* Filters Sidebar */}
             <div className="md:w-1/4">
               <VehicleFilters 
-                vehicles={vehicleStoreVehicles}
+                vehicles={vehicles}
                 onFilterChange={handleFilterChange}
+                initialFilters={initialFilters}
               />
             </div>
 
@@ -282,38 +263,12 @@ export default function VehiclesPage() {
             <div className="md:w-3/4">
               <div className="mb-6 flex justify-between items-center">
                 <h1 className="text-2xl font-bold text-gray-900">
-                  Available Vehicles ({filteredVehiclesByCategory.length})
+                  Available Vehicles ({filteredVehicles.length})
                 </h1>
               </div>
 
-              {/* Filters */}
-              <div className="mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div className="flex gap-4">
-                  {categories.map(category => (
-                    <button
-                      key={category}
-                      onClick={() => setSelectedCategory(category)}
-                      className={`px-4 py-2 rounded-full ${
-                        selectedCategory === category
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white text-gray-700 hover:bg-gray-100'
-                      }`}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search vehicles..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-64"
-                />
-              </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredVehiclesByCategory.map(vehicle => (
+                {filteredVehicles.map(vehicle => (
                   <div
                     key={vehicle.id}
                     className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100"
@@ -338,6 +293,24 @@ export default function VehiclesPage() {
                         ))}
                       </div>
 
+                      {/* Favorite Button */}
+                      <div className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors z-10 flex items-center gap-1">
+                        {/* Display the favorites count */}
+                        <span className="text-xs font-medium text-gray-700">
+                          {vehicle.favorites ? 1 : 0}
+                        </span>
+                        <button
+                          onClick={(e) => handleFavorite(vehicle.id, e)}
+                          className="ml-1"
+                        >
+                          {vehicle.favorites ? (
+                            <HeartSolidIcon className="h-5 w-5 text-red-500" />
+                          ) : (
+                            <HeartIcon className="h-5 w-5 text-gray-400" />
+                          )}
+                        </button>
+                      </div>
+
                       <div className="absolute inset-0">
                         {vehicle.image.startsWith('http') ? (
                           <Image
@@ -359,86 +332,44 @@ export default function VehiclesPage() {
                       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent h-20" />
                     </div>
 
-                    <div className="p-4 flex flex-col min-h-[220px]">
-                      <div className="flex justify-between items-center mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900">
-                          {vehicle.title}
-                        </h3>
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleFavorite(vehicle.id);
-                            }}
-                            className="flex items-center gap-1 hover:scale-110 transition-transform"
-                          >
-                            {vehicle.favorites && <span className="text-sm text-red-500">Saved</span>}
-                            <div className="flex items-center gap-1">
-                              <svg
-                                className={`w-5 h-5 ${vehicle.favorites ? 'text-red-500 fill-current' : 'text-gray-400'}`}
-                                viewBox="0 0 24 24"
-                              >
-                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                              </svg>
-                              <span className="text-sm text-gray-500">{vehicle.favorites ? '1' : '0'}</span>
-                            </div>
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
-                        <span>{vehicle.year}</span>
-                        <span>•</span>
-                        <span>{vehicle.mileage.toLocaleString()} mi</span>
-                        <span>•</span>
-                        <span>{vehicle.condition}</span>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-2 mb-4">
-                        {vehicle.specifications?.engine && (
-                          <div className="flex items-center text-sm text-gray-600">
-                            <svg className="w-4 h-4 mr-1.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                            </svg>
-                            {vehicle.specifications.engine}
-                          </div>
-                        )}
-                        {vehicle.specifications?.horsepower && (
-                          <div className="flex items-center text-sm text-gray-600">
-                            <svg className="w-4 h-4 mr-1.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                            </svg>
-                            {vehicle.specifications.horsepower} HP
-                          </div>
-                        )}
-                        {vehicle.transmission && (
-                          <div className="flex items-center text-sm text-gray-600">
-                            <svg className="w-4 h-4 mr-1.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                            </svg>
-                            {vehicle.transmission}
-                          </div>
-                        )}
-                        {vehicle.specifications?.range && (
-                          <div className="flex items-center text-sm text-gray-600">
-                            <svg className="w-4 h-4 mr-1.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                            {typeof vehicle.specifications.range === 'string' ? parseInt(vehicle.specifications.range) : vehicle.specifications.range} mi
-                          </div>
+                    <div className="p-4">
+                      <h2 className="font-bold text-lg text-gray-900 mb-1 line-clamp-1">{vehicle.title}</h2>
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-blue-600 font-semibold">${vehicle.price.toLocaleString()}</p>
+                        {vehicle.status === 'sold' ? (
+                          <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Sold</span>
+                        ) : vehicle.status === 'pending' ? (
+                          <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span>
+                        ) : (
+                          <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Available</span>
                         )}
                       </div>
-
-                      <div className="mt-auto flex items-center justify-between">
-                        <span className="text-2xl font-bold text-blue-600">
-                          ${vehicle.price.toLocaleString()}
-                        </span>
-                        <Link 
-                          href={`/vehicles/${vehicle.id}`}
-                          className="inline-flex items-center px-4 py-1 rounded-full text-sm font-medium bg-blue-600 text-white hover:bg-blue-700"
+                      <div className="space-y-1 text-sm text-gray-500 mb-4">
+                        <p>Year: {vehicle.year}</p>
+                        <p>Mileage: {vehicle.mileage.toLocaleString()} miles</p>
+                        <p>{vehicle.location}</p>
+                      </div>
+                      
+                      <div className="flex gap-2 mt-4">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedVehicle(vehicle);
+                            incrementViews(vehicle.id);
+                          }}
+                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded transition-colors text-sm"
                         >
                           View Details
-                        </Link>
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setContactVehicle(vehicle);
+                          }}
+                          className="flex-1 bg-white hover:bg-gray-100 text-blue-600 py-2 px-3 rounded border border-blue-600 transition-colors text-sm"
+                        >
+                          Contact Dealer
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -494,6 +425,21 @@ export default function VehiclesPage() {
             </form>
           </div>
         </div>
+      )}
+
+      {/* Contact Dealer Modal */}
+      {contactVehicle && (
+        <VehicleContactForm
+          onClose={() => setContactVehicle(null)}
+          vehicle={{
+            id: contactVehicle.id,
+            title: contactVehicle.title,
+            price: contactVehicle.price,
+            year: contactVehicle.year,
+            make: contactVehicle.make,
+            model: contactVehicle.model
+          }}
+        />
       )}
     </div>
   )

@@ -2,8 +2,11 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import Logo from '@/components/Logo'
+import { memo } from 'react'
 
-export default function Header() {
+// Use memo to prevent unnecessary re-renders
+const Header = memo(function Header() {
   const pathname = usePathname()
 
   return (
@@ -14,15 +17,16 @@ export default function Header() {
             <Link 
               href="/"
               className="flex items-center px-2 py-2"
+              prefetch={false} // Disable prefetching for better initial load
             >
-              <span className="text-2xl font-bold">DOSKI</span>
-              <span className="text-2xl font-light ml-2">MOTORS</span>
+              <Logo textColor="black" size="medium" />
             </Link>
           </div>
           
           <div className="flex items-center space-x-8">
             <Link
               href="/vehicles"
+              prefetch={false}
               className={`inline-flex items-center px-3 py-2 text-sm font-medium ${
                 pathname === '/vehicles'
                   ? 'text-blue-600'
@@ -33,6 +37,7 @@ export default function Header() {
             </Link>
             <Link
               href="/financing"
+              prefetch={false}
               className={`inline-flex items-center px-3 py-2 text-sm font-medium ${
                 pathname === '/financing'
                   ? 'text-blue-600'
@@ -43,6 +48,7 @@ export default function Header() {
             </Link>
             <Link
               href="/services"
+              prefetch={false}
               className={`inline-flex items-center px-3 py-2 text-sm font-medium ${
                 pathname === '/services'
                   ? 'text-blue-600'
@@ -52,7 +58,19 @@ export default function Header() {
               Services
             </Link>
             <Link
+              href="/tesla-repairs"
+              prefetch={false}
+              className={`inline-flex items-center px-3 py-2 text-sm font-medium ${
+                pathname === '/tesla-repairs'
+                  ? 'text-blue-600'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Tesla Repairs
+            </Link>
+            <Link
               href="/about"
+              prefetch={false}
               className={`inline-flex items-center px-3 py-2 text-sm font-medium ${
                 pathname === '/about'
                   ? 'text-blue-600'
@@ -63,6 +81,7 @@ export default function Header() {
             </Link>
             <Link
               href="/contact"
+              prefetch={false}
               className={`inline-flex items-center px-3 py-2 text-sm font-medium ${
                 pathname === '/contact'
                   ? 'text-blue-600'
@@ -84,4 +103,6 @@ export default function Header() {
       </nav>
     </header>
   )
-} 
+})
+
+export default Header 

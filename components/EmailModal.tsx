@@ -6,12 +6,22 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 interface EmailModalProps {
-  isOpen: boolean
   onClose: () => void
   onSubmit: (email: string) => void
+  onSkip?: () => void
+  isOpen?: boolean
+  subject?: string
+  message?: string
 }
 
-export default function EmailModal({ isOpen, onClose, onSubmit }: EmailModalProps) {
+export default function EmailModal({ 
+  onClose, 
+  onSubmit,
+  onSkip,
+  isOpen = true, 
+  subject = "Stay Updated About This Vehicle", 
+  message = "Enter your email to receive updates about price changes and availability." 
+}: EmailModalProps) {
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
 
@@ -68,12 +78,12 @@ export default function EmailModal({ isOpen, onClose, onSubmit }: EmailModalProp
               </button>
 
               <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                Stay Updated About This Vehicle
+                {subject}
               </Dialog.Title>
               
               <div className="mt-2">
                 <p className="text-sm text-gray-500">
-                  Enter your email to receive updates about price changes and availability.
+                  {message}
                 </p>
               </div>
 
@@ -87,7 +97,7 @@ export default function EmailModal({ isOpen, onClose, onSubmit }: EmailModalProp
                       setError('')
                     }}
                     className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
-                      error ? 'border-red-500' : 'border-gray-300'
+                      error ? 'border-red-500 bg-red-50' : 'border-gray-300'
                     }`}
                     placeholder="Enter your email"
                     autoFocus
@@ -102,16 +112,25 @@ export default function EmailModal({ isOpen, onClose, onSubmit }: EmailModalProp
                 <div className="mt-8 flex justify-end gap-3">
                   <button
                     type="button"
-                    onClick={onClose}
+                    onClick={onSkip || onClose}
                     className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
                   >
-                    Cancel
+                    Skip
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center"
                   >
-                    Keep Me Updated
+                    <span>Keep Me Updated</span>
+                    <svg 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      className="h-4 w-4 ml-1" 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
                   </button>
                 </div>
               </form>

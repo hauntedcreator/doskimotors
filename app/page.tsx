@@ -1,53 +1,77 @@
+'use client'
+
 import Hero from '@/components/Hero'
 import Reviews from '@/components/Reviews'
+import Footer from '@/components/Footer'
 import FeaturedVehicles from '@/components/FeaturedVehicles'
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
+import { useRef, useEffect, useState } from 'react'
 
 export default function Home() {
+  const scrollRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: scrollRef,
+    offset: ["start start", "end start"]
+  })
+  
+  const smoothYProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 })
+  const opacity = useTransform(smoothYProgress, [0, 0.2], [0, 1])
+  const scale = useTransform(smoothYProgress, [0, 0.2], [0.95, 1])
+  const y = useTransform(smoothYProgress, [0, 0.2], [50, 0])
+  
+  const [isMounted, setIsMounted] = useState(false)
+  
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+  
+  if (!isMounted) {
+    return (
+      <main className="min-h-screen bg-white">
+        <Hero />
+        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden border-none">
+          <div className="mx-auto max-w-7xl">
+            <FeaturedVehicles />
+          </div>
+        </section>
+        <Reviews />
+        <Footer />
+      </main>
+    )
+  }
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <main className="min-h-screen bg-white" ref={scrollRef}>
       <Hero />
       
-      {/* Featured Vehicles Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Featured Vehicles</h2>
-          <FeaturedVehicles />
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Why Choose Us</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: 'Premium Fleet',
-                description: 'Access to the latest Tesla models, maintained to the highest standards.',
-                icon: '🚗'
-              },
-              {
-                title: 'Flexible Rentals',
-                description: 'Daily, weekly, or monthly rental options to suit your needs.',
-                icon: '📅'
-              },
-              {
-                title: '24/7 Support',
-                description: 'Round-the-clock customer service for peace of mind.',
-                icon: '🔧'
-              }
-            ].map((benefit, index) => (
-              <div key={index} className="text-center p-6">
-                <div className="text-4xl mb-4">{benefit.icon}</div>
-                <h3 className="text-xl font-bold mb-2">{benefit.title}</h3>
-                <p className="text-gray-600">{benefit.description}</p>
-              </div>
-            ))}
+      {/* Remove all background styling and use pure white */}
+      <motion.div 
+        className="relative overflow-hidden bg-white"
+        style={{ opacity, y }}
+      >
+        <motion.section
+          className="py-16 px-4 sm:px-6 lg:px-8 relative"
+          style={{ scale }}
+        >
+          <div className="mx-auto max-w-7xl">
+            <FeaturedVehicles />
           </div>
-        </div>
-      </section>
-
-      <Reviews />
-    </div>
+        </motion.section>
+      </motion.div>
+      
+      {/* Completely remove any divider elements between sections */}
+      
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="bg-white"
+      >
+        <Reviews />
+      </motion.div>
+      
+      <Footer />
+    </main>
   )
 } 

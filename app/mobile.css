@@ -1,0 +1,84 @@
+/* 
+  Mobile-specific styles that override desktop styles 
+  This file only contains rules that apply to mobile devices
+*/
+
+@media (max-width: 767px) {
+  /* Navbar mobile adjustments */
+  .md\:h-20 {
+    height: 4rem !important;
+  }
+
+  /* Featured vehicles section - fix grid layout */
+  .grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-3.xl\:grid-cols-4 > div {
+    max-width: 100% !important;
+  }
+
+  /* Fix mobile vehicle cards */
+  .bg-white.rounded-xl.shadow-sm.overflow-hidden {
+    margin-bottom: 1rem;
+  }
+
+  /* Improve tap targets for buttons */
+  a, button {
+    padding: 0.5rem !important;
+  }
+
+  /* Adjust hero section image positioning for mobile */
+  .h-screen video {
+    object-position: center center !important;
+  }
+
+  /* Fix mobile typography */
+  .text-center h1 {
+    padding: 0 1rem;
+  }
+
+  /* Adjust trust badges for mobile */
+  .mt-12.flex.flex-wrap {
+    justify-content: center;
+    gap: 0.75rem !important;
+  }
+  
+  .bg-white\/10.backdrop-blur-sm.rounded-xl {
+    padding: 0.75rem !important;
+  }
+
+  /* Make mobile forms easier to use */
+  .mt-8.w-full.max-w-md {
+    width: 90% !important;
+  }
+  
+  form input {
+    height: 3rem !important;
+  }
+
+  /* Ensure action buttons are properly sized */
+  .bg-blue-600.text-white.rounded-lg {
+    width: 100%;
+    display: block;
+    margin-top: 0.5rem;
+  }
+
+  /* Vehicle modal adjustments */
+  .fixed.inset-0 > div {
+    padding: 1rem !important;
+  }
+
+  /* Fix mobile image galleries */
+  .overflow-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Add mobile-friendly favorite button */
+  .absolute.top-2.right-2 {
+    top: 0.75rem !important;
+    right: 0.75rem !important;
+  }
+
+  /* Animated element fixes for mobile */
+  .motion-reduce * {
+    animation: none !important;
+    transition: none !important;
+  }
+} 

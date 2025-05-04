@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { motion, useScroll } from 'framer-motion'
+import { motion, useScroll, AnimatePresence } from 'framer-motion'
 import Logo from './Logo'
 
 const Navbar = () => {
@@ -41,14 +41,14 @@ const Navbar = () => {
       transition={{ duration: 0.5 }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Logo size="large" textColor={isScrolled ? 'black' : 'white'} />
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-4 lg:space-x-8">
             <Link 
               href="/vehicles" 
               className={`text-sm font-medium hover:text-blue-600 transition-colors ${
@@ -83,6 +83,17 @@ const Navbar = () => {
               Services
             </Link>
             <Link 
+              href="/tesla-repairs" 
+              className={`text-sm font-medium hover:text-blue-600 transition-colors ${
+                isScrolled ? 'text-gray-900' : 'text-white'
+              }`}
+              style={{
+                textShadow: isScrolled ? 'none' : '2px 2px 4px rgba(0, 0, 0, 0.5)'
+              }}
+            >
+              Tesla Repairs
+            </Link>
+            <Link 
               href="/about" 
               className={`text-sm font-medium hover:text-blue-600 transition-colors ${
                 isScrolled ? 'text-gray-900' : 'text-white'
@@ -106,7 +117,7 @@ const Navbar = () => {
             </Link>
             <button
               onClick={handleLocationClick}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
             >
               Dealership Location
             </button>
@@ -119,6 +130,8 @@ const Navbar = () => {
               className={`inline-flex items-center justify-center p-2 rounded-md ${
                 isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-400'
               }`}
+              aria-expanded={isMenuOpen}
+              aria-label="Toggle menu"
             >
               <span className="sr-only">Open main menu</span>
               {!isMenuOpen ? (
@@ -136,63 +149,85 @@ const Navbar = () => {
       </div>
 
       {/* Mobile menu */}
-      <motion.div
-        className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: isMenuOpen ? 1 : 0, y: isMenuOpen ? 0 : -20 }}
-        transition={{ duration: 0.2 }}
-      >
-        <div className={`px-2 pt-2 pb-3 space-y-1 shadow-lg ${
-          isScrolled ? 'bg-white' : 'bg-gray-900'
-        }`}>
-          <Link
-            href="/vehicles"
-            className={`block px-3 py-2 rounded-md text-base font-medium ${
-              isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-400'
-            }`}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="md:hidden"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
           >
-            Vehicles
-          </Link>
-          <Link
-            href="/financing"
-            className={`block px-3 py-2 rounded-md text-base font-medium ${
-              isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-400'
-            }`}
-          >
-            Financing
-          </Link>
-          <Link
-            href="/services"
-            className={`block px-3 py-2 rounded-md text-base font-medium ${
-              isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-400'
-            }`}
-          >
-            Services
-          </Link>
-          <Link
-            href="/about"
-            className={`block px-3 py-2 rounded-md text-base font-medium ${
-              isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-400'
-            }`}
-          >
-            About
-          </Link>
-          <Link
-            href="/contact"
-            className={`block px-3 py-2 rounded-md text-base font-medium ${
-              isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-400'
-            }`}
-          >
-            Contact
-          </Link>
-          <button 
-            onClick={handleLocationClick}
-            className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-lg"
-          >
-            Dealership Location
-          </button>
-        </div>
-      </motion.div>
+            <div className={`px-2 pt-2 pb-3 space-y-1 shadow-lg ${
+              isScrolled ? 'bg-white' : 'bg-gray-900'
+            }`}>
+              <Link
+                href="/vehicles"
+                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  isScrolled ? 'text-gray-900 hover:text-blue-600 hover:bg-gray-50' : 'text-white hover:text-blue-400 hover:bg-gray-800'
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Vehicles
+              </Link>
+              <Link
+                href="/financing"
+                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  isScrolled ? 'text-gray-900 hover:text-blue-600 hover:bg-gray-50' : 'text-white hover:text-blue-400 hover:bg-gray-800'
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Financing
+              </Link>
+              <Link
+                href="/services"
+                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  isScrolled ? 'text-gray-900 hover:text-blue-600 hover:bg-gray-50' : 'text-white hover:text-blue-400 hover:bg-gray-800'
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Services
+              </Link>
+              <Link
+                href="/tesla-repairs"
+                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  isScrolled ? 'text-gray-900 hover:text-blue-600 hover:bg-gray-50' : 'text-white hover:text-blue-400 hover:bg-gray-800'
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Tesla Repairs
+              </Link>
+              <Link
+                href="/about"
+                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  isScrolled ? 'text-gray-900 hover:text-blue-600 hover:bg-gray-50' : 'text-white hover:text-blue-400 hover:bg-gray-800'
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About
+              </Link>
+              <Link
+                href="/contact"
+                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  isScrolled ? 'text-gray-900 hover:text-blue-600 hover:bg-gray-50' : 'text-white hover:text-blue-400 hover:bg-gray-800'
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact
+              </Link>
+              <button 
+                onClick={() => {
+                  handleLocationClick();
+                  setIsMenuOpen(false);
+                }}
+                className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-lg"
+              >
+                Dealership Location
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   )
 }

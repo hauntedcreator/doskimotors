@@ -7,12 +7,22 @@ interface FilterCounts {
   [key: string]: number
 }
 
-interface VehicleFiltersProps {
+type FilterProps = {
   vehicles: Vehicle[]
   onFilterChange: (filters: any) => void
+  initialFilters?: {
+    search: string
+    priceRange: { min: string, max: string }
+    year: { min: string, max: string }
+    condition: string[]
+    bodyStyle: string[]
+    transmission: string[]
+    fuelType: string[]
+    make: string[]
+  }
 }
 
-export default function VehicleFilters({ vehicles, onFilterChange }: VehicleFiltersProps) {
+export default function VehicleFilters({ vehicles, onFilterChange, initialFilters }: FilterProps) {
   const [filters, setFilters] = useState({
     search: '',
     priceRange: {
@@ -66,6 +76,14 @@ export default function VehicleFilters({ vehicles, onFilterChange }: VehicleFilt
     
     setCounts(newCounts)
   }, [vehicles])
+
+  // Apply initial filters if provided
+  useEffect(() => {
+    if (initialFilters) {
+      setFilters(initialFilters)
+      onFilterChange(initialFilters)
+    }
+  }, [initialFilters])
 
   const handleFilterChange = (category: string, value: string | string[] | { min: string, max: string }) => {
     const newFilters = {

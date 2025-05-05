@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import './mobile.css'
 import Navbar from '@/components/Navbar'
 import { FavoritesProvider } from '@/context/FavoritesContext'
 import { Providers } from './providers'
@@ -32,6 +33,7 @@ export default function RootLayout({
       <head>
         <link rel="preload" href="/images/Logos/white.svg" as="image" fetchPriority="high" />
         <link rel="preload" href="/images/Logos/black.svg" as="image" fetchPriority="high" />
+        <link rel="stylesheet" href="/app/mobile.css" media="(max-width: 767px)" />
         
         <link rel="preconnect" href="https://images.unsplash.com" />
         
@@ -40,6 +42,15 @@ export default function RootLayout({
             .preload-fix {
               content-visibility: auto;
               contain-intrinsic-size: 0 500px;
+            }
+          }
+          
+          @media screen and (max-width: 767px) {
+            main {
+              padding-top: 64px;
+            }
+            body {
+              -webkit-text-size-adjust: 100%;
             }
           }
         `}} />

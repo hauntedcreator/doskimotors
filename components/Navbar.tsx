@@ -9,11 +9,27 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { scrollY } = useScroll()
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    return scrollY.on('change', (latest) => {
+    // Check if we're on mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    // Run on mount and window resize
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    // Scroll listener
+    const scrollListener = scrollY.on('change', (latest) => {
       setIsScrolled(latest > 50)
     })
+
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+      scrollListener()
+    }
   }, [scrollY])
 
   const handleLocationClick = () => {
@@ -34,7 +50,7 @@ const Navbar = () => {
   return (
     <motion.nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md' : 'bg-transparent'
+        isMobile || isScrolled ? 'bg-white shadow-md' : 'bg-transparent'
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -44,7 +60,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <Logo size="large" textColor={isScrolled ? 'black' : 'white'} />
+            <Logo size="large" textColor={isMobile || isScrolled ? 'black' : 'white'} />
           </Link>
 
           {/* Desktop Navigation */}
@@ -127,9 +143,7 @@ const Navbar = () => {
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={`inline-flex items-center justify-center p-2 rounded-md ${
-                isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-400'
-              }`}
+              className={`inline-flex items-center justify-center p-2 rounded-md text-gray-900 hover:text-blue-600`}
               aria-expanded={isMenuOpen}
               aria-label="Toggle menu"
             >
@@ -158,72 +172,60 @@ const Navbar = () => {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className={`px-2 pt-2 pb-3 space-y-1 shadow-lg ${
-              isScrolled ? 'bg-white' : 'bg-gray-900'
-            }`}>
+            <div className="px-2 pt-2 pb-3 space-y-1 shadow-lg bg-white">
               <Link
                 href="/vehicles"
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
-                  isScrolled ? 'text-gray-900 hover:text-blue-600 hover:bg-gray-50' : 'text-white hover:text-blue-400 hover:bg-gray-800'
-                }`}
+                className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Vehicles
               </Link>
               <Link
                 href="/financing"
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
-                  isScrolled ? 'text-gray-900 hover:text-blue-600 hover:bg-gray-50' : 'text-white hover:text-blue-400 hover:bg-gray-800'
-                }`}
+                className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Financing
               </Link>
               <Link
                 href="/services"
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
-                  isScrolled ? 'text-gray-900 hover:text-blue-600 hover:bg-gray-50' : 'text-white hover:text-blue-400 hover:bg-gray-800'
-                }`}
+                className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Services
               </Link>
               <Link
                 href="/tesla-repairs"
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
-                  isScrolled ? 'text-gray-900 hover:text-blue-600 hover:bg-gray-50' : 'text-white hover:text-blue-400 hover:bg-gray-800'
-                }`}
+                className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Tesla Repairs
               </Link>
               <Link
                 href="/about"
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
-                  isScrolled ? 'text-gray-900 hover:text-blue-600 hover:bg-gray-50' : 'text-white hover:text-blue-400 hover:bg-gray-800'
-                }`}
+                className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
               </Link>
               <Link
                 href="/contact"
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
-                  isScrolled ? 'text-gray-900 hover:text-blue-600 hover:bg-gray-50' : 'text-white hover:text-blue-400 hover:bg-gray-800'
-                }`}
+                className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Contact
               </Link>
-              <button 
-                onClick={() => {
-                  handleLocationClick();
-                  setIsMenuOpen(false);
-                }}
-                className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-lg"
-              >
-                Dealership Location
-              </button>
+              <div className="px-3 py-2">
+                <button 
+                  onClick={() => {
+                    handleLocationClick();
+                    setIsMenuOpen(false);
+                  }}
+                  className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors text-base font-medium shadow-sm"
+                >
+                  Dealership Location
+                </button>
+              </div>
             </div>
           </motion.div>
         )}

@@ -53,13 +53,27 @@ const MobileDetector = () => {
       document.head.appendChild(meta)
     }
 
-    // Add custom mobile stylesheet
-    const style = document.createElement('link')
-    style.rel = 'stylesheet'
-    style.href = '/mobile.css'
-    style.id = 'mobile-stylesheet'
-    style.media = '(max-width: 767px)'
-    document.head.appendChild(style)
+    // Check if mobile stylesheet already exists
+    let mobileStylesheet = document.getElementById('mobile-stylesheet')
+    
+    // If it doesn't exist, create it
+    if (!mobileStylesheet) {
+      mobileStylesheet = document.createElement('link')
+      mobileStylesheet.rel = 'stylesheet'
+      mobileStylesheet.id = 'mobile-stylesheet'
+      mobileStylesheet.media = '(max-width: 767px)'
+      
+      // Use the correct path - ensure we load from the right location
+      // First try the app directory path
+      mobileStylesheet.href = '/app/mobile.css'
+      
+      document.head.appendChild(mobileStylesheet)
+      
+      // Set a fallback in case the first path doesn't work
+      mobileStylesheet.onerror = () => {
+        mobileStylesheet!.href = '/mobile.css'
+      }
+    }
 
     // Cleanup
     return () => {
@@ -67,10 +81,8 @@ const MobileDetector = () => {
       window.removeEventListener('resize', setVh)
       window.removeEventListener('orientationchange', setVh)
       
-      const mobileStylesheet = document.getElementById('mobile-stylesheet')
-      if (mobileStylesheet) {
-        mobileStylesheet.remove()
-      }
+      // Don't remove the stylesheet on unmount to maintain consistency
+      // This ensures the mobile styles persist throughout the application
     }
   }, [])
 
@@ -94,6 +106,11 @@ const MobileDetector = () => {
         /* Fix tap highlight color on mobile */
         body.is-mobile-device * {
           -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+        
+        /* Mobile-friendly padding */
+        body.is-mobile-device main {
+          padding-top: 4rem;
         }
       `}</style>
     )

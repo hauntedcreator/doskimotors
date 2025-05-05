@@ -10,11 +10,17 @@ const Navbar = () => {
   const { scrollY } = useScroll()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [currentPath, setCurrentPath] = useState('/')
 
   useEffect(() => {
     // Check if we're on mobile
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
+    }
+    
+    // Set current path
+    if (typeof window !== 'undefined') {
+      setCurrentPath(window.location.pathname)
     }
     
     // Run on mount and window resize
@@ -47,11 +53,13 @@ const Navbar = () => {
     }
   }
 
+  // Determine if we're on a subpage
+  const isSubpage = currentPath !== '/'
+  const navBgClass = isMobile || isScrolled || isSubpage ? 'bg-white shadow-sm' : 'bg-transparent'
+
   return (
     <motion.nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isMobile || isScrolled ? 'bg-white shadow-sm' : 'bg-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBgClass}`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.3 }}
@@ -59,11 +67,11 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-3 md:px-6 lg:px-8">
         <div className="flex justify-between items-center h-14 md:h-20">
           {/* Logo - even smaller on mobile */}
-          <Link href="/" className="flex items-center md:flex-1">
+          <Link href="/" className="flex items-center z-10">
             <div className="flex items-center">
               <Logo 
                 size={isMobile ? 'small' : 'large'} 
-                textColor={isMobile || isScrolled ? 'black' : 'white'} 
+                textColor={isMobile || isScrolled || isSubpage ? 'black' : 'white'} 
                 className="py-0"
               />
             </div>
@@ -74,10 +82,10 @@ const Navbar = () => {
             <Link 
               href="/vehicles" 
               className={`text-sm font-medium hover:text-blue-600 transition-colors ${
-                isScrolled ? 'text-gray-900' : 'text-white'
+                isScrolled || isSubpage ? 'text-gray-900' : 'text-white'
               }`}
               style={{
-                textShadow: isScrolled ? 'none' : '2px 2px 4px rgba(0, 0, 0, 0.5)'
+                textShadow: !isSubpage && !isScrolled ? '2px 2px 4px rgba(0, 0, 0, 0.5)' : 'none'
               }}
             >
               Vehicles
@@ -85,10 +93,10 @@ const Navbar = () => {
             <Link 
               href="/financing" 
               className={`text-sm font-medium hover:text-blue-600 transition-colors ${
-                isScrolled ? 'text-gray-900' : 'text-white'
+                isScrolled || isSubpage ? 'text-gray-900' : 'text-white'
               }`}
               style={{
-                textShadow: isScrolled ? 'none' : '2px 2px 4px rgba(0, 0, 0, 0.5)'
+                textShadow: !isSubpage && !isScrolled ? '2px 2px 4px rgba(0, 0, 0, 0.5)' : 'none'
               }}
             >
               Financing
@@ -96,10 +104,10 @@ const Navbar = () => {
             <Link 
               href="/services" 
               className={`text-sm font-medium hover:text-blue-600 transition-colors ${
-                isScrolled ? 'text-gray-900' : 'text-white'
+                isScrolled || isSubpage ? 'text-gray-900' : 'text-white'
               }`}
               style={{
-                textShadow: isScrolled ? 'none' : '2px 2px 4px rgba(0, 0, 0, 0.5)'
+                textShadow: !isSubpage && !isScrolled ? '2px 2px 4px rgba(0, 0, 0, 0.5)' : 'none'
               }}
             >
               Services
@@ -107,10 +115,10 @@ const Navbar = () => {
             <Link 
               href="/tesla-repairs" 
               className={`text-sm font-medium hover:text-blue-600 transition-colors ${
-                isScrolled ? 'text-gray-900' : 'text-white'
+                isScrolled || isSubpage ? 'text-gray-900' : 'text-white'
               }`}
               style={{
-                textShadow: isScrolled ? 'none' : '2px 2px 4px rgba(0, 0, 0, 0.5)'
+                textShadow: !isSubpage && !isScrolled ? '2px 2px 4px rgba(0, 0, 0, 0.5)' : 'none'
               }}
             >
               Tesla Repairs
@@ -118,10 +126,10 @@ const Navbar = () => {
             <Link 
               href="/about" 
               className={`text-sm font-medium hover:text-blue-600 transition-colors ${
-                isScrolled ? 'text-gray-900' : 'text-white'
+                isScrolled || isSubpage ? 'text-gray-900' : 'text-white'
               }`}
               style={{
-                textShadow: isScrolled ? 'none' : '2px 2px 4px rgba(0, 0, 0, 0.5)'
+                textShadow: !isSubpage && !isScrolled ? '2px 2px 4px rgba(0, 0, 0, 0.5)' : 'none'
               }}
             >
               About
@@ -129,10 +137,10 @@ const Navbar = () => {
             <Link 
               href="/contact" 
               className={`text-sm font-medium hover:text-blue-600 transition-colors ${
-                isScrolled ? 'text-gray-900' : 'text-white'
+                isScrolled || isSubpage ? 'text-gray-900' : 'text-white'
               }`}
               style={{
-                textShadow: isScrolled ? 'none' : '2px 2px 4px rgba(0, 0, 0, 0.5)'
+                textShadow: !isSubpage && !isScrolled ? '2px 2px 4px rgba(0, 0, 0, 0.5)' : 'none'
               }}
             >
               Contact
@@ -168,7 +176,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu - fullscreen with smaller items */}
+      {/* Mobile menu - fullscreen with proper text display */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -183,47 +191,47 @@ const Navbar = () => {
               <div className="space-y-0">
                 <Link
                   href="/vehicles"
-                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100 w-full"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Vehicles
+                  <span className="block w-full">Vehicles</span>
                 </Link>
                 <Link
                   href="/financing"
-                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100 w-full"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Financing
+                  <span className="block w-full">Financing</span>
                 </Link>
                 <Link
                   href="/services"
-                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100 w-full"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Services
+                  <span className="block w-full">Services</span>
                 </Link>
                 <Link
                   href="/tesla-repairs"
-                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100 w-full"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Tesla Repairs
+                  <span className="block w-full">Tesla Repairs</span>
                 </Link>
                 <Link
                   href="/about"
-                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100 w-full"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  About
+                  <span className="block w-full">About</span>
                 </Link>
                 <Link
                   href="/contact"
-                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100 w-full"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Contact
+                  <span className="block w-full">Contact</span>
                 </Link>
-                <div className="px-4 py-3 mt-4">
+                <div className="px-4 py-3 mt-2">
                   <button 
                     onClick={() => {
                       handleLocationClick();

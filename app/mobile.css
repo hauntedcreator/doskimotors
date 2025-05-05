@@ -4,66 +4,156 @@
 */
 
 @media (max-width: 767px) {
-  /* Remove all unwanted white space */
+  /* ===== CRITICAL FIX: Remove all gaps from main page ===== */
+  /* Remove all unwanted white space on body and html */
   body, html {
     margin: 0 !important;
     padding: 0 !important;
     overflow-x: hidden;
   }
   
-  /* Fix top spacing issues */
-  body {
-    padding-top: 0 !important;
+  /* Fix the hero video container to fill the screen */
+  .h-screen, section.h-screen, div.h-screen {
+    height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
   
-  main {
+  /* Ensure video background fills the screen */
+  .h-screen video, .h-screen img {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+  }
+  
+  /* Fix the hero content container */
+  .h-screen > div {
+    height: 100vh !important;
+    width: 100% !important;
     padding-top: 0 !important;
     margin-top: 0 !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    z-index: 10;
+  }
+  
+  /* Fix the hero text to be fully visible */
+  .h-screen h1 {
+    font-size: 2.25rem !important;
+    margin-top: 2rem !important;
+    padding: 0 1rem !important;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7) !important;
+  }
+  
+  .h-screen h2, .h-screen p {
+    font-size: 1.25rem !important;
+    padding: 0 1rem !important;
+    margin-top: 0.5rem !important;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7) !important;
+  }
+  
+  /* Fix hero content positioning - move it down from navbar */
+  .h-screen > div > div {
+    margin-top: 3rem !important;
+  }
+  
+  /* ===== Fix button issues ===== */
+  /* Fix the See All Vehicles button */
+  a[href="/vehicles"] {
+    margin: 1rem auto !important;
+    text-align: center !important;
+    display: inline-block !important;
+    width: auto !important;
+    min-width: 200px !important;
+  }
+  
+  /* Fix the arrow in button */
+  a[href="/vehicles"] svg {
+    display: none !important;
+  }
+  
+  /* Fix the search button padding */
+  button[type="submit"] {
+    padding: 0 1rem !important;
+  }
+  
+  /* ===== Fix navbar issues ===== */
+  /* Main navbar fixes */
+  nav.fixed {
+    background-color: rgba(255,255,255,0.9) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+    height: 56px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    z-index: 50 !important;
+  }
+  
+  /* Fix subpage navigation */
+  body:has(> main > div[class*="vehicles-"]),
+  body:has(> main > div[class*="financing-"]),
+  body:has(> main > div[class*="services-"]),
+  body:has(> main > div[class*="about-"]),
+  body:has(> main > div[class*="contact-"]),
+  body:has(> main > div[class*="repairs-"]) {
+    nav.fixed {
+      background-color: white !important;
+    }
+    
+    /* Fix subpage content padding */
+    main > div {
+      padding-top: 56px !important;
+    }
+  }
+  
+  /* Fix navbar z-index stacking */
+  nav.fixed.z-50 {
+    z-index: 9999 !important;
+  }
+  
+  /* Fix menu text so it's fully visible */
+  nav.fixed .fixed.inset-0.z-40 a {
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    display: block !important;
+    width: 100% !important;
   }
 
-  /* Fix page-specific issues */
-  main > div:first-child {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
+  /* Additional fix for menu items being cut off */
+  .fixed.inset-0.z-40 a {
+    padding: 0.75rem 1rem !important;
+    font-size: 1rem !important;
   }
   
-  /* Remove any large gaps everywhere */
-  div[class*="bg-"], section[class*="bg-"] {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
+  /* ===== Fix card layout issues ===== */
+  /* Make vehicle cards look better */
+  .grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-3.xl\:grid-cols-4 > div {
+    max-width: 100% !important;
+    margin-bottom: 1rem !important;
   }
   
-  /* Ensure the hero section fills the entire height without gap */
-  .h-screen {
-    height: 100vh !important;
-    margin-top: 0 !important;
+  /* Fix card shadow and borders */
+  .bg-white.rounded-xl.shadow-sm.overflow-hidden {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+    border-radius: 8px !important;
   }
   
-  /* Fix hero positioning and alignment */
-  div:has(> section.h-screen) {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
+  /* Fix overflow issues on whole page */
+  #__next, main, main > div {
+    overflow-x: hidden !important;
+    width: 100% !important;
   }
   
-  /* Make search sections more mobile friendly */
-  [class*="min-h-screen"] {
-    min-height: calc(100vh - 56px) !important;
-    padding-top: 56px !important; /* Account for fixed navbar */
-  }
-  
-  /* Navbar mobile adjustments - make it smaller */
+  /* Rest of original mobile CSS follows */
   .md\:h-20 {
     height: 56px !important;
-  }
-  
-  /* Always show navbar on mobile with better styling */
-  nav.fixed {
-    background-color: white !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
-    height: 56px !important;
-    display: flex;
-    align-items: center;
-    padding: 0 !important;
   }
   
   /* Make navbar top aligned and slim */
@@ -81,11 +171,6 @@
   /* Fix fullscreen menu positioning */
   .fixed.inset-0.z-40 {
     top: 56px !important;
-  }
-  
-  /* Make page headings start below navbar */
-  h1:first-of-type, h2:first-of-type {
-    padding-top: 56px !important;
   }
   
   /* Fix subpage hero sections to start below navbar */
@@ -114,25 +199,10 @@
     max-width: 100% !important;
   }
 
-  /* Fix mobile vehicle cards */
-  .bg-white.rounded-xl.shadow-sm.overflow-hidden {
-    margin-bottom: 1rem;
-  }
-
   /* Improve tap targets for buttons */
   a, button {
     min-height: 44px;
     min-width: 44px;
-  }
-
-  /* Adjust hero section image positioning for mobile */
-  .h-screen video, .h-screen img {
-    object-position: center center !important;
-  }
-  
-  /* Fix hero content positioning */
-  .h-screen > div {
-    padding-top: 56px !important; /* Account for navbar */
   }
 
   /* Fix mobile typography */
@@ -252,24 +322,6 @@
     margin-right: 0.5rem;
   }
   
-  /* Improve spacing and sizing for filter sections */
-  [id^="search"] > div {
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Make the reset button more visible */
-  a:has(> span) {
-    padding: 0.5rem 1rem;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-  }
-  
-  /* Make mobile filtering friendly */
-  form[class*="flex flex-col"] {
-    gap: 1.25rem;
-  }
-  
   /* Fix specific pages */
   /* Fix financing page */
   .financing-page, 
@@ -285,11 +337,6 @@
   /* Add more space at the bottom of the page */
   main > div:last-child {
     padding-bottom: 3rem;
-  }
-  
-  /* Fix z-index issues with navbar */
-  .z-50 {
-    z-index: 9999 !important;
   }
   
   /* Make subpage headers smaller */

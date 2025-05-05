@@ -10,18 +10,18 @@ interface LogoProps {
 const Logo = memo(({ className = '', textColor = 'white', size = 'medium' }: LogoProps) => {
   // Consistent text size classes that won't change based on color
   const sizeClasses = {
-    small: 'text-xl',
-    medium: 'text-2xl',
-    large: 'text-3xl',
-    'extra-large': 'text-4xl'
+    small: 'text-lg',
+    medium: 'text-xl',
+    large: 'text-2xl',
+    'extra-large': 'text-3xl'
   }
 
   // Fixed dimensions for consistent logo sizing
   const dimensions = {
-    small: { width: 32, height: 22 },
-    medium: { width: 60, height: 40 },
-    large: { width: 75, height: 50 },
-    'extra-large': { width: 90, height: 60 }
+    small: { width: 28, height: 18 },
+    medium: { width: 45, height: 30 },
+    large: { width: 60, height: 40 },
+    'extra-large': { width: 75, height: 50 }
   };
   
   // Ensure SVGs have consistent dimensions and positioning
@@ -40,18 +40,18 @@ const Logo = memo(({ className = '', textColor = 'white', size = 'medium' }: Log
         style={{ 
           width: `${dimensions[size].width}px`,
           height: `${dimensions[size].height}px`,
-          marginRight: '-8px', // Reduced margin
+          marginRight: '-4px', // Reduced margin
         }}
         className="object-contain"
         loading="eager"
         fetchPriority="high"
       />
 
-      <div className="relative pl-1">
+      <div className="relative pl-0">
         <span className={`font-bold ${sizeClasses[size]} ${textColor === 'white' ? 'text-white' : 'text-gray-900'} tracking-tight`}>
           DOSKI
         </span>
-        <span className={`ml-1 uppercase tracking-wider ${size === 'extra-large' ? 'text-base' : size === 'large' ? 'text-sm' : 'text-xs'} ${textColor === 'white' ? 'text-gray-300' : 'text-gray-600'}`}>
+        <span className={`ml-1 uppercase tracking-wider ${size === 'extra-large' ? 'text-xs' : size === 'large' ? 'text-xs' : 'text-xs'} ${textColor === 'white' ? 'text-gray-300' : 'text-gray-600'}`}>
           MOTORS
         </span>
       </div>

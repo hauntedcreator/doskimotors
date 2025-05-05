@@ -4,16 +4,33 @@
 */
 
 @media (max-width: 767px) {
-  /* Remove unwanted white space */
+  /* Remove all unwanted white space */
   body, html {
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
     overflow-x: hidden;
   }
   
+  /* Fix top spacing issues */
+  body {
+    padding-top: 0 !important;
+  }
+  
   main {
-    padding-top: 0 !important; /* Remove extra padding at top */
+    padding-top: 0 !important;
     margin-top: 0 !important;
+  }
+
+  /* Fix page-specific issues */
+  main > div:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  
+  /* Remove any large gaps everywhere */
+  div[class*="bg-"], section[class*="bg-"] {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
   }
   
   /* Ensure the hero section fills the entire height without gap */
@@ -30,34 +47,62 @@
   
   /* Make search sections more mobile friendly */
   [class*="min-h-screen"] {
-    min-height: calc(100vh - 64px) !important;
-    padding-top: 64px !important; /* Account for fixed navbar */
+    min-height: calc(100vh - 56px) !important;
+    padding-top: 56px !important; /* Account for fixed navbar */
   }
   
-  /* Navbar mobile adjustments */
+  /* Navbar mobile adjustments - make it smaller */
   .md\:h-20 {
-    height: 3.5rem !important;
+    height: 56px !important;
   }
   
   /* Always show navbar on mobile with better styling */
   nav.fixed {
     background-color: white !important;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.1) !important;
-    height: 64px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+    height: 56px !important;
     display: flex;
     align-items: center;
+    padding: 0 !important;
+  }
+  
+  /* Make navbar top aligned and slim */
+  nav.fixed > div {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    height: 56px !important;
+  }
+  
+  /* Fix navbar children height */
+  nav.fixed > div > div {
+    height: 56px !important;
+  }
+  
+  /* Fix fullscreen menu positioning */
+  .fixed.inset-0.z-40 {
+    top: 56px !important;
+  }
+  
+  /* Make page headings start below navbar */
+  h1:first-of-type, h2:first-of-type {
+    padding-top: 56px !important;
+  }
+  
+  /* Fix subpage hero sections to start below navbar */
+  .pt-20, .pt-16, .pt-24, .pt-32 {
+    padding-top: 56px !important;
   }
   
   /* Reduce logo size on mobile */
   nav .flex.items-center svg {
     height: auto !important;
-    max-width: 150px !important;
+    max-width: 120px !important;
   }
   
   /* Enhance mobile menu button for better accessibility */
   nav button {
-    min-height: 48px;
-    min-width: 48px;
+    height: 38px !important;
+    width: 38px !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
@@ -76,8 +121,8 @@
 
   /* Improve tap targets for buttons */
   a, button {
-    min-height: 48px;
-    min-width: 48px;
+    min-height: 44px;
+    min-width: 44px;
   }
 
   /* Adjust hero section image positioning for mobile */
@@ -87,17 +132,19 @@
   
   /* Fix hero content positioning */
   .h-screen > div {
-    padding-top: 64px !important; /* Account for navbar */
+    padding-top: 56px !important; /* Account for navbar */
   }
 
   /* Fix mobile typography */
   .text-center h1 {
     padding: 0 1rem;
-    font-size: 2.25rem !important;
+    font-size: 2rem !important;
+    margin-top: 0;
   }
   
   .text-center h2 {
     font-size: 1.25rem !important;
+    margin-top: 0;
   }
 
   /* Adjust trust badges for mobile */
@@ -116,7 +163,7 @@
   }
   
   form input, input[type="text"], input[type="email"], input[type="search"], input[type="number"] {
-    height: 48px !important;
+    height: 44px !important;
     font-size: 16px !important; /* Prevents zoom on iOS */
     padding: 0 1rem !important;
   }
@@ -131,7 +178,7 @@
     width: 100%;
     display: block;
     margin-top: 0.5rem;
-    min-height: 48px;
+    min-height: 44px;
   }
 
   /* Vehicle modal adjustments */
@@ -158,7 +205,7 @@
   
   /* Vehicles search page improvements */
   #search-container {
-    padding-top: 64px !important;
+    padding-top: 56px !important;
   }
   
   /* Fix search page layout */
@@ -170,14 +217,14 @@
   input[type="search"],
   input[type="text"],
   input[type="number"] {
-    height: 48px !important;
+    height: 44px !important;
     font-size: 16px !important;
     padding: 0.75rem 1rem !important;
   }
   
   /* Improve filter elements */
   #search-container input[placeholder="Search by make, model, or title..."] {
-    height: 48px !important;
+    height: 44px !important;
     font-size: 16px;
     padding: 0.75rem 1rem;
   }
@@ -187,7 +234,7 @@
   input[placeholder="Max"],
   input[placeholder$="Min"],
   input[placeholder$="Max"] {
-    height: 48px !important;
+    height: 44px !important;
     font-size: 16px;
     padding-left: 1.5rem !important;
   }
@@ -195,7 +242,7 @@
   /* Year range inputs */
   input[placeholder="Min year"],
   input[placeholder="Max year"] {
-    height: 48px !important;
+    height: 44px !important;
     font-size: 16px;
   }
   
@@ -213,7 +260,7 @@
   /* Make the reset button more visible */
   a:has(> span) {
     padding: 0.5rem 1rem;
-    min-height: 48px;
+    min-height: 44px;
     display: inline-flex;
     align-items: center;
   }
@@ -223,13 +270,37 @@
     gap: 1.25rem;
   }
   
+  /* Fix specific pages */
+  /* Fix financing page */
+  .financing-page, 
+  [class*="financing-"], 
+  [class*="contact-"],
+  [class*="about-"],
+  [class*="repairs-"],
+  [class*="services-"] {
+    padding-top: 56px !important;
+    margin-top: 0 !important;
+  }
+  
   /* Add more space at the bottom of the page */
   main > div:last-child {
-    padding-bottom: 4rem;
+    padding-bottom: 3rem;
   }
   
   /* Fix z-index issues with navbar */
   .z-50 {
     z-index: 9999 !important;
+  }
+  
+  /* Make subpage headers smaller */
+  .text-4xl, .text-5xl, .text-6xl {
+    font-size: 1.75rem !important;
+    line-height: 2.25rem !important;
+  }
+  
+  /* Make all blue subpage headers touch the navbar */
+  div.bg-blue-900, section.bg-blue-900 {
+    margin-top: 0 !important;
+    padding-top: 72px !important;
   }
 } 

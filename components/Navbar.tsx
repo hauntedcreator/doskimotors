@@ -50,18 +50,22 @@ const Navbar = () => {
   return (
     <motion.nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isMobile || isScrolled ? 'bg-white shadow-md' : 'bg-transparent'
+        isMobile || isScrolled ? 'bg-white shadow-sm' : 'bg-transparent'
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.3 }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 md:h-20">
-          {/* Logo - made smaller on mobile */}
+      <div className="max-w-7xl mx-auto px-3 md:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-14 md:h-20">
+          {/* Logo - even smaller on mobile */}
           <Link href="/" className="flex items-center md:flex-1">
-            <div className="mr-auto md:mr-0">
-              <Logo size={isMobile ? 'small' : 'large'} textColor={isMobile || isScrolled ? 'black' : 'white'} />
+            <div className="flex items-center">
+              <Logo 
+                size={isMobile ? 'small' : 'large'} 
+                textColor={isMobile || isScrolled ? 'black' : 'white'} 
+                className="py-0"
+              />
             </div>
           </Link>
 
@@ -141,21 +145,21 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Mobile menu button - moved to the right with increased touch target */}
+          {/* Mobile menu button - smaller and more compact */}
           <div className="md:hidden z-50">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-3 rounded-md text-gray-900 hover:text-blue-600"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-900 hover:text-blue-600"
               aria-expanded={isMenuOpen}
               aria-label="Toggle menu"
             >
               <span className="sr-only">Open main menu</span>
               {!isMenuOpen ? (
-                <svg className="block h-7 w-7" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                <svg className="block h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               ) : (
-                <svg className="block h-7 w-7" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                <svg className="block h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               )}
@@ -164,7 +168,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu - made fullscreen for better usability */}
+      {/* Mobile menu - fullscreen with smaller items */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -172,59 +176,60 @@ const Navbar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.15 }}
+            style={{ top: '56px' }}
           >
-            <div className="pt-20 px-2 pb-3 h-full overflow-y-auto">
-              <div className="space-y-2">
+            <div className="pt-1 px-0 pb-3 h-full overflow-y-auto">
+              <div className="space-y-0">
                 <Link
                   href="/vehicles"
-                  className="block px-4 py-4 rounded-md text-lg font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Vehicles
                 </Link>
                 <Link
                   href="/financing"
-                  className="block px-4 py-4 rounded-md text-lg font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Financing
                 </Link>
                 <Link
                   href="/services"
-                  className="block px-4 py-4 rounded-md text-lg font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Services
                 </Link>
                 <Link
                   href="/tesla-repairs"
-                  className="block px-4 py-4 rounded-md text-lg font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Tesla Repairs
                 </Link>
                 <Link
                   href="/about"
-                  className="block px-4 py-4 rounded-md text-lg font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   About
                 </Link>
                 <Link
                   href="/contact"
-                  className="block px-4 py-4 rounded-md text-lg font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Contact
                 </Link>
-                <div className="px-4 py-4">
+                <div className="px-4 py-3 mt-4">
                   <button 
                     onClick={() => {
                       handleLocationClick();
                       setIsMenuOpen(false);
                     }}
-                    className="w-full bg-blue-600 text-white px-4 py-4 rounded-lg hover:bg-blue-700 transition-colors text-lg font-medium shadow-sm"
+                    className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors text-base font-medium shadow-sm"
                   >
                     Dealership Location
                   </button>

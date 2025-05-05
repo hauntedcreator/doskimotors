@@ -4,18 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, useScroll, AnimatePresence } from 'framer-motion'
 import Logo from './Logo'
-import Image from 'next/image'
 import { useRouter, usePathname } from 'next/navigation'
-
-const Logo = ({ size, textColor, className }: { size: string, textColor: string, className: string }) => (
-  <Image 
-    src="/images/doski-logo-white.png" 
-    alt="Doski Motors" 
-    width={size === 'small' ? 120 : 240} 
-    height={size === 'small' ? 40 : 80} 
-    className={`h-${size} w-auto ${className}`}
-  />
-)
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -30,27 +19,12 @@ const Navbar = () => {
   const isHomePage = currentPath === '/'
 
   useEffect(() => {
-    // Check if we're on mobile
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    
-    // Set current path
-    if (typeof window !== 'undefined') {
-      setCurrentPath(window.location.pathname)
-    }
-    
-    // Run on mount and window resize
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    
     // Scroll listener
     const scrollListener = scrollY.on('change', (latest) => {
       setIsScrolled(latest > 50)
     })
 
     return () => {
-      window.removeEventListener('resize', checkMobile)
       scrollListener()
     }
   }, [scrollY])
@@ -243,7 +217,7 @@ const MobileMenuItem = ({ href, label, onClick }) => (
     className="block w-full text-left border-b border-gray-100"
     onClick={onClick}
   >
-    <div className="px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50">
+    <div className="px-4 py-3 text-base font-medium text-white hover:text-blue-300 hover:bg-blue-800">
       {label}
     </div>
   </Link>

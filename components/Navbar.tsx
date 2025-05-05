@@ -1,16 +1,33 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, useScroll, AnimatePresence } from 'framer-motion'
 import Logo from './Logo'
+import Image from 'next/image'
+import { useRouter, usePathname } from 'next/navigation'
+
+const Logo = ({ size, textColor, className }: { size: string, textColor: string, className: string }) => (
+  <Image 
+    src="/images/doski-logo-white.png" 
+    alt="Doski Motors" 
+    width={size === 'small' ? 120 : 240} 
+    height={size === 'small' ? 40 : 80} 
+    className={`h-${size} w-auto ${className}`}
+  />
+)
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { scrollY } = useScroll()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-  const [currentPath, setCurrentPath] = useState('/')
+  const pathName = usePathname()
+  const router = useRouter()
+  const { scrollY } = useScroll()
+  
+  const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  
+  const currentPath = pathName || '/'
+  const isHomePage = currentPath === '/'
 
   useEffect(() => {
     // Check if we're on mobile
@@ -55,9 +72,8 @@ const Navbar = () => {
 
   // Determine if we're on a subpage
   const isSubpage = currentPath !== '/'
-  const isHomePage = currentPath === '/'
   
-  // Set transparent navbar for home, white for subpages
+  // Always use white logo regardless of scroll position
   const navBgClass = (isMobile && !isHomePage) || (isScrolled && isHomePage) || (!isHomePage) 
     ? 'bg-white shadow-sm' 
     : 'bg-transparent'
@@ -76,7 +92,7 @@ const Navbar = () => {
             <div className="flex items-center">
               <Logo 
                 size={isMobile ? 'small' : 'large'} 
-                textColor={isMobile && !isHomePage ? 'black' : isScrolled && isHomePage ? 'black' : !isHomePage ? 'black' : 'white'} 
+                textColor="white" 
                 className="py-0"
               />
             </div>
@@ -158,26 +174,21 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Mobile menu button - using same color as logo text */}
-          <div className="md:hidden z-50">
+          {/* Mobile menu button - Always white */}
+          <div className="md:hidden">
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={`inline-flex items-center justify-center p-2 rounded-md ${
-                isMobile && !isHomePage ? 'text-gray-900' : 
-                isScrolled && isHomePage ? 'text-gray-900' : 
-                !isHomePage ? 'text-gray-900' : 'text-white'
-              } hover:text-blue-600`}
-              aria-expanded={isMenuOpen}
-              aria-label="Toggle menu"
+              type="button"
+              className="text-white p-2 rounded-md focus:outline-none"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               <span className="sr-only">Open main menu</span>
-              {!isMenuOpen ? (
-                <svg className="block h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              {mobileMenuOpen ? (
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
-                <svg className="block h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               )}
             </button>
@@ -185,38 +196,37 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu - simplified with all pages visible */}
+      {/* Mobile menu */}
       <AnimatePresence>
-        {isMenuOpen && (
+        {mobileMenuOpen && (
           <motion.div
-            className="md:hidden fixed inset-0 bg-white"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            style={{ top: '56px', height: 'calc(100vh - 56px)', zIndex: 40 }}
+            key="mobile-menu"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            id="mobile-menu"
+            className="fixed inset-0 z-40"
+            style={{ top: '64px' }}
           >
-            <div className="h-full overflow-y-auto">
-              {/* Menu Items - simple list with no fancy styling */}
-              <div className="flex flex-col">
-                <MobileMenuItem href="/vehicles" label="Vehicles" onClick={() => setIsMenuOpen(false)} />
-                <MobileMenuItem href="/financing" label="Financing" onClick={() => setIsMenuOpen(false)} />
-                <MobileMenuItem href="/services" label="Services" onClick={() => setIsMenuOpen(false)} />
-                <MobileMenuItem href="/tesla-repairs" label="Tesla Repairs" onClick={() => setIsMenuOpen(false)} />
-                <MobileMenuItem href="/about" label="About" onClick={() => setIsMenuOpen(false)} />
-                <MobileMenuItem href="/contact" label="Contact" onClick={() => setIsMenuOpen(false)} />
-                
-                <div className="px-4 py-4 mt-2">
-                  <button 
-                    onClick={() => {
-                      handleLocationClick();
-                      setIsMenuOpen(false);
-                    }}
-                    className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors text-base font-medium"
-                  >
-                    Dealership Location
-                  </button>
-                </div>
+            <div className="bg-blue-900 text-white space-y-1 px-2 pb-3 pt-2">
+              <MobileMenuItem href="/vehicles" label="Vehicles" onClick={() => setMobileMenuOpen(false)} />
+              <MobileMenuItem href="/financing" label="Financing" onClick={() => setMobileMenuOpen(false)} />
+              <MobileMenuItem href="/services" label="Services" onClick={() => setMobileMenuOpen(false)} />
+              <MobileMenuItem href="/tesla-repairs" label="Tesla Repairs" onClick={() => setMobileMenuOpen(false)} />
+              <MobileMenuItem href="/about" label="About" onClick={() => setMobileMenuOpen(false)} />
+              <MobileMenuItem href="/contact" label="Contact" onClick={() => setMobileMenuOpen(false)} />
+              
+              <div className="px-4 py-4 mt-2">
+                <button 
+                  onClick={() => {
+                    handleLocationClick();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors text-base font-medium"
+                >
+                  Dealership Location
+                </button>
               </div>
             </div>
           </motion.div>

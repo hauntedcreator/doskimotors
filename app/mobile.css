@@ -1,37 +1,71 @@
 /* 
-  Mobile-specific styles that override desktop styles 
-  This file only contains rules that apply to mobile devices
+  Mobile-specific styles - completely simplified version 
 */
 
 @media (max-width: 767px) {
-  /* Fix white gap at top of mobile screens */
-  body, html {
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow-x: hidden;
-    width: 100%;
-    min-height: 100%;
+  /* Basic resets */
+  * {
+    box-sizing: border-box;
   }
-  
-  #__next, #__next > div, main {
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    width: 100%;
+    overflow-x: hidden;
+    background: white;
+  }
+
+  /* Ensure main container fills screen */
+  main {
     width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    display: block !important;
     overflow-x: hidden !important;
   }
-  
-  /* Hero section fixes */
+
+  /* Navbar styling */
+  nav {
+    height: 60px !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 1rem !important;
+    position: relative !important;
+    z-index: 10 !important;
+  }
+
+  nav.fixed {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(5px) !important;
+  }
+
+  /* Logo in navbar */
+  nav svg {
+    height: 24px !important;
+    width: auto !important;
+  }
+
+  /* Menu button in navbar */
+  nav button {
+    background: transparent !important;
+    border: none !important;
+    padding: 8px !important;
+    margin-left: auto !important;
+  }
+
+  /* Hero section styling */
   .h-screen {
     height: 100vh !important;
-    min-height: 100vh !important;
-    margin: 0 !important;
-    padding: 0 !important;
     position: relative !important;
-    width: 100% !important;
     overflow: hidden !important;
+    padding-top: 60px !important; /* Account for navbar */
   }
-  
-  /* Make video fill screen */
+
+  /* Video background */
   .h-screen video {
     position: absolute !important;
     top: 0 !important;
@@ -39,16 +73,13 @@
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
-    object-position: center !important;
   }
-  
-  /* FIX: Position hero content properly to show text */
+
+  /* Content overlay */
   .h-screen > div {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
     width: 100% !important;
     height: 100% !important;
     display: flex !important;
@@ -56,190 +87,200 @@
     justify-content: center !important;
     align-items: center !important;
     text-align: center !important;
-    padding: 0 1rem !important;
-    margin: 0 !important;
-    z-index: 2 !important;
-    background-color: rgba(0,0,0,0.4) !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    padding: 1rem !important;
+    color: white !important;
   }
-  
-  /* Hero content container */
-  .h-screen > div > div {
-    width: 100% !important;
-    padding: 2rem 1rem !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin-top: -2rem !important; /* Pull up content slightly */
-  }
-  
-  /* Make navbar transparent */
-  body.index-page nav.fixed {
-    background-color: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    box-shadow: none !important;
-  }
-  
-  /* Make non-home page navbars white */
-  body.vehicles-page nav.fixed,
-  body.financing-page nav.fixed,
-  body.services-page nav.fixed,
-  body.about-page nav.fixed,
-  body.contact-page nav.fixed,
-  body.repairs-page nav.fixed {
-    background-color: white !important;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
-  }
-  
-  /* Fix navbar z-index */
-  nav.fixed {
-    z-index: 50 !important;
-    height: 56px !important;
-  }
-  
-  /* Text styling for hero - Make sure text is visible */
+
+  /* Hero headline */
   .h-screen h1 {
+    font-size: 2rem !important;
+    margin-bottom: 0.5rem !important;
     color: white !important;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.7) !important;
-    font-size: 2.5rem !important;
-    line-height: 1.2 !important;
-    padding: 0 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  /* Hero subheading */
+  .h-screen h2, 
+  .h-screen p {
+    font-size: 1.25rem !important;
     margin-bottom: 1rem !important;
-    max-width: 100% !important;
-    width: 100% !important;
-    display: block !important;
-  }
-  
-  .h-screen h2, .h-screen p {
     color: white !important;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5) !important;
-    font-size: 1.5rem !important;
-    line-height: 1.4 !important;
-    padding: 0 !important;
-    margin-bottom: 1.5rem !important;
-    max-width: 100% !important;
-    width: 100% !important;
-    display: block !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
   }
-  
-  /* Fix blue button to be more visible */
-  a[href="/vehicles"] {
-    margin: 1.5rem auto 0 !important;
-    text-align: center !important;
-    display: inline-block !important;
-    width: auto !important;
-    min-width: 220px !important;
+
+  /* Call to action button */
+  .h-screen a.bg-blue-600 {
+    background-color: #2563eb !important;
+    color: white !important;
     padding: 0.75rem 1.5rem !important;
-    font-size: 1.125rem !important;
+    border-radius: 0.375rem !important;
     font-weight: 600 !important;
-    border-radius: 0.5rem !important;
+    text-decoration: none !important;
+    margin-top: 1rem !important;
+    display: inline-block !important;
   }
-  
-  a[href="/vehicles"] svg {
+
+  /* Hide arrow in CTA button */
+  .h-screen a.bg-blue-600 svg {
     display: none !important;
   }
-  
-  /* Navbar height */
-  .md\:h-20 {
-    height: 56px !important;
+
+  /* Featured vehicles section */
+  .py-16 {
+    padding: 2rem 1rem !important;
   }
-  
-  /* Fix mobile menu navigation */
-  .fixed.inset-0.z-40 {
-    top: 56px !important;
-    height: calc(100vh - 56px) !important;
-    overflow-y: auto !important;
-  }
-  
-  /* Fix menu links to be fully visible */
-  .fixed.inset-0.z-40 a {
-    white-space: nowrap !important;
-    overflow: visible !important;
-    width: 100% !important;
-    display: block !important;
-  }
-  
-  /* Tap target fixes */
-  a, button {
-    min-height: 44px;
-    min-width: 44px;
-  }
-  
-  /* Form styling */
-  form input, input[type="text"], input[type="email"], input[type="search"] {
-    height: 44px !important;
-    font-size: 16px !important;
-  }
-  
-  /* Subpage spacing fix */
-  .financing-page, 
-  .vehicles-page,
-  .contact-page,
-  .about-page,
-  .repairs-page,
-  .services-page {
-    padding-top: 56px !important;
-    margin-top: 0 !important;
-  }
-  
-  /* Fix Featured Vehicles section */
-  main > div > motion\:section, 
-  main > div > motion\:div,
-  main > div > section {
-    width: 100% !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-    padding-top: 2rem !important;
-    padding-bottom: 2rem !important;
-    max-width: 100% !important;
-  }
-  
-  /* Fix white gap between sections */
-  main > div {
-    margin-bottom: 0 !important;
-    padding-bottom: 0 !important;
-  }
-  
-  /* Make section headers visible */
-  .text-3xl, .text-4xl, .text-5xl, .text-6xl {
+
+  /* Section headings */
+  h2.text-3xl {
     font-size: 1.75rem !important;
-    line-height: 2rem !important;
+    text-align: center !important;
     margin-bottom: 1.5rem !important;
+  }
+
+  /* Vehicle grid */
+  .grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+
+  /* Vehicle cards */
+  .grid > div {
     width: 100% !important;
-    max-width: 100% !important;
+    margin-bottom: 1.5rem !important;
+    background-color: white !important;
+    border-radius: 0.5rem !important;
+    overflow: hidden !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Vehicle images */
+  .grid img {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16/9 !important;
+    object-fit: cover !important;
+  }
+
+  /* Vehicle info section */
+  .grid .p-4 {
+    padding: 1rem !important;
+  }
+
+  /* Vehicle title */
+  .grid h3 {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Vehicle price */
+  .grid .font-bold {
+    font-size: 1.5rem !important;
+    color: #2563eb !important;
+  }
+
+  /* Reviews section */
+  .bg-gray-100 {
+    background-color: #f3f4f6 !important;
+    padding: 2rem 1rem !important;
     text-align: center !important;
   }
-  
-  /* Fix Google reviews section */
-  main > div > motion\:div:nth-of-type(2) {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
+
+  /* Review metrics */
+  .flex.flex-wrap {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 1.5rem !important;
+    margin-top: 1.5rem !important;
   }
-  
-  /* Fix vehicle cards to display properly */
-  .grid-cols-1 > div,
-  .sm\:grid-cols-2 > div,
-  .lg\:grid-cols-3 > div {
-    width: 100% !important;
-    margin-bottom: 1.5rem !important;
+
+  /* Individual metrics */
+  .bg-white\/10 {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(5px) !important;
+    padding: 1rem !important;
+    border-radius: 0.5rem !important;
+    width: 40% !important;
+    text-align: center !important;
   }
-  
-  /* Fix gap below reviews section */
+
+  /* Metric number */
+  .text-4xl {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Footer styling */
   footer {
-    margin-top: 0 !important;
+    background-color: #1e3a8a !important;
+    color: white !important;
+    padding: 2rem 1rem !important;
+    text-align: center !important;
   }
-  
-  /* Fix bottom white gap */
-  html {
+
+  /* Footer links */
+  footer a {
+    color: white !important;
+    text-decoration: none !important;
+    padding: 0.5rem !important;
+    display: inline-block !important;
+  }
+
+  /* Search form */
+  .rounded-full {
+    border-radius: 9999px !important;
+  }
+
+  input[type="text"],
+  input[type="search"] {
+    font-size: 16px !important; /* Prevent iOS zoom */
+    padding: 0.75rem 1rem !important;
+    width: 100% !important;
+    border-radius: 9999px !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+
+  button[type="submit"] {
+    background-color: #2563eb !important;
+    color: white !important;
+    border: none !important;
+    padding: 0.75rem 1rem !important;
+    border-radius: 9999px !important;
+  }
+
+  /* Menu dropdown */
+  .fixed.inset-0.z-40 {
+    position: fixed !important;
+    top: 60px !important; /* Navbar height */
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
     background-color: white !important;
+    padding: 1rem !important;
+    z-index: 40 !important;
+    overflow-y: auto !important;
   }
-  
-  /* Don't let content get cut off at the bottom */
-  main {
-    padding-bottom: 0 !important;
-    min-height: 100% !important;
+
+  /* Menu links */
+  .fixed.inset-0.z-40 a {
+    display: block !important;
+    padding: 1rem !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    font-size: 1.125rem !important;
+    text-decoration: none !important;
+    color: #1a202c !important;
+  }
+
+  /* Ensure standard button sizes for better touch targets */
+  button, 
+  a[class*="btn"],
+  .hover\:bg-blue-700,
+  .bg-blue-600 {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 0.75rem 1rem !important;
   }
 } 

@@ -38,26 +38,53 @@ main > div, section, article, aside {
   padding: 0 !important;
 }
 
-/* NAVBAR */
+/* NAVBAR - FIX LOGO VISIBILITY */
 nav.fixed {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 60px;
-  background: white;
+  background: rgba(13, 30, 97, 0.95);
   z-index: 1000;
   display: flex;
   align-items: center;
   padding: 0 16px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
+/* Fix Doski logo in navbar */
+nav.fixed a svg, 
+nav.fixed img,
+nav.fixed a img {
+  height: 28px !important;
+  width: auto !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Make sure all nav elements are visible */
 nav.fixed > div {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  visibility: visible !important;
+}
+
+/* Fix menu button */
+nav.fixed button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 40px !important;
+  height: 40px !important;
+  background-color: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 /* HERO SECTION - make it scroll normally */
@@ -118,6 +145,37 @@ nav.fixed > div {
   color: white;
 }
 
+/* SEARCH BAR IN HERO */
+.h-screen .flex.items-center {
+  display: flex !important;
+  width: 100% !important;
+  max-width: 400px !important;
+  margin: 16px auto !important;
+  background: white !important;
+  border-radius: 24px !important;
+  overflow: hidden !important;
+}
+
+input[type="search"] {
+  flex: 1 !important;
+  height: 48px !important;
+  padding: 0 16px !important;
+  border: none !important;
+  font-size: 16px !important;
+  background: white !important;
+}
+
+button[type="submit"] {
+  background-color: #2563eb !important;
+  color: white !important;
+  border: none !important;
+  height: 48px !important;
+  width: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
 /* CTA button */
 .h-screen a.bg-blue-600 {
   display: inline-block;
@@ -129,12 +187,73 @@ nav.fixed > div {
   text-decoration: none;
   margin-top: 16px;
   font-size: 16px;
+  width: 200px;
+  text-align: center;
+}
+
+/* REVIEWS SECTION - FIX STYLING */
+.flex.flex-wrap,
+.mt-12.flex.flex-wrap {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 16px !important;
+  margin-top: 24px !important;
+  padding: 0 16px !important;
+}
+
+/* Review cards */
+.bg-white\/10,
+.backdrop-blur-sm {
+  background-color: white !important;
+  padding: 16px !important;
+  border-radius: 8px !important;
+  width: calc(50% - 8px) !important;
+  text-align: center !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+/* Make BBB styling nicer */
+.bg-white\/10 svg,
+.backdrop-blur-sm svg {
+  width: 32px !important;
+  height: 32px !important;
+  margin: 0 auto 8px auto !important;
+  display: block !important;
+}
+
+/* Review headings */
+.text-xl.font-semibold,
+.text-lg.font-semibold {
+  font-size: 16px !important;
+  margin-top: 8px !important;
+  color: #333 !important;
+}
+
+/* Review ratings */
+.text-4xl {
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+  color: #2563eb !important;
+}
+
+/* Scroll to explore button */
+.absolute.bottom-4.left-0.right-0.mx-auto.text-center.text-white {
+  position: relative !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  padding: 16px !important;
+  color: #666 !important;
+  font-size: 14px !important;
+  margin-top: 24px !important;
 }
 
 /* FEATURED VEHICLES SECTION */
 .py-16 {
   padding: 32px 16px !important;
-  margin: 0 0 1rem 0 !important;
+  margin: 0 !important;
   background: white !important;
 }
 
@@ -143,6 +262,7 @@ h2.text-3xl {
   text-align: center;
   margin-bottom: 24px;
   font-weight: bold;
+  color: #333;
 }
 
 /* Vehicle grid */
@@ -171,6 +291,45 @@ h2.text-3xl {
   object-fit: cover;
 }
 
+/* FIX HEART/VIEWS BUTTONS */
+.absolute.top-2.right-2,
+.absolute.flex.items-center.gap-1.rounded-full.bg-white.px-2.py-1 {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  background-color: rgba(255,255,255,0.8) !important;
+  border-radius: 4px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  z-index: 5 !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+  max-width: 70px !important;
+  overflow: hidden !important;
+}
+
+/* Hide view counter icon to save space */
+.absolute.flex.items-center svg {
+  display: none !important;
+}
+
+/* Hide heart on mobile to save space */
+.absolute.top-2.right-2 {
+  display: none !important;
+}
+
+/* Car specs badges */
+.absolute.bottom-2.left-2 {
+  position: absolute !important;
+  bottom: 8px !important;
+  left: 8px !important;
+  background-color: rgba(37, 99, 235, 0.9) !important;
+  color: white !important;
+  border-radius: 4px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+}
+
 .grid .p-4 {
   padding: 16px !important;
 }
@@ -179,6 +338,7 @@ h2.text-3xl {
   font-size: 18px;
   margin-bottom: 8px;
   font-weight: 600;
+  color: #333;
 }
 
 .grid .font-bold {
@@ -187,39 +347,61 @@ h2.text-3xl {
   font-weight: bold;
 }
 
-/* REVIEWS SECTION */
-.bg-gray-100 {
-  background-color: #f3f4f6 !important;
-  padding: 32px 16px !important;
-  text-align: center !important;
+/* Fix vehicle info */
+.grid .text-gray-500 {
+  color: #666 !important;
+  font-size: 14px !important;
+  margin-bottom: 4px !important;
 }
 
-/* Review metrics */
-.flex.flex-wrap {
+/* Fix availability tag */
+.grid .text-green-500 {
+  color: #10b981 !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  padding: 2px 8px !important;
+  border-radius: 4px !important;
+  display: inline-block !important;
+}
+
+/* Fix vehicle buttons */
+.grid .mt-4.flex.items-center.justify-between.gap-2 {
   display: flex !important;
-  flex-wrap: wrap !important;
-  justify-content: center !important;
-  gap: 16px !important;
-  margin-top: 24px !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  margin-top: 16px !important;
 }
 
-/* Review cards */
-.bg-white\/10 {
-  background-color: white !important;
-  padding: 16px !important;
-  border-radius: 8px !important;
-  width: calc(50% - 8px) !important;
+.grid .flex-1 {
+  flex: 1 !important;
+}
+
+.grid a.bg-blue-600 {
+  background-color: #2563eb !important;
+  color: white !important;
+  padding: 8px !important;
+  border-radius: 4px !important;
   text-align: center !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  display: block !important;
 }
 
-.text-4xl {
-  font-size: 24px !important;
-  font-weight: 700 !important;
-  margin-bottom: 8px !important;
+.grid a.border {
+  border: 1px solid #2563eb !important;
+  color: #2563eb !important;
+  padding: 8px !important;
+  border-radius: 4px !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  display: block !important;
 }
 
-/* FOOTER */
+/* FOOTER - RESTORE ORIGINAL STYLING */
 footer {
   background-color: #1e3a8a !important;
   color: white !important;
@@ -227,44 +409,61 @@ footer {
   text-align: center !important;
 }
 
+footer .max-w-7xl {
+  padding: 0 !important;
+}
+
+footer .grid {
+  display: block !important;
+  text-align: center !important;
+}
+
+footer .grid > div {
+  margin-bottom: 24px !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Footer logo */
+footer svg, 
+footer img {
+  height: 32px !important;
+  width: auto !important;
+  margin: 0 auto 16px auto !important;
+  display: block !important;
+}
+
+/* Footer heading */
+footer h3 {
+  font-size: 18px !important;
+  margin-bottom: 16px !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+/* Footer text */
+footer p {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  margin-bottom: 16px !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Footer links */
 footer a {
   color: white !important;
   text-decoration: none !important;
-  padding: 8px !important;
-  display: inline-block !important;
+  padding: 4px 0 !important;
+  display: block !important;
+  font-size: 14px !important;
 }
 
-/* SEARCH FORM */
-.rounded-full {
-  border-radius: 999px !important;
-}
-
-.h-screen .flex.items-center {
-  display: flex !important;
-  width: 100% !important;
-  max-width: 400px !important;
-  margin: 16px auto !important;
-}
-
-input[type="search"] {
-  flex: 1 !important;
-  height: 48px !important;
-  padding: 0 16px !important;
-  border: none !important;
-  border-radius: 24px 0 0 24px !important;
-  font-size: 16px !important;
-}
-
-button[type="submit"] {
-  background-color: #2563eb !important;
-  color: white !important;
-  border: none !important;
-  height: 48px !important;
-  width: 48px !important;
-  border-radius: 0 24px 24px 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+/* Footer address */
+footer address {
+  font-style: normal !important;
+  margin-bottom: 8px !important;
+  font-size: 14px !important;
+  color: rgba(255, 255, 255, 0.8) !important;
 }
 
 /* MENU DROPDOWN */

@@ -4,131 +4,96 @@
 */
 
 @media (max-width: 767px) {
-  /* ===== CRITICAL FIX: Remove white bar at top ===== */
-  /* Force full page coverage with no gaps */
-  html, body {
+  /* Fix white gap at top of mobile screens */
+  body, html {
     margin: 0 !important;
     padding: 0 !important;
     overflow-x: hidden;
-    height: 100% !important;
-    width: 100% !important;
+    width: 100%;
+    height: 100%;
   }
   
-  /* Remove ALL padding/margins from main sections */
-  body > div, #__next, main, main > div {
+  #__next, #__next > div, main {
+    width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    width: 100% !important;
-    height: auto !important;
-    min-height: 100vh !important;
   }
   
-  /* Force hero section to fill screen completely */
-  .h-screen, section.h-screen, div.h-screen {
+  /* Fix hero section to fill screen */
+  .h-screen {
     height: 100vh !important;
     min-height: 100vh !important;
     margin: 0 !important;
     padding: 0 !important;
     position: relative !important;
-    top: 0 !important;
-    left: 0 !important;
     width: 100% !important;
-    border: none !important;
+    overflow: hidden !important;
   }
   
-  /* Make video fill entire screen */
-  .h-screen video, .h-screen img {
-    height: 100% !important;
-    width: 100% !important;
-    object-fit: cover !important;
-    object-position: center !important;
+  /* Make video fill screen */
+  .h-screen video {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    z-index: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
   }
   
-  /* Put content above video */
+  /* Position content over video */
   .h-screen > div {
-    height: 100vh !important;
+    position: relative !important;
+    z-index: 2 !important;
     width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    height: 100% !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
-    align-items: center !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    z-index: 10 !important;
-    background: rgba(0,0,0,0.25) !important;
+    background-color: rgba(0,0,0,0.3) !important;
   }
   
-  /* Push content down from navbar */
-  .h-screen > div > div {
-    margin-top: 60px !important;
-  }
-  
-  /* Make navbar transparent on home page */
-  body:not(:has(> main > div[class*="vehicles-"])):not(:has(> main > div[class*="financing-"])):not(:has(> main > div[class*="services-"])):not(:has(> main > div[class*="about-"])):not(:has(> main > div[class*="contact-"])):not(:has(> main > div[class*="repairs-"])) nav.fixed {
+  /* Make navbar transparent */
+  body.index-page nav.fixed {
     background-color: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     box-shadow: none !important;
   }
   
-  /* Fix z-index for navbar */
+  /* Make non-home page navbars white */
+  body.vehicles-page nav.fixed,
+  body.financing-page nav.fixed,
+  body.services-page nav.fixed,
+  body.about-page nav.fixed,
+  body.contact-page nav.fixed,
+  body.repairs-page nav.fixed {
+    background-color: white !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+  }
+  
+  /* Fix navbar z-index */
   nav.fixed {
     z-index: 50 !important;
     height: 56px !important;
-    min-height: 56px !important;
-    max-height: 56px !important;
-    padding: 0 !important;
-    margin: 0 !important;
   }
   
-  /* Make subpage navbars white with shadow */
-  body:has(> main > div[class*="vehicles-"]) nav.fixed,
-  body:has(> main > div[class*="financing-"]) nav.fixed,
-  body:has(> main > div[class*="services-"]) nav.fixed,
-  body:has(> main > div[class*="about-"]) nav.fixed,
-  body:has(> main > div[class*="contact-"]) nav.fixed,
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    z-index: 10;
-  }
-  
-  /* Fix the hero text to be fully visible */
+  /* Text styling for hero */
   .h-screen h1 {
-    font-size: 2.25rem !important;
-    margin-top: 2rem !important;
-    padding: 0 1rem !important;
+    color: white !important;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.7) !important;
+    font-size: 2.25rem !important;
+    padding: 0 1rem !important;
   }
   
   .h-screen h2, .h-screen p {
+    color: white !important;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5) !important;
     font-size: 1.25rem !important;
     padding: 0 1rem !important;
-    margin-top: 0.5rem !important;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.7) !important;
   }
   
-  /* Fix hero content positioning - move it down from navbar */
-  .h-screen > div > div {
-    margin-top: 3rem !important;
-  }
-  
-  /* ===== Fix button issues ===== */
-  /* Fix the See All Vehicles button */
+  /* Fix blue button by removing arrow */
   a[href="/vehicles"] {
     margin: 1rem auto !important;
     text-align: center !important;
@@ -137,282 +102,56 @@
     min-width: 200px !important;
   }
   
-  /* Fix the arrow in button */
   a[href="/vehicles"] svg {
     display: none !important;
   }
   
-  /* Fix the search button padding */
-  button[type="submit"] {
-    padding: 0 1rem !important;
-  }
-  
-  /* ===== Fix navbar issues ===== */
-  /* Main navbar fixes */
-  nav.fixed {
-    background-color: rgba(255,255,255,0.9) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
-    height: 56px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    z-index: 50 !important;
-  }
-  
-  /* Fix subpage navigation */
-  body:has(> main > div[class*="vehicles-"]),
-  body:has(> main > div[class*="financing-"]),
-  body:has(> main > div[class*="services-"]),
-  body:has(> main > div[class*="about-"]),
-  body:has(> main > div[class*="contact-"]),
-  body:has(> main > div[class*="repairs-"]) {
-    nav.fixed {
-      background-color: white !important;
-    }
-    
-    /* Fix subpage content padding */
-    main > div {
-      padding-top: 56px !important;
-    }
-  }
-  
-  /* Fix navbar z-index stacking */
-  nav.fixed.z-50 {
-    z-index: 9999 !important;
-  }
-  
-  /* Fix menu text so it's fully visible */
-  nav.fixed .fixed.inset-0.z-40 a {
-    white-space: nowrap !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-    display: block !important;
-    width: 100% !important;
-  }
-
-  /* Additional fix for menu items being cut off */
-  .fixed.inset-0.z-40 a {
-    padding: 0.75rem 1rem !important;
-    font-size: 1rem !important;
-  }
-  
-  /* ===== Fix card layout issues ===== */
-  /* Make vehicle cards look better */
-  .grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-3.xl\:grid-cols-4 > div {
-    max-width: 100% !important;
-    margin-bottom: 1rem !important;
-  }
-  
-  /* Fix card shadow and borders */
-  .bg-white.rounded-xl.shadow-sm.overflow-hidden {
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
-    border-radius: 8px !important;
-  }
-  
-  /* Fix overflow issues on whole page */
-  #__next, main, main > div {
-    overflow-x: hidden !important;
-    width: 100% !important;
-  }
-  
-  /* Rest of original mobile CSS follows */
+  /* Navbar height */
   .md\:h-20 {
     height: 56px !important;
   }
   
-  /* Make navbar top aligned and slim */
-  nav.fixed > div {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    height: 56px !important;
-  }
-  
-  /* Fix navbar children height */
-  nav.fixed > div > div {
-    height: 56px !important;
-  }
-  
-  /* Fix fullscreen menu positioning */
+  /* Fix mobile menu navigation */
   .fixed.inset-0.z-40 {
     top: 56px !important;
+    height: calc(100vh - 56px) !important;
+    overflow-y: auto !important;
   }
   
-  /* Fix subpage hero sections to start below navbar */
-  .pt-20, .pt-16, .pt-24, .pt-32 {
-    padding-top: 56px !important;
+  /* Fix menu links to be fully visible */
+  .fixed.inset-0.z-40 a {
+    white-space: nowrap !important;
+    overflow: visible !important;
+    width: 100% !important;
+    display: block !important;
   }
   
-  /* Reduce logo size on mobile */
-  nav .flex.items-center svg {
-    height: auto !important;
-    max-width: 120px !important;
-  }
-  
-  /* Enhance mobile menu button for better accessibility */
-  nav button {
-    height: 38px !important;
-    width: 38px !important;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-  }
-
-  /* Featured vehicles section - fix grid layout */
-  .grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-3.xl\:grid-cols-4 > div {
-    max-width: 100% !important;
-  }
-
-  /* Improve tap targets for buttons */
+  /* Tap target fixes */
   a, button {
     min-height: 44px;
     min-width: 44px;
   }
-
-  /* Fix mobile typography */
-  .text-center h1 {
-    padding: 0 1rem;
-    font-size: 2rem !important;
-    margin-top: 0;
-  }
   
-  .text-center h2 {
-    font-size: 1.25rem !important;
-    margin-top: 0;
-  }
-
-  /* Adjust trust badges for mobile */
-  .mt-12.flex.flex-wrap {
-    justify-content: center;
-    gap: 0.75rem !important;
-  }
-  
-  .bg-white\/10.backdrop-blur-sm.rounded-xl {
-    padding: 0.75rem !important;
-  }
-
-  /* Make mobile forms easier to use */
-  .mt-8.w-full.max-w-md {
-    width: 90% !important;
-  }
-  
-  form input, input[type="text"], input[type="email"], input[type="search"], input[type="number"] {
-    height: 44px !important;
-    font-size: 16px !important; /* Prevents zoom on iOS */
-    padding: 0 1rem !important;
-  }
-  
-  /* Make sure input heights are consistent */
-  input::placeholder {
-    font-size: 16px;
-  }
-
-  /* Ensure action buttons are properly sized */
-  .bg-blue-600.text-white.rounded-lg {
-    width: 100%;
-    display: block;
-    margin-top: 0.5rem;
-    min-height: 44px;
-  }
-
-  /* Vehicle modal adjustments */
-  .fixed.inset-0 > div {
-    padding: 1rem !important;
-  }
-
-  /* Fix mobile image galleries */
-  .overflow-auto {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Add mobile-friendly favorite button */
-  .absolute.top-2.right-2 {
-    top: 0.75rem !important;
-    right: 0.75rem !important;
-  }
-
-  /* Animated element fixes for mobile */
-  .motion-reduce * {
-    animation: none !important;
-    transition: none !important;
-  }
-  
-  /* Vehicles search page improvements */
-  #search-container {
-    padding-top: 56px !important;
-  }
-  
-  /* Fix search page layout */
-  #search-container > div {
-    padding: 0.75rem !important;
-  }
-  
-  /* Improve search inputs */
-  input[type="search"],
-  input[type="text"],
-  input[type="number"] {
+  /* Form styling */
+  form input, input[type="text"], input[type="email"], input[type="search"] {
     height: 44px !important;
     font-size: 16px !important;
-    padding: 0.75rem 1rem !important;
   }
   
-  /* Improve filter elements */
-  #search-container input[placeholder="Search by make, model, or title..."] {
-    height: 44px !important;
-    font-size: 16px;
-    padding: 0.75rem 1rem;
-  }
-  
-  /* Price range inputs */
-  input[placeholder="Min"],
-  input[placeholder="Max"],
-  input[placeholder$="Min"],
-  input[placeholder$="Max"] {
-    height: 44px !important;
-    font-size: 16px;
-    padding-left: 1.5rem !important;
-  }
-  
-  /* Year range inputs */
-  input[placeholder="Min year"],
-  input[placeholder="Max year"] {
-    height: 44px !important;
-    font-size: 16px;
-  }
-  
-  /* Checkboxes for condition */
-  input[type="checkbox"] {
-    transform: scale(1.2);
-    margin-right: 0.5rem;
-  }
-  
-  /* Fix specific pages */
-  /* Fix financing page */
+  /* Subpage spacing fix */
   .financing-page, 
-  [class*="financing-"], 
-  [class*="contact-"],
-  [class*="about-"],
-  [class*="repairs-"],
-  [class*="services-"] {
+  .vehicles-page,
+  .contact-page,
+  .about-page,
+  .repairs-page,
+  .services-page {
     padding-top: 56px !important;
     margin-top: 0 !important;
   }
   
-  /* Add more space at the bottom of the page */
-  main > div:last-child {
-    padding-bottom: 3rem;
-  }
-  
-  /* Make subpage headers smaller */
+  /* Reduce text sizes */
   .text-4xl, .text-5xl, .text-6xl {
     font-size: 1.75rem !important;
     line-height: 2.25rem !important;
-  }
-  
-  /* Make all blue subpage headers touch the navbar */
-  div.bg-blue-900, section.bg-blue-900 {
-    margin-top: 0 !important;
-    padding-top: 72px !important;
   }
 } 

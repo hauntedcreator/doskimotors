@@ -33,7 +33,7 @@ export default function RootLayout({
       <head>
         <link rel="preload" href="/images/Logos/white.svg" as="image" fetchPriority="high" />
         <link rel="preload" href="/images/Logos/black.svg" as="image" fetchPriority="high" />
-        <link rel="stylesheet" href="/app/mobile.css" media="(max-width: 767px)" />
+        <link rel="stylesheet" href="/mobile.css" media="(max-width: 767px)" />
         
         <link rel="preconnect" href="https://images.unsplash.com" />
         
@@ -45,10 +45,23 @@ export default function RootLayout({
             }
           }
           
+          /* Critical mobile fixes */
           @media screen and (max-width: 767px) {
-            main {
-              padding-top: 64px;
+            html, body {
+              margin: 0;
+              padding: 0;
+              width: 100%;
+              height: 100%;
             }
+            
+            .h-screen {
+              height: 100vh;
+              min-height: 100vh;
+              position: relative;
+              width: 100%;
+              overflow: hidden;
+            }
+            
             body {
               -webkit-text-size-adjust: 100%;
             }

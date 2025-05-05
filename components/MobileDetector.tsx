@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 const MobileDetector = () => {
   const [isMobile, setIsMobile] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -63,16 +65,10 @@ const MobileDetector = () => {
       mobileStylesheet.id = 'mobile-stylesheet'
       mobileStylesheet.media = '(max-width: 767px)'
       
-      // Use the correct path - ensure we load from the right location
-      // First try the app directory path
-      mobileStylesheet.href = '/app/mobile.css'
+      // Use the direct path to the public folder
+      mobileStylesheet.href = '/mobile.css'
       
       document.head.appendChild(mobileStylesheet)
-      
-      // Set a fallback in case the first path doesn't work
-      mobileStylesheet.onerror = () => {
-        mobileStylesheet!.href = '/mobile.css'
-      }
     }
 
     // Cleanup
@@ -85,6 +81,27 @@ const MobileDetector = () => {
       // This ensures the mobile styles persist throughout the application
     }
   }, [])
+
+  // Add page-specific class to body
+  useEffect(() => {
+    // Remove any existing page classes
+    document.body.classList.forEach(cls => {
+      if (cls.endsWith('-page')) {
+        document.body.classList.remove(cls)
+      }
+    })
+    
+    // Add class based on current path
+    if (pathname === '/') {
+      document.body.classList.add('index-page')
+    } else {
+      // Extract the page name from the path
+      const pageName = pathname.split('/')[1]
+      if (pageName) {
+        document.body.classList.add(`${pageName}-page`)
+      }
+    }
+  }, [pathname])
 
   if (isMobile) {
     return (
@@ -110,7 +127,7 @@ const MobileDetector = () => {
         
         /* Mobile-friendly padding */
         body.is-mobile-device main {
-          padding-top: 4rem;
+          padding-top: 0;
         }
       `}</style>
     )

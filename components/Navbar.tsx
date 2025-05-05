@@ -55,7 +55,12 @@ const Navbar = () => {
 
   // Determine if we're on a subpage
   const isSubpage = currentPath !== '/'
-  const navBgClass = isMobile || isScrolled || isSubpage ? 'bg-white shadow-sm' : 'bg-transparent'
+  const isHomePage = currentPath === '/'
+  
+  // Set transparent navbar for home, white for subpages
+  const navBgClass = (isMobile && !isHomePage) || (isScrolled && isHomePage) || (!isHomePage) 
+    ? 'bg-white shadow-sm' 
+    : 'bg-transparent'
 
   return (
     <motion.nav
@@ -66,12 +71,12 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-3 md:px-6 lg:px-8">
         <div className="flex justify-between items-center h-14 md:h-20">
-          {/* Logo - even smaller on mobile */}
+          {/* Logo */}
           <Link href="/" className="flex items-center z-10">
             <div className="flex items-center">
               <Logo 
                 size={isMobile ? 'small' : 'large'} 
-                textColor={isMobile || isScrolled || isSubpage ? 'black' : 'white'} 
+                textColor={isMobile && !isHomePage ? 'black' : isScrolled && isHomePage ? 'black' : !isHomePage ? 'black' : 'white'} 
                 className="py-0"
               />
             </div>
@@ -153,11 +158,15 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Mobile menu button - smaller and more compact */}
+          {/* Mobile menu button - using same color as logo text */}
           <div className="md:hidden z-50">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-900 hover:text-blue-600"
+              className={`inline-flex items-center justify-center p-2 rounded-md ${
+                isMobile && !isHomePage ? 'text-gray-900' : 
+                isScrolled && isHomePage ? 'text-gray-900' : 
+                !isHomePage ? 'text-gray-900' : 'text-white'
+              } hover:text-blue-600`}
               aria-expanded={isMenuOpen}
               aria-label="Toggle menu"
             >
@@ -176,68 +185,34 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu - fullscreen with proper text display */}
+      {/* Mobile menu - simplified with all pages visible */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            className="md:hidden fixed inset-0 z-40 bg-white"
+            className="md:hidden fixed inset-0 bg-white"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            style={{ top: '56px' }}
+            style={{ top: '56px', height: 'calc(100vh - 56px)', zIndex: 40 }}
           >
-            <div className="pt-1 px-0 pb-3 h-full overflow-y-auto">
-              <div className="space-y-0">
-                <Link
-                  href="/vehicles"
-                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100 w-full"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <span className="block w-full">Vehicles</span>
-                </Link>
-                <Link
-                  href="/financing"
-                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100 w-full"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <span className="block w-full">Financing</span>
-                </Link>
-                <Link
-                  href="/services"
-                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100 w-full"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <span className="block w-full">Services</span>
-                </Link>
-                <Link
-                  href="/tesla-repairs"
-                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100 w-full"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <span className="block w-full">Tesla Repairs</span>
-                </Link>
-                <Link
-                  href="/about"
-                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100 w-full"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <span className="block w-full">About</span>
-                </Link>
-                <Link
-                  href="/contact"
-                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100 w-full"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <span className="block w-full">Contact</span>
-                </Link>
-                <div className="px-4 py-3 mt-2">
+            <div className="h-full overflow-y-auto">
+              {/* Menu Items - simple list with no fancy styling */}
+              <div className="flex flex-col">
+                <MobileMenuItem href="/vehicles" label="Vehicles" onClick={() => setIsMenuOpen(false)} />
+                <MobileMenuItem href="/financing" label="Financing" onClick={() => setIsMenuOpen(false)} />
+                <MobileMenuItem href="/services" label="Services" onClick={() => setIsMenuOpen(false)} />
+                <MobileMenuItem href="/tesla-repairs" label="Tesla Repairs" onClick={() => setIsMenuOpen(false)} />
+                <MobileMenuItem href="/about" label="About" onClick={() => setIsMenuOpen(false)} />
+                <MobileMenuItem href="/contact" label="Contact" onClick={() => setIsMenuOpen(false)} />
+                
+                <div className="px-4 py-4 mt-2">
                   <button 
                     onClick={() => {
                       handleLocationClick();
                       setIsMenuOpen(false);
                     }}
-                    className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors text-base font-medium shadow-sm"
+                    className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors text-base font-medium"
                   >
                     Dealership Location
                   </button>
@@ -250,5 +225,18 @@ const Navbar = () => {
     </motion.nav>
   )
 }
+
+// Simple component for mobile menu item
+const MobileMenuItem = ({ href, label, onClick }) => (
+  <Link
+    href={href}
+    className="block w-full text-left border-b border-gray-100"
+    onClick={onClick}
+  >
+    <div className="px-4 py-3 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50">
+      {label}
+    </div>
+  </Link>
+)
 
 export default Navbar 

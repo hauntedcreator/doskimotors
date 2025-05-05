@@ -4,33 +4,98 @@
 */
 
 @media (max-width: 767px) {
-  /* ===== CRITICAL FIX: Remove all gaps from main page ===== */
-  /* Remove all unwanted white space on body and html */
-  body, html {
+  /* ===== CRITICAL FIX: Remove white bar at top ===== */
+  /* Force full page coverage with no gaps */
+  html, body {
     margin: 0 !important;
     padding: 0 !important;
     overflow-x: hidden;
+    height: 100% !important;
+    width: 100% !important;
   }
   
-  /* Fix the hero video container to fill the screen */
-  .h-screen, section.h-screen, div.h-screen {
-    height: 100vh !important;
+  /* Remove ALL padding/margins from main sections */
+  body > div, #__next, main, main > div {
     margin: 0 !important;
     padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100vh !important;
   }
   
-  /* Ensure video background fills the screen */
+  /* Force hero section to fill screen completely */
+  .h-screen, section.h-screen, div.h-screen {
+    height: 100vh !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    border: none !important;
+  }
+  
+  /* Make video fill entire screen */
   .h-screen video, .h-screen img {
     height: 100% !important;
     width: 100% !important;
     object-fit: cover !important;
     object-position: center !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 1 !important;
   }
   
-  /* Fix the hero content container */
+  /* Put content above video */
   .h-screen > div {
     height: 100vh !important;
     width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 10 !important;
+    background: rgba(0,0,0,0.25) !important;
+  }
+  
+  /* Push content down from navbar */
+  .h-screen > div > div {
+    margin-top: 60px !important;
+  }
+  
+  /* Make navbar transparent on home page */
+  body:not(:has(> main > div[class*="vehicles-"])):not(:has(> main > div[class*="financing-"])):not(:has(> main > div[class*="services-"])):not(:has(> main > div[class*="about-"])):not(:has(> main > div[class*="contact-"])):not(:has(> main > div[class*="repairs-"])) nav.fixed {
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+  
+  /* Fix z-index for navbar */
+  nav.fixed {
+    z-index: 50 !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    max-height: 56px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Make subpage navbars white with shadow */
+  body:has(> main > div[class*="vehicles-"]) nav.fixed,
+  body:has(> main > div[class*="financing-"]) nav.fixed,
+  body:has(> main > div[class*="services-"]) nav.fixed,
+  body:has(> main > div[class*="about-"]) nav.fixed,
+  body:has(> main > div[class*="contact-"]) nav.fixed,
     padding-top: 0 !important;
     margin-top: 0 !important;
     display: flex;

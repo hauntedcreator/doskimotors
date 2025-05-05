@@ -4,21 +4,64 @@
 */
 
 @media (max-width: 767px) {
+  /* Remove unwanted white space */
+  body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  
+  main {
+    padding-top: 0 !important; /* Remove extra padding at top */
+    margin-top: 0 !important;
+  }
+  
+  /* Ensure the hero section fills the entire height without gap */
+  .h-screen {
+    height: 100vh !important;
+    margin-top: 0 !important;
+  }
+  
+  /* Fix hero positioning and alignment */
+  div:has(> section.h-screen) {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  
+  /* Make search sections more mobile friendly */
+  [class*="min-h-screen"] {
+    min-height: calc(100vh - 64px) !important;
+    padding-top: 64px !important; /* Account for fixed navbar */
+  }
+  
   /* Navbar mobile adjustments */
   .md\:h-20 {
-    height: 4rem !important;
+    height: 3.5rem !important;
   }
   
-  /* Always show navbar on mobile */
+  /* Always show navbar on mobile with better styling */
   nav.fixed {
     background-color: white !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1) !important;
+    height: 64px !important;
+    display: flex;
+    align-items: center;
   }
   
-  /* Enhance mobile menu button */
+  /* Reduce logo size on mobile */
+  nav .flex.items-center svg {
+    height: auto !important;
+    max-width: 150px !important;
+  }
+  
+  /* Enhance mobile menu button for better accessibility */
   nav button {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: 48px;
+    min-width: 48px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
   }
 
   /* Featured vehicles section - fix grid layout */
@@ -33,18 +76,28 @@
 
   /* Improve tap targets for buttons */
   a, button {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: 48px;
+    min-width: 48px;
   }
 
   /* Adjust hero section image positioning for mobile */
-  .h-screen video {
+  .h-screen video, .h-screen img {
     object-position: center center !important;
+  }
+  
+  /* Fix hero content positioning */
+  .h-screen > div {
+    padding-top: 64px !important; /* Account for navbar */
   }
 
   /* Fix mobile typography */
   .text-center h1 {
     padding: 0 1rem;
+    font-size: 2.25rem !important;
+  }
+  
+  .text-center h2 {
+    font-size: 1.25rem !important;
   }
 
   /* Adjust trust badges for mobile */
@@ -62,9 +115,15 @@
     width: 90% !important;
   }
   
-  form input {
-    height: 3rem !important;
+  form input, input[type="text"], input[type="email"], input[type="search"], input[type="number"] {
+    height: 48px !important;
     font-size: 16px !important; /* Prevents zoom on iOS */
+    padding: 0 1rem !important;
+  }
+  
+  /* Make sure input heights are consistent */
+  input::placeholder {
+    font-size: 16px;
   }
 
   /* Ensure action buttons are properly sized */
@@ -72,6 +131,7 @@
     width: 100%;
     display: block;
     margin-top: 0.5rem;
+    min-height: 48px;
   }
 
   /* Vehicle modal adjustments */
@@ -97,17 +157,21 @@
   }
   
   /* Vehicles search page improvements */
-  /* Search page container padding */
-  [class*="min-h-screen"] {
-    padding-top: 4rem !important;
+  #search-container {
+    padding-top: 64px !important;
+  }
+  
+  /* Fix search page layout */
+  #search-container > div {
+    padding: 0.75rem !important;
   }
   
   /* Improve search inputs */
   input[type="search"],
   input[type="text"],
   input[type="number"] {
-    font-size: 16px !important;
     height: 48px !important;
+    font-size: 16px !important;
     padding: 0.75rem 1rem !important;
   }
   
@@ -120,7 +184,9 @@
   
   /* Price range inputs */
   input[placeholder="Min"],
-  input[placeholder="Max"] {
+  input[placeholder="Max"],
+  input[placeholder$="Min"],
+  input[placeholder$="Max"] {
     height: 48px !important;
     font-size: 16px;
     padding-left: 1.5rem !important;
@@ -145,10 +211,11 @@
   }
   
   /* Make the reset button more visible */
-  a:has(span:contains("Reset All")) {
-    padding: 0.5rem 1rem !important;
-    border-radius: 0.375rem;
-    background-color: #f3f4f6;
+  a:has(> span) {
+    padding: 0.5rem 1rem;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
   }
   
   /* Make mobile filtering friendly */
@@ -159,5 +226,10 @@
   /* Add more space at the bottom of the page */
   main > div:last-child {
     padding-bottom: 4rem;
+  }
+  
+  /* Fix z-index issues with navbar */
+  .z-50 {
+    z-index: 9999 !important;
   }
 } 

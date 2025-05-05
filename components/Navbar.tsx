@@ -58,9 +58,11 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 md:h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <Logo size="large" textColor={isMobile || isScrolled ? 'black' : 'white'} />
+          {/* Logo - made smaller on mobile */}
+          <Link href="/" className="flex items-center md:flex-1">
+            <div className="mr-auto md:mr-0">
+              <Logo size={isMobile ? 'small' : 'large'} textColor={isMobile || isScrolled ? 'black' : 'white'} />
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -139,21 +141,21 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
+          {/* Mobile menu button - moved to the right with increased touch target */}
+          <div className="md:hidden z-50">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={`inline-flex items-center justify-center p-2 rounded-md text-gray-900 hover:text-blue-600`}
+              className="inline-flex items-center justify-center p-3 rounded-md text-gray-900 hover:text-blue-600"
               aria-expanded={isMenuOpen}
               aria-label="Toggle menu"
             >
               <span className="sr-only">Open main menu</span>
               {!isMenuOpen ? (
-                <svg className="block h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                <svg className="block h-7 w-7" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               ) : (
-                <svg className="block h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                <svg className="block h-7 w-7" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               )}
@@ -162,69 +164,71 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile menu - made fullscreen for better usability */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            className="md:hidden"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
+            className="md:hidden fixed inset-0 z-40 bg-white"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
           >
-            <div className="px-2 pt-2 pb-3 space-y-1 shadow-lg bg-white">
-              <Link
-                href="/vehicles"
-                className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Vehicles
-              </Link>
-              <Link
-                href="/financing"
-                className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Financing
-              </Link>
-              <Link
-                href="/services"
-                className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Services
-              </Link>
-              <Link
-                href="/tesla-repairs"
-                className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Tesla Repairs
-              </Link>
-              <Link
-                href="/about"
-                className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                About
-              </Link>
-              <Link
-                href="/contact"
-                className="block px-3 py-3 rounded-md text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Contact
-              </Link>
-              <div className="px-3 py-2">
-                <button 
-                  onClick={() => {
-                    handleLocationClick();
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors text-base font-medium shadow-sm"
+            <div className="pt-20 px-2 pb-3 h-full overflow-y-auto">
+              <div className="space-y-2">
+                <Link
+                  href="/vehicles"
+                  className="block px-4 py-4 rounded-md text-lg font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
+                  onClick={() => setIsMenuOpen(false)}
                 >
-                  Dealership Location
-                </button>
+                  Vehicles
+                </Link>
+                <Link
+                  href="/financing"
+                  className="block px-4 py-4 rounded-md text-lg font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Financing
+                </Link>
+                <Link
+                  href="/services"
+                  className="block px-4 py-4 rounded-md text-lg font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Services
+                </Link>
+                <Link
+                  href="/tesla-repairs"
+                  className="block px-4 py-4 rounded-md text-lg font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Tesla Repairs
+                </Link>
+                <Link
+                  href="/about"
+                  className="block px-4 py-4 rounded-md text-lg font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  About
+                </Link>
+                <Link
+                  href="/contact"
+                  className="block px-4 py-4 rounded-md text-lg font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Contact
+                </Link>
+                <div className="px-4 py-4">
+                  <button 
+                    onClick={() => {
+                      handleLocationClick();
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full bg-blue-600 text-white px-4 py-4 rounded-lg hover:bg-blue-700 transition-colors text-lg font-medium shadow-sm"
+                  >
+                    Dealership Location
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>

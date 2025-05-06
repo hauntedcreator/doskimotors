@@ -1,14 +1,14 @@
 // Force static rendering with no client components
 export const dynamic = 'force-static';
 
-export default function Custom404() {
+function Error() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
       <div className="max-w-lg w-full text-center">
-        <h1 className="text-9xl font-bold text-blue-600">404</h1>
-        <h2 className="text-3xl font-semibold mt-4 mb-6">Page Not Found</h2>
+        <h1 className="text-6xl font-bold text-red-600">Error</h1>
+        <h2 className="text-3xl font-semibold mt-4 mb-6">Something went wrong</h2>
         <p className="text-lg text-gray-600 mb-8">
-          The page you are looking for doesn't exist or has been moved.
+          We're sorry, but something went wrong on our end.
         </p>
         <a 
           href="/"
@@ -20,4 +20,10 @@ export default function Custom404() {
       </div>
     </div>
   );
-} 
+}
+
+Error.getInitialProps = () => {
+  return { statusCode: 500 };
+};
+
+export default Error; 

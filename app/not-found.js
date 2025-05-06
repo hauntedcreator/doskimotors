@@ -1,4 +1,4 @@
-export default function Custom404() {
+export default function NotFound() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
       <div className="max-w-lg w-full text-center">

@@ -1,508 +1,332 @@
-/* Reset everything for mobile */
-* {
-  box-sizing: border-box;
+/* Mobile-only styling for Doski Motors website */
+
+/* Mobile hero section adjustments */
+.h-screen {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
 }
 
-/* CORE BODY RESET */
-html, body {
-  width: 100%;
-  min-height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  background: white;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-
-main {
-  width: 100%;
-  overflow-x: hidden;
-  height: auto;
-  display: block;
-}
-
-/* DISABLE ALL ANIMATIONS */
-* {
-  animation: none !important;
-  transition: none !important;
-  transform: none !important;
-}
-
-/* BASIC LAYOUT - ensure everything stacks properly */
-main > div, section, article, aside {
-  width: 100%;
-  height: auto;
-  display: block;
-  position: static !important;
-  margin: 0 0 1rem 0 !important;
-  padding: 0 !important;
-}
-
-/* NAVBAR - FIX LOGO VISIBILITY */
-nav.fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  background: rgba(13, 30, 97, 0.95);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* Fix Doski logo in navbar */
-nav.fixed a svg, 
-nav.fixed img,
-nav.fixed a img {
-  height: 28px !important;
-  width: auto !important;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-/* Make sure all nav elements are visible */
-nav.fixed > div {
-  width: 100%;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  visibility: visible !important;
-}
-
-/* Fix menu button */
-nav.fixed button {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 40px !important;
-  height: 40px !important;
-  background-color: transparent !important;
-  border: none !important;
-  cursor: pointer !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-/* HERO SECTION - make it scroll normally */
-.h-screen, section.h-screen {
-  height: auto !important;
-  min-height: 100vh;
-  width: 100%;
-  position: relative;
-  padding-top: 60px !important;
-  margin-bottom: 1rem;
-  overflow: visible;
-}
-
-/* Background video */
-.h-screen video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
-}
-
-/* Content wrapper */
-.h-screen > div {
-  position: relative;
-  z-index: 2;
-  padding: 32px 16px !important;
-  background-color: rgba(0,0,0,0.5);
-  height: auto;
-  min-height: calc(100vh - 60px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.h-screen > div > div {
-  width: 100%;
-  max-width: 500px;
-}
-
-/* Hero text */
-.h-screen h1 {
-  font-size: 32px;
-  line-height: 1.2;
-  margin: 0 0 16px 0;
-  color: white;
-  font-weight: bold;
-}
-
-.h-screen h2, .h-screen p {
-  font-size: 18px;
-  line-height: 1.4;
-  margin: 0 0 24px 0;
-  color: white;
-}
-
-/* SEARCH BAR IN HERO */
-.h-screen .flex.items-center {
-  display: flex !important;
-  width: 100% !important;
-  max-width: 400px !important;
-  margin: 16px auto !important;
-  background: white !important;
-  border-radius: 24px !important;
-  overflow: hidden !important;
-}
-
-input[type="search"] {
-  flex: 1 !important;
-  height: 48px !important;
-  padding: 0 16px !important;
-  border: none !important;
-  font-size: 16px !important;
-  background: white !important;
-}
-
-button[type="submit"] {
-  background-color: #2563eb !important;
-  color: white !important;
-  border: none !important;
-  height: 48px !important;
-  width: 48px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-/* CTA button */
-.h-screen a.bg-blue-600 {
-  display: inline-block;
-  background-color: #2563eb;
-  color: white;
-  font-weight: 600;
-  padding: 12px 24px;
-  border-radius: 4px;
-  text-decoration: none;
-  margin-top: 16px;
-  font-size: 16px;
-  width: 200px;
-  text-align: center;
-}
-
-/* REVIEWS SECTION - FIX STYLING */
-.flex.flex-wrap,
-.mt-12.flex.flex-wrap {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  justify-content: center !important;
-  gap: 16px !important;
-  margin-top: 24px !important;
-  padding: 0 16px !important;
-}
-
-/* Review cards */
-.bg-white\/10,
-.backdrop-blur-sm {
-  background-color: white !important;
-  padding: 16px !important;
-  border-radius: 8px !important;
-  width: calc(50% - 8px) !important;
-  text-align: center !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-}
-
-/* Make BBB styling nicer */
-.bg-white\/10 svg,
-.backdrop-blur-sm svg {
-  width: 32px !important;
-  height: 32px !important;
-  margin: 0 auto 8px auto !important;
-  display: block !important;
-}
-
-/* Review headings */
-.text-xl.font-semibold,
-.text-lg.font-semibold {
-  font-size: 16px !important;
-  margin-top: 8px !important;
-  color: #333 !important;
-}
-
-/* Review ratings */
+/* Main text adjustments */
 .text-4xl {
-  font-size: 24px !important;
-  font-weight: 700 !important;
-  margin-bottom: 8px !important;
-  color: #2563eb !important;
+  font-size: 2.5rem !important;
 }
 
-/* Scroll to explore button */
-.absolute.bottom-4.left-0.right-0.mx-auto.text-center.text-white {
-  position: relative !important;
-  bottom: auto !important;
-  left: auto !important;
-  right: auto !important;
-  padding: 16px !important;
-  color: #666 !important;
-  font-size: 14px !important;
-  margin-top: 24px !important;
-}
-
-/* FEATURED VEHICLES SECTION */
+/* Layout adjustments */
 .py-16 {
-  padding: 32px 16px !important;
-  margin: 0 !important;
-  background: white !important;
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
 }
 
-h2.text-3xl {
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 24px;
-  font-weight: bold;
-  color: #333;
+.px-12 {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
 }
 
-/* Vehicle grid */
+/* Better mobile navigation */
+.md\:flex {
+  display: none !important;
+}
+
+/* Make sure buttons are easier to tap */
+button, 
+a[class*="px-"], 
+a[class*="py-"] {
+  padding: 0.75rem !important;
+  touch-action: manipulation;
+}
+
+/* Adjust image boxes */
+[class*="aspect-"] {
+  aspect-ratio: 4/3 !important;
+}
+
+/* Make all vehicle cards stack for mobile */
 .grid {
-  display: block !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+}
+
+/* Fix text sizing on cards */
+.text-lg {
+  font-size: 1.125rem !important;
+}
+
+/* Make price text larger */
+.font-bold.text-lg {
+  font-size: 1.5rem !important;
+}
+
+/* Better form controls for mobile */
+input,
+textarea,
+select {
+  font-size: 16px !important; /* Prevents iOS zoom */
+  padding: 0.875rem !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Improve modal experience on mobile */
+div[role="dialog"] {
   width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 1rem !important;
+  max-width: 100% !important;
+  border-radius: 0 !important;
 }
 
-.grid-cols-1 > div, 
-.sm\:grid-cols-2 > div, 
-.lg\:grid-cols-3 > div,
-.grid > div {
-  width: 100% !important;
-  margin-bottom: 24px !important;
-  border-radius: 8px !important;
-  overflow: hidden !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-  background: white !important;
+/* Fix scrolling issues on iOS */
+.overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Vehicle card content */
-.grid div > img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16/9;
-  object-fit: cover;
+/* Reduce motion on mobile for better performance */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0 !important;
+  }
 }
 
-/* FIX HEART/VIEWS BUTTONS */
-.absolute.top-2.right-2,
-.absolute.flex.items-center.gap-1.rounded-full.bg-white.px-2.py-1 {
-  position: absolute !important;
-  top: 8px !important;
-  right: 8px !important;
-  background-color: rgba(255,255,255,0.8) !important;
-  border-radius: 4px !important;
-  padding: 4px 8px !important;
-  font-size: 12px !important;
-  z-index: 5 !important;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
-  max-width: 70px !important;
-  overflow: hidden !important;
-}
+/* FIX: Mobile Hero Header Adjustments */
+@media (max-width: 767px) {
+  /* Add more space at top of hero section */
+  .h-screen > div:first-child {
+    padding-top: 1.5rem !important;
+  }
 
-/* Hide view counter icon to save space */
-.absolute.flex.items-center svg {
-  display: none !important;
-}
+  /* Make logo bigger as requested */
+  .h-16 img[alt="Doski Motors Logo"] {
+    width: 70px !important;
+    height: 45px !important;
+  }
+  
+  /* Specific styling for the mobile logo - bigger logo */
+  .mobile-logo img {
+    width: 65px !important;
+    height: 45px !important;
+  }
+  
+  /* Adjust logo text */
+  .h-16 .text-3xl {
+    font-size: 1.5rem !important;
+  }
+  
+  .h-16 .text-sm {
+    font-size: 0.8rem !important;
+  }
+  
+  /* Mobile logo text adjustments - make bigger */
+  .mobile-logo .text-3xl {
+    font-size: 1.5rem !important;
+  }
+  
+  .mobile-logo .text-sm {
+    font-size: 0.8rem !important;
+  }
 
-/* Hide heart on mobile to save space */
-.absolute.top-2.right-2 {
-  display: none !important;
-}
+  /* Add space or hide the tagline on mobile */
+  .text-lg.md\:text-xl.lg\:text-2xl.text-gray-200.font-medium {
+    display: none !important;  /* Hide the tagline on mobile */
+  }
 
-/* Car specs badges */
-.absolute.bottom-2.left-2 {
-  position: absolute !important;
-  bottom: 8px !important;
-  left: 8px !important;
-  background-color: rgba(37, 99, 235, 0.9) !important;
-  color: white !important;
-  border-radius: 4px !important;
-  padding: 4px 8px !important;
-  font-size: 12px !important;
-  font-weight: bold !important;
-}
+  /* Lower the "Drive Your Dream" text to avoid overlapping with logo */
+  .text-4xl.font-bold.tracking-tight.text-white {
+    margin-top: 4rem !important;
+  }
 
-.grid .p-4 {
-  padding: 16px !important;
-}
+  /* Hide desktop-only elements on mobile */
+  .desktop-only {
+    display: none !important;
+  }
 
-.grid h3 {
-  font-size: 18px;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: #333;
-}
+  /* Fix rating badges position and display */
+  .mt-12.flex.justify-center.gap-12 {
+    margin-top: 1.5rem !important;
+    gap: 1rem !important;
+  }
 
-.grid .font-bold {
-  font-size: 20px;
-  color: #2563eb;
-  font-weight: bold;
-}
+  /* Fix BBC Accredited and Google Rating badges */
+  .group.flex.items-center.gap-3.px-4.py-3.bg-white\/10.backdrop-blur-sm.rounded-xl {
+    width: 45% !important;
+    padding: 0.5rem !important;
+    margin-bottom: 1rem !important;
+  }
 
-/* Fix vehicle info */
-.grid .text-gray-500 {
-  color: #666 !important;
-  font-size: 14px !important;
-  margin-bottom: 4px !important;
-}
+  /* Make badge icons smaller */
+  .group.flex.items-center.gap-3 svg {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+  }
 
-/* Fix availability tag */
-.grid .text-green-500 {
-  color: #10b981 !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  background-color: rgba(16, 185, 129, 0.1) !important;
-  padding: 2px 8px !important;
-  border-radius: 4px !important;
-  display: inline-block !important;
-}
-
-/* Fix vehicle buttons */
-.grid .mt-4.flex.items-center.justify-between.gap-2 {
-  display: flex !important;
-  justify-content: space-between !important;
-  gap: 8px !important;
-  margin-top: 16px !important;
-}
-
-.grid .flex-1 {
-  flex: 1 !important;
-}
-
-.grid a.bg-blue-600 {
-  background-color: #2563eb !important;
-  color: white !important;
-  padding: 8px !important;
-  border-radius: 4px !important;
-  text-align: center !important;
-  text-decoration: none !important;
-  font-weight: 600 !important;
-  font-size: 14px !important;
-  display: block !important;
-}
-
-.grid a.border {
-  border: 1px solid #2563eb !important;
-  color: #2563eb !important;
-  padding: 8px !important;
-  border-radius: 4px !important;
-  text-align: center !important;
-  text-decoration: none !important;
-  font-weight: 600 !important;
-  font-size: 14px !important;
-  display: block !important;
-}
-
-/* FOOTER - RESTORE ORIGINAL STYLING */
-footer {
-  background-color: #1e3a8a !important;
-  color: white !important;
-  padding: 32px 16px !important;
-  text-align: center !important;
-}
-
-footer .max-w-7xl {
-  padding: 0 !important;
-}
-
-footer .grid {
-  display: block !important;
-  text-align: center !important;
-}
-
-footer .grid > div {
-  margin-bottom: 24px !important;
-  box-shadow: none !important;
-  background: transparent !important;
-}
-
-/* Footer logo */
-footer svg, 
-footer img {
-  height: 32px !important;
-  width: auto !important;
-  margin: 0 auto 16px auto !important;
-  display: block !important;
-}
-
-/* Footer heading */
-footer h3 {
-  font-size: 18px !important;
-  margin-bottom: 16px !important;
-  color: white !important;
-  font-weight: 600 !important;
-}
-
-/* Footer text */
-footer p {
-  font-size: 14px !important;
-  line-height: 1.5 !important;
-  margin-bottom: 16px !important;
-  color: rgba(255, 255, 255, 0.8) !important;
-}
-
-/* Footer links */
-footer a {
-  color: white !important;
-  text-decoration: none !important;
-  padding: 4px 0 !important;
-  display: block !important;
-  font-size: 14px !important;
-}
-
-/* Footer address */
-footer address {
-  font-style: normal !important;
-  margin-bottom: 8px !important;
-  font-size: 14px !important;
-  color: rgba(255, 255, 255, 0.8) !important;
-}
-
-/* MENU DROPDOWN */
-.fixed.inset-0.z-40 {
-  position: fixed !important;
-  top: 60px !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  background-color: white !important;
-  z-index: 40 !important;
-  overflow-y: auto !important;
-}
-
-.fixed.inset-0.z-40 a {
-  display: block !important;
-  padding: 16px !important;
-  border-bottom: 1px solid #e5e7eb !important;
-  font-size: 18px !important;
-  color: #111827 !important;
-  text-decoration: none !important;
-}
-
-/* ALL OTHER UTILITY CLASSES */
-.hidden {
-  display: none !important;
-}
-
-.block {
-  display: block !important;
-}
-
-.mx-auto {
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-/* FIX PHONE NUMBERS */
-a[href^="tel"] {
-  color: inherit !important;
-  text-decoration: none !important;
+  /* Make badge text smaller */
+  .group.flex.items-center.gap-3 .flex.flex-col span.text-sm {
+    font-size: 0.75rem !important;
+  }
+  
+  .group.flex.items-center.gap-3 .flex.flex-col span.text-xs {
+    font-size: 0.7rem !important;
+  }
+  
+  /* Fix trust badges layout for mobile */
+  .mobile-trust-badges {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 1rem !important;
+    width: 100% !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 4rem !important;  /* Add space before scroll indicator */
+  }
+  
+  /* Position the Google Rating and Licensed Dealer badges side by side */
+  .mobile-badge {
+    width: 45% !important;
+    margin-bottom: 0 !important;
+    padding: 0.75rem !important;
+  }
+  
+  /* Fix animation overflow issues on mobile */
+  div.issue {
+    opacity: 0 !important;
+    display: none !important;
+  }
+  
+  /* Improve mobile search input */
+  .mt-8.w-full.max-w-md.mx-auto form {
+    width: 90% !important;
+    margin: 0 auto !important;
+  }
+  
+  /* Ensure scroll indicator doesn't overlap with badges */
+  .absolute.bottom-8.left-1\/2.-translate-x-1\/2 {
+    bottom: 1rem !important;
+  }
+  
+  /* ULTRA-COMPACT VEHICLE CARD STATS FOR MOBILE */
+  
+  /* Ultra-small, minimal likes and views counter with no right padding */
+  .absolute.top-2.right-2.p-2.bg-white.rounded-full.shadow-md.hover\:bg-gray-50 {
+    position: absolute !important;
+    top: 6px !important;
+    right: 6px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(2px) !important;
+    border-radius: 100px !important;
+    padding: 3px 6px 3px 6px !important;
+    gap: 2px !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+    border: none !important;
+    max-height: 24px !important;
+    z-index: 20 !important;
+    width: auto !important;
+    min-width: auto !important;
+  }
+  
+  /* Override any default padding from the original p-2 class */
+  .absolute.top-2.right-2.p-2 {
+    padding: 0 !important;
+  }
+  
+  /* Make views count icon and text more compact */
+  .absolute.top-2.right-2.p-2 span.text-xs.font-medium.text-gray-700:first-child {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-size: 0.65rem !important;
+    font-weight: 400 !important;
+    line-height: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+  }
+  
+  /* Add eye icon before views count - more compact */
+  .absolute.top-2.right-2.p-2 span.text-xs.font-medium.text-gray-700:first-child:before {
+    content: "👁" !important;
+    font-size: 0.6rem !important;
+    margin-right: 1px !important;
+    display: inline !important;
+  }
+  
+  /* No separation elements */
+  .absolute.top-2.right-2.p-2 > span.text-xs.font-medium.text-gray-700 ~ .flex.items-center:before {
+    content: none !important;
+  }
+  
+  /* Ultra-tight likes section */
+  .absolute.top-2.right-2.p-2 .flex.items-center.ml-2.mr-1 {
+    margin-left: 2px !important;
+    margin-right: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    background: none !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+  }
+  
+  /* Compact likes count */
+  .absolute.top-2.right-2.p-2 .flex.items-center.ml-2.mr-1 span.text-xs.font-medium.text-gray-700 {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-size: 0.65rem !important;
+    font-weight: 400 !important;
+    line-height: 1 !important;
+    margin-right: 1px !important;
+    position: relative !important;
+  }
+  
+  /* Remove any extra space or elements */
+  .absolute.top-2.right-2.p-2 .flex.items-center.ml-2.mr-1 span.text-xs.font-medium.text-gray-700:before,
+  .absolute.top-2.right-2.p-2 .flex.items-center.ml-2.mr-1 span.text-xs.font-medium.text-gray-700:after {
+    content: none !important;
+    display: none !important;
+  }
+  
+  /* Ensure heart button takes minimal space */
+  .absolute.top-2.right-2.p-2 button {
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 0 !important;
+    height: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    width: auto !important;
+  }
+  
+  /* Compact heart icon */
+  .absolute.top-2.right-2.p-2 button .h-5.w-5 {
+    height: 0.8rem !important;
+    width: 0.8rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+  }
+  
+  /* Default heart color - more visible */
+  .absolute.top-2.right-2.p-2 button .h-5.w-5.text-gray-400 {
+    color: white !important;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5)) !important;
+  }
+  
+  /* Active heart color - more vibrant */
+  .absolute.top-2.right-2.p-2 button .h-5.w-5.text-red-500 {
+    color: #ff3333 !important;
+    filter: drop-shadow(0 0 2px rgba(255, 0, 0, 0.3)) !important;
+  }
+  
+  /* Add tap highlight to make the heart look clickable */
+  .absolute.top-2.right-2.p-2 button:active {
+    transform: scale(0.9) !important;
+    transition: transform 0.1s !important;
+  }
+  
+  /* Remove any extra dividers or spacing */
+  .absolute.top-2.right-2.p-2 .flex.items-center.ml-2.mr-1:after,
+  .absolute.top-2.right-2.p-2 .flex.items-center.ml-2.mr-1:before {
+    content: none !important;
+    display: none !important;
+  }
 } 

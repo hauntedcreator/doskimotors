@@ -10,18 +10,18 @@ interface LogoProps {
 const Logo = memo(({ className = '', textColor = 'white', size = 'medium' }: LogoProps) => {
   // Consistent text size classes that won't change based on color
   const sizeClasses = {
-    small: 'text-lg',
-    medium: 'text-xl',
-    large: 'text-2xl',
-    'extra-large': 'text-3xl'
+    small: 'text-2xl',
+    medium: 'text-3xl',
+    large: 'text-4xl',
+    'extra-large': 'text-5xl'
   }
 
   // Fixed dimensions for consistent logo sizing
   const dimensions = {
-    small: { width: 28, height: 18 },
-    medium: { width: 45, height: 30 },
-    large: { width: 60, height: 40 },
-    'extra-large': { width: 75, height: 50 }
+    small: { width: 45, height: 30 },
+    medium: { width: 70, height: 45 },
+    large: { width: 90, height: 60 },
+    'extra-large': { width: 120, height: 80 }
   };
   
   // Ensure SVGs have consistent dimensions and positioning
@@ -40,18 +40,18 @@ const Logo = memo(({ className = '', textColor = 'white', size = 'medium' }: Log
         style={{ 
           width: `${dimensions[size].width}px`,
           height: `${dimensions[size].height}px`,
-          marginRight: '-4px', // Reduced margin
+          marginRight: '-12px', // Consistent margin
         }}
         className="object-contain"
         loading="eager"
         fetchPriority="high"
       />
 
-      <div className="relative pl-0">
+      <div className="relative pl-2">
         <span className={`font-bold ${sizeClasses[size]} ${textColor === 'white' ? 'text-white' : 'text-gray-900'} tracking-tight`}>
           DOSKI
         </span>
-        <span className={`ml-1 uppercase tracking-wider ${size === 'extra-large' ? 'text-xs' : size === 'large' ? 'text-xs' : 'text-xs'} ${textColor === 'white' ? 'text-gray-300' : 'text-gray-600'}`}>
+        <span className={`ml-2 uppercase tracking-wider ${size === 'extra-large' ? 'text-xl' : size === 'large' ? 'text-base' : 'text-sm'} ${textColor === 'white' ? 'text-gray-300' : 'text-gray-600'}`}>
           MOTORS
         </span>
       </div>

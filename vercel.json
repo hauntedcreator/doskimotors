@@ -2,7 +2,7 @@
   "buildCommand": "npm run build",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "environmentVariables": {
+  "env": {
     "NODE_ENV": "production",
     "NEXT_PUBLIC_SITE_URL": "https://doskimotorsauto.vercel.app"
   }

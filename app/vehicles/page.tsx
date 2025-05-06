@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { useVehicleStore, Vehicle } from '../store/vehicleStore'
@@ -14,8 +14,17 @@ import VehicleContactForm from '../components/VehicleContactForm'
 import { HeartIcon } from '@heroicons/react/24/outline'
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid'
 
-export default function VehiclesPage() {
+// Create a separate component that uses useSearchParams
+function VehicleSearchContent({ children }) {
   const searchParams = useSearchParams()
+  
+  // Use the search params here
+  // ... your existing logic with searchParams
+  
+  return <>{children}</>
+}
+
+export default function VehiclesPage() {
   const { vehicles, toggleFavorite, incrementViews } = useVehicleStore()
   const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>(vehicles)
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null)
@@ -244,203 +253,207 @@ export default function VehiclesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Header />
-      
-      <main className="flex-grow pt-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto py-12">
-          <div className="flex flex-col md:flex-row gap-8">
-            {/* Filters Sidebar */}
-            <div className="md:w-1/4">
-              <VehicleFilters 
-                vehicles={vehicles}
-                onFilterChange={handleFilterChange}
-                initialFilters={initialFilters}
-              />
-            </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <VehicleSearchContent>
+        <div className="min-h-screen bg-gray-50 flex flex-col">
+          <Header />
+          
+          <main className="flex-grow pt-20 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto py-12">
+              <div className="flex flex-col md:flex-row gap-8">
+                {/* Filters Sidebar */}
+                <div className="md:w-1/4">
+                  <VehicleFilters 
+                    vehicles={vehicles}
+                    onFilterChange={handleFilterChange}
+                    initialFilters={initialFilters}
+                  />
+                </div>
 
-            {/* Vehicle Grid */}
-            <div className="md:w-3/4">
-              <div className="mb-6 flex justify-between items-center">
-                <h1 className="text-2xl font-bold text-gray-900">
-                  Available Vehicles ({filteredVehicles.length})
-                </h1>
-              </div>
+                {/* Vehicle Grid */}
+                <div className="md:w-3/4">
+                  <div className="mb-6 flex justify-between items-center">
+                    <h1 className="text-2xl font-bold text-gray-900">
+                      Available Vehicles ({filteredVehicles.length})
+                    </h1>
+                  </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredVehicles.map(vehicle => (
-                  <div
-                    key={vehicle.id}
-                    className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100"
-                  >
-                    <div 
-                      className="relative pb-[60%] bg-gray-100 group cursor-pointer"
-                      onClick={() => {
-                        setSelectedVehicle(vehicle);
-                        incrementViews(vehicle.id);
-                      }}
-                    >
-                      {/* Feature Badges */}
-                      <div className="absolute top-2 left-2 z-10 flex flex-wrap gap-2">
-                        {getVehicleHighlights(vehicle).map((highlight, index) => (
-                          <span
-                            key={index}
-                            className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white ${highlight.color}`}
-                          >
-                            {highlight.icon}
-                            <span className="ml-1">{highlight.text}</span>
-                          </span>
-                        ))}
-                      </div>
-
-                      {/* Favorite Button */}
-                      <div className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors z-10 flex items-center gap-1">
-                        {/* Display the favorites count */}
-                        <span className="text-xs font-medium text-gray-700">
-                          {vehicle.favorites ? 1 : 0}
-                        </span>
-                        <button
-                          onClick={(e) => handleFavorite(vehicle.id, e)}
-                          className="ml-1"
-                        >
-                          {vehicle.favorites ? (
-                            <HeartSolidIcon className="h-5 w-5 text-red-500" />
-                          ) : (
-                            <HeartIcon className="h-5 w-5 text-gray-400" />
-                          )}
-                        </button>
-                      </div>
-
-                      <div className="absolute inset-0">
-                        {vehicle.image.startsWith('http') ? (
-                          <Image
-                            src={vehicle.image}
-                            alt={vehicle.title}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          />
-                        ) : (
-                          <img
-                            src={vehicle.image}
-                            alt={vehicle.title}
-                            className="w-full h-full object-cover"
-                          />
-                        )}
-                      </div>
-
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent h-20" />
-                    </div>
-
-                    <div className="p-4">
-                      <h2 className="font-bold text-lg text-gray-900 mb-1 line-clamp-1">{vehicle.title}</h2>
-                      <div className="flex items-center justify-between mb-2">
-                        <p className="text-blue-600 font-semibold">${vehicle.price.toLocaleString()}</p>
-                        {vehicle.status === 'sold' ? (
-                          <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Sold</span>
-                        ) : vehicle.status === 'pending' ? (
-                          <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span>
-                        ) : (
-                          <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Available</span>
-                        )}
-                      </div>
-                      <div className="space-y-1 text-sm text-gray-500 mb-4">
-                        <p>Year: {vehicle.year}</p>
-                        <p>Mileage: {vehicle.mileage.toLocaleString()} miles</p>
-                        <p>{vehicle.location}</p>
-                      </div>
-                      
-                      <div className="flex gap-2 mt-4">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredVehicles.map(vehicle => (
+                      <div
+                        key={vehicle.id}
+                        className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100"
+                      >
+                        <div 
+                          className="relative pb-[60%] bg-gray-100 group cursor-pointer"
+                          onClick={() => {
                             setSelectedVehicle(vehicle);
                             incrementViews(vehicle.id);
                           }}
-                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded transition-colors text-sm"
                         >
-                          View Details
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setContactVehicle(vehicle);
-                          }}
-                          className="flex-1 bg-white hover:bg-gray-100 text-blue-600 py-2 px-3 rounded border border-blue-600 transition-colors text-sm"
-                        >
-                          Contact Dealer
-                        </button>
+                          {/* Feature Badges */}
+                          <div className="absolute top-2 left-2 z-10 flex flex-wrap gap-2">
+                            {getVehicleHighlights(vehicle).map((highlight, index) => (
+                              <span
+                                key={index}
+                                className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white ${highlight.color}`}
+                              >
+                                {highlight.icon}
+                                <span className="ml-1">{highlight.text}</span>
+                              </span>
+                            ))}
+                          </div>
+
+                          {/* Favorite Button */}
+                          <div className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors z-10 flex items-center gap-1">
+                            {/* Display the favorites count */}
+                            <span className="text-xs font-medium text-gray-700">
+                              {vehicle.favorites ? 1 : 0}
+                            </span>
+                            <button
+                              onClick={(e) => handleFavorite(vehicle.id, e)}
+                              className="ml-1"
+                            >
+                              {vehicle.favorites ? (
+                                <HeartSolidIcon className="h-5 w-5 text-red-500" />
+                              ) : (
+                                <HeartIcon className="h-5 w-5 text-gray-400" />
+                              )}
+                            </button>
+                          </div>
+
+                          <div className="absolute inset-0">
+                            {vehicle.image.startsWith('http') ? (
+                              <Image
+                                src={vehicle.image}
+                                alt={vehicle.title}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                              />
+                            ) : (
+                              <img
+                                src={vehicle.image}
+                                alt={vehicle.title}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                          </div>
+
+                          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent h-20" />
+                        </div>
+
+                        <div className="p-4">
+                          <h2 className="font-bold text-lg text-gray-900 mb-1 line-clamp-1">{vehicle.title}</h2>
+                          <div className="flex items-center justify-between mb-2">
+                            <p className="text-blue-600 font-semibold">${vehicle.price.toLocaleString()}</p>
+                            {vehicle.status === 'sold' ? (
+                              <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Sold</span>
+                            ) : vehicle.status === 'pending' ? (
+                              <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span>
+                            ) : (
+                              <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Available</span>
+                            )}
+                          </div>
+                          <div className="space-y-1 text-sm text-gray-500 mb-4">
+                            <p>Year: {vehicle.year}</p>
+                            <p>Mileage: {vehicle.mileage.toLocaleString()} miles</p>
+                            <p>{vehicle.location}</p>
+                          </div>
+                          
+                          <div className="flex gap-2 mt-4">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedVehicle(vehicle);
+                                incrementViews(vehicle.id);
+                              }}
+                              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded transition-colors text-sm"
+                            >
+                              View Details
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setContactVehicle(vehicle);
+                              }}
+                              className="flex-1 bg-white hover:bg-gray-100 text-blue-600 py-2 px-3 rounded border border-blue-600 transition-colors text-sm"
+                            >
+                              Contact Dealer
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </main>
+          </main>
 
-      <Footer />
+          <Footer />
 
-      {/* Vehicle Details Modal */}
-      {selectedVehicle && (
-        <VehicleModal
-          vehicle={selectedVehicle}
-          onClose={() => setSelectedVehicle(null)}
-        />
-      )}
+          {/* Vehicle Details Modal */}
+          {selectedVehicle && (
+            <VehicleModal
+              vehicle={selectedVehicle}
+              onClose={() => setSelectedVehicle(null)}
+            />
+          )}
 
-      {/* Email Prompt Modal */}
-      {showEmailPrompt && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">Save Your Favorites</h3>
-            <p className="text-gray-600 mb-4">
-              Enter your email to save your favorite vehicles and get updates on price changes.
-            </p>
-            <form onSubmit={handleEmailSubmit} className="space-y-4">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="w-full px-3 py-2 border rounded-md"
-                required
-              />
-              <div className="flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={handleSkipEmail}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
-                >
-                  Skip
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                >
-                  Save
-                </button>
+          {/* Email Prompt Modal */}
+          {showEmailPrompt && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
+                <h3 className="text-lg font-semibold mb-4">Save Your Favorites</h3>
+                <p className="text-gray-600 mb-4">
+                  Enter your email to save your favorite vehicles and get updates on price changes.
+                </p>
+                <form onSubmit={handleEmailSubmit} className="space-y-4">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="w-full px-3 py-2 border rounded-md"
+                    required
+                  />
+                  <div className="flex justify-end space-x-3">
+                    <button
+                      type="button"
+                      onClick={handleSkipEmail}
+                      className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                    >
+                      Skip
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </form>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
+            </div>
+          )}
 
-      {/* Contact Dealer Modal */}
-      {contactVehicle && (
-        <VehicleContactForm
-          onClose={() => setContactVehicle(null)}
-          vehicle={{
-            id: contactVehicle.id,
-            title: contactVehicle.title,
-            price: contactVehicle.price,
-            year: contactVehicle.year,
-            make: contactVehicle.make,
-            model: contactVehicle.model
-          }}
-        />
-      )}
-    </div>
+          {/* Contact Dealer Modal */}
+          {contactVehicle && (
+            <VehicleContactForm
+              onClose={() => setContactVehicle(null)}
+              vehicle={{
+                id: contactVehicle.id,
+                title: contactVehicle.title,
+                price: contactVehicle.price,
+                year: contactVehicle.year,
+                make: contactVehicle.make,
+                model: contactVehicle.model
+              }}
+            />
+          )}
+        </div>
+      </VehicleSearchContent>
+    </Suspense>
   )
 } 

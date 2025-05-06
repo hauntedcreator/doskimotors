@@ -1,7 +1,10 @@
+import { Suspense } from 'react';
+
 // Force static rendering with no client components
 export const dynamic = 'force-static';
 
-export default function Custom404() {
+// Inner component to handle any potential client-side functionality
+function NotFoundContent() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
       <div className="max-w-lg w-full text-center">
@@ -19,5 +22,14 @@ export default function Custom404() {
         </a>
       </div>
     </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function Custom404() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <NotFoundContent />
+    </Suspense>
   );
 } 

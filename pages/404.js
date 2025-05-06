@@ -10,11 +10,12 @@ export default function Custom404() {
         <p className="text-lg text-gray-600 mb-8">
           The page you are looking for doesn't exist or has been moved.
         </p>
-        <Link href="/">
-          <a className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
-            <span className="mr-2">←</span>
-            Return to Homepage
-          </a>
+        <Link 
+          href="/"
+          className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          <span className="mr-2">←</span>
+          Return to Homepage
         </Link>
       </div>
     </div>

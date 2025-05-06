@@ -127,6 +127,7 @@ const nextConfig = {
   },
   distDir: process.env.BUILD_DIR || '.next',
   pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
+  trailingSlash: false,
 }
 
 module.exports = nextConfig 

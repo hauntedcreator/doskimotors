@@ -1,9 +1,7 @@
-'use client'
+import React from 'react';
+import Link from 'next/link';
 
-import React from 'react'
-import Link from 'next/link'
-
-export default function NotFound() {
+export default function Custom404() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
       <div className="max-w-lg w-full text-center">
@@ -12,14 +10,13 @@ export default function NotFound() {
         <p className="text-lg text-gray-600 mb-8">
           The page you are looking for doesn't exist or has been moved.
         </p>
-        <a
-          href="/"
-          className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <span className="mr-2">←</span>
-          Return to Homepage
-        </a>
+        <Link href="/">
+          <a className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
+            <span className="mr-2">←</span>
+            Return to Homepage
+          </a>
+        </Link>
       </div>
     </div>
-  )
-}
+  );
+} 

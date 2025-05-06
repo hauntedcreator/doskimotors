@@ -125,6 +125,8 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  output: 'standalone',
+  distDir: process.env.BUILD_DIR || '.next',
 }
 
 module.exports = nextConfig 

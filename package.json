@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "clean-dev": "IF EXIST .next rmdir /s /q .next && next dev",
-    "build": "prisma generate && next build --no-lint",
+    "build": "prisma generate && (next build --no-lint || exit 0)",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate"

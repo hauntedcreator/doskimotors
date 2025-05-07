@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useVehicleStore, Vehicle } from '../store/vehicleStore'
 import VehicleModal from '../components/VehicleModal'
 import VehicleFilters from '../components/VehicleFilters'
+import VehicleCard from '../components/VehicleCard'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ImageCarousel from '../components/ImageCarousel'
@@ -43,6 +44,29 @@ export default function VehiclesPage() {
     fuelType: [] as string[],
     make: [] as string[]
   })
+
+  // Memoized callbacks for the VehicleCard component
+  const handleViewDetails = useCallback((vehicle: Vehicle) => {
+    setSelectedVehicle(vehicle)
+  }, [])
+
+  const handleContactDealer = useCallback((vehicle: Vehicle) => {
+    setContactVehicle(vehicle)
+  }, [])
+
+  const handleFavoriteClick = useCallback((vehicleId: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (!localStorage.getItem('userEmail')) {
+      setSelectedVehicleId(vehicleId)
+      setShowEmailPrompt(true)
+    } else {
+      toggleFavorite(vehicleId)
+    }
+  }, [toggleFavorite])
+
+  const handleIncrementViews = useCallback((vehicleId: string) => {
+    incrementViews(vehicleId)
+  }, [incrementViews])
 
   const handleFilterChange = useCallback((filters: any) => {
     let filtered = [...vehicles].filter(vehicle => vehicle.status !== 'sold') // Show all vehicles except sold ones
@@ -115,80 +139,8 @@ export default function VehiclesPage() {
     setFilteredVehicles(filtered)
   }, [vehicles])
 
-  // Apply initial filters when vehicles change
-  useEffect(() => {
-    if (vehicles.length > 0) {
-      handleFilterChange(initialFilters)
-    }
-  }, [vehicles, initialFilters, handleFilterChange])
-
-  // Extract search params on initial load
-  useEffect(() => {
-    const query = searchParams.get('search')
-    const brand = searchParams.get('brand')
-    const price = searchParams.get('price')
-    
-    if (query || brand || price) {
-      const newFilters = { ...initialFilters }
-      
-      if (query) {
-        newFilters.search = query
-      }
-      
-      if (brand && brand !== 'all') {
-        newFilters.make = [brand]
-      }
-      
-      if (price && price !== 'all') {
-        const [min, max] = price.split('-')
-        if (min && max) {
-          newFilters.priceRange = { min, max }
-        } else if (min === '0' && max) {
-          newFilters.priceRange = { min: '0', max }
-        } else if (min && max === 'plus') {
-          newFilters.priceRange = { min, max: '' }
-        }
-      }
-      
-      setInitialFilters(newFilters)
-      handleFilterChange(newFilters)
-    } else {
-      handleFilterChange(initialFilters)
-    }
-  }, [searchParams, initialFilters, handleFilterChange])
-
-  const handleFavorite = (vehicleId: string, e?: React.MouseEvent) => {
-    if (e) {
-      e.stopPropagation();
-    }
-    if (!localStorage.getItem('userEmail')) {
-      setSelectedVehicleId(vehicleId)
-      setShowEmailPrompt(true)
-    } else {
-      toggleFavorite(vehicleId)
-    }
-  }
-
-  const handleEmailSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (email && selectedVehicleId) {
-      localStorage.setItem('userEmail', email)
-      toggleFavorite(selectedVehicleId)
-      setShowEmailPrompt(false)
-      setEmail('')
-      setSelectedVehicleId(null)
-    }
-  }
-
-  const handleSkipEmail = () => {
-    if (selectedVehicleId) {
-      toggleFavorite(selectedVehicleId)
-      setShowEmailPrompt(false)
-      setSelectedVehicleId(null)
-    }
-  }
-
-  const getVehicleHighlights = (vehicle: Vehicle) => {
+  // The getVehicleHighlights function should be memoized too
+  const getVehicleHighlights = useCallback((vehicle: Vehicle) => {
     const highlights = []
 
     // Premium EV Features (Priority 1)
@@ -249,8 +201,70 @@ export default function VehiclesPage() {
       })
     }
 
-    // Sort by priority and return exactly 2 highlights
+    // Sort by priority and limit to 2
     return highlights.sort((a, b) => a.priority - b.priority).slice(0, 2)
+  }, [])
+
+  // Apply initial filters when vehicles change
+  useEffect(() => {
+    if (vehicles.length > 0) {
+      handleFilterChange(initialFilters)
+    }
+  }, [vehicles, initialFilters, handleFilterChange])
+
+  // Extract search params on initial load
+  useEffect(() => {
+    const query = searchParams.get('search')
+    const brand = searchParams.get('brand')
+    const price = searchParams.get('price')
+    
+    if (query || brand || price) {
+      // Only update if we actually have search params to avoid unnecessary rerenders
+      setInitialFilters(prevFilters => {
+        const newFilters = { ...prevFilters }
+        
+        if (query) {
+          newFilters.search = query
+        }
+        
+        if (brand && brand !== 'all') {
+          newFilters.make = [brand]
+        }
+        
+        if (price && price !== 'all') {
+          const [min, max] = price.split('-')
+          if (min && max) {
+            newFilters.priceRange = { min, max }
+          } else if (min === '0' && max) {
+            newFilters.priceRange = { min: '0', max }
+          } else if (min && max === 'plus') {
+            newFilters.priceRange = { min, max: '' }
+          }
+        }
+        
+        return newFilters
+      })
+      // We don't call handleFilterChange here since the other useEffect will handle that
+    }
+  }, [searchParams]) // Removed initialFilters and handleFilterChange from dependencies
+
+  const handleEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (email && selectedVehicleId) {
+      localStorage.setItem('userEmail', email)
+      toggleFavorite(selectedVehicleId)
+      setShowEmailPrompt(false)
+      setEmail('')
+      setSelectedVehicleId(null)
+    }
+  }
+
+  const handleSkipEmail = () => {
+    if (selectedVehicleId) {
+      toggleFavorite(selectedVehicleId)
+      setShowEmailPrompt(false)
+      setSelectedVehicleId(null)
+    }
   }
 
   return (
@@ -281,110 +295,15 @@ export default function VehiclesPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredVehicles.map(vehicle => (
-                      <div
+                      <VehicleCard
                         key={vehicle.id}
-                        className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100"
-                      >
-                        <div 
-                          className="relative pb-[60%] bg-gray-100 group cursor-pointer"
-                          onClick={() => {
-                            setSelectedVehicle(vehicle);
-                            incrementViews(vehicle.id);
-                          }}
-                        >
-                          {/* Feature Badges */}
-                          <div className="absolute top-2 left-2 z-10 flex flex-wrap gap-2">
-                            {getVehicleHighlights(vehicle).map((highlight, index) => (
-                              <span
-                                key={index}
-                                className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white ${highlight.color}`}
-                              >
-                                {highlight.icon}
-                                <span className="ml-1">{highlight.text}</span>
-                              </span>
-                            ))}
-                          </div>
-
-                          {/* Favorite Button */}
-                          <div className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors z-10 flex items-center gap-1">
-                            {/* Display the favorites count */}
-                            <span className="text-xs font-medium text-gray-700">
-                              {vehicle.favorites ? 1 : 0}
-                            </span>
-                            <button
-                              onClick={(e) => handleFavorite(vehicle.id, e)}
-                              className="ml-1"
-                            >
-                              {vehicle.favorites ? (
-                                <HeartSolidIcon className="h-5 w-5 text-red-500" />
-                              ) : (
-                                <HeartIcon className="h-5 w-5 text-gray-400" />
-                              )}
-                            </button>
-                          </div>
-
-                          <div className="absolute inset-0">
-                            {vehicle.image.startsWith('http') ? (
-                              <Image
-                                src={vehicle.image}
-                                alt={vehicle.title}
-                                fill
-                                className="object-cover"
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                              />
-                            ) : (
-                              <img
-                                src={vehicle.image}
-                                alt={vehicle.title}
-                                className="w-full h-full object-cover"
-                              />
-                            )}
-                          </div>
-
-                          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent h-20" />
-                        </div>
-
-                        <div className="p-4">
-                          <h2 className="font-bold text-lg text-gray-900 mb-1 line-clamp-1">{vehicle.title}</h2>
-                          <div className="flex items-center justify-between mb-2">
-                            <p className="text-blue-600 font-semibold">${vehicle.price.toLocaleString()}</p>
-                            {vehicle.status === 'sold' ? (
-                              <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Sold</span>
-                            ) : vehicle.status === 'pending' ? (
-                              <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span>
-                            ) : (
-                              <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Available</span>
-                            )}
-                          </div>
-                          <div className="space-y-1 text-sm text-gray-500 mb-4">
-                            <p>Year: {vehicle.year}</p>
-                            <p>Mileage: {vehicle.mileage.toLocaleString()} miles</p>
-                            <p>{vehicle.location}</p>
-                          </div>
-                          
-                          <div className="flex gap-2 mt-4">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedVehicle(vehicle);
-                                incrementViews(vehicle.id);
-                              }}
-                              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded transition-colors text-sm"
-                            >
-                              View Details
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setContactVehicle(vehicle);
-                              }}
-                              className="flex-1 bg-white hover:bg-gray-100 text-blue-600 py-2 px-3 rounded border border-blue-600 transition-colors text-sm"
-                            >
-                              Contact Dealer
-                            </button>
-                          </div>
-                        </div>
-                      </div>
+                        vehicle={vehicle}
+                        onViewDetails={handleViewDetails}
+                        onContact={handleContactDealer}
+                        onFavorite={handleFavoriteClick}
+                        onIncrementViews={handleIncrementViews}
+                        getVehicleHighlights={getVehicleHighlights}
+                      />
                     ))}
                   </div>
                 </div>

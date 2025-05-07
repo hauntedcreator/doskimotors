@@ -106,7 +106,7 @@ export default function TeslaRepairsPage() {
         throw new Error('Failed to save your request. Please try again.');
       }
       
-      // Send email notification
+      // Send email notification with image attachments
       const emailResponse = await fetch('/api/email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -118,9 +118,9 @@ export default function TeslaRepairsPage() {
           message: `
 Model: ${data.model}
 Issue: ${data.issue || 'General inquiry'}
-${data.files && data.files.length > 0 ? `Files: ${data.files.join(', ')}` : ''}
           `,
-          source: 'tesla-repairs-page'
+          source: 'tesla-repairs-page',
+          files: data.files // Pass the array of image URLs
         })
       });
       
@@ -542,12 +542,20 @@ ${data.files && data.files.length > 0 ? `Files: ${data.files.join(', ')}` : ''}
                       let uploadedUrls: string[] = [];
                       if (requestForm.files && requestForm.files.length > 0) {
                         try {
+                          console.log(`Attempting to upload ${requestForm.files.length} files`);
                           const formData = new FormData();
-                          requestForm.files.forEach(file => formData.append('images', file));
+                          requestForm.files.forEach(file => {
+                            console.log(`Adding file to form: ${file.name}, type: ${file.type}, size: ${file.size}`);
+                            formData.append('images', file);
+                          });
+                          
                           const res = await fetch('/api/upload', { method: 'POST', body: formData });
+                          console.log('Upload response status:', res.status);
+                          
                           if (!res.ok) throw new Error('Failed to upload images');
                           const data = await res.json();
                           uploadedUrls = data.urls || [];
+                          console.log('Uploaded image URLs:', uploadedUrls);
                         } catch (error) {
                           console.error('Error uploading images:', error);
                           // Continue with form submission even if image upload fails
@@ -589,7 +597,7 @@ ${data.files && data.files.length > 0 ? `Files: ${data.files.join(', ')}` : ''}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Phone (optional)</label>
                       <input 
                         type="tel" 
                         className="w-full border rounded-md px-3 py-2" 

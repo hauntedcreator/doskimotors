@@ -11,6 +11,7 @@ import Portal from '../components/Portal'
 import DealerAnalytics from '../components/DealerAnalytics'
 import AuctionWatchComingSoon from '../components/AuctionWatchComingSoon'
 import TeslaAuctionsRoi from '../components/TeslaAuctionsRoi'
+import { toast } from 'react-hot-toast'
 
 interface BulkUploadFile {
   fileName: string;
@@ -357,27 +358,42 @@ export default function DealerDashboard() {
   }
 
   const handleMarkRead = async (index: number, read: boolean) => {
-    await fetch('/api/leads', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ index, read }),
-    });
-    // Refresh leads
-    fetch('/api/leads')
-      .then(res => res.json())
-      .then(data => setLeads(data.reverse()));
+    try {
+      const updatedLeads = [...leads];
+      updatedLeads[index] = {
+        ...updatedLeads[index],
+        read,
+        viewedAt: read ? new Date().toISOString() : null
+      };
+      setLeads(updatedLeads);
+      
+      // Update server-side
+      await fetch(`/api/leads/update`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ index, read, viewedAt: read ? new Date().toISOString() : null })
+      });
+    } catch (error) {
+      console.error('Error marking lead as read:', error);
+      toast.error('Failed to update lead status');
+    }
   };
 
   const handleDeleteLead = async (index: number) => {
-    if (window.confirm('Delete this lead?')) {
-      await fetch('/api/leads', {
-        method: 'DELETE',
+    try {
+      const updatedLeads = [...leads];
+      updatedLeads.splice(index, 1);
+      setLeads(updatedLeads);
+      
+      // Update server-side
+      await fetch(`/api/leads/delete`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ index }),
+        body: JSON.stringify({ index })
       });
-      fetch('/api/leads')
-        .then(res => res.json())
-        .then(data => setLeads(data));
+    } catch (error) {
+      console.error('Error deleting lead:', error);
+      toast.error('Failed to delete lead');
     }
   };
 
@@ -952,11 +968,11 @@ export default function DealerDashboard() {
                   ) : (
                     <div className="divide-y divide-gray-200">
                       {leads.map((lead, idx) => (
-                        <div key={idx} id={`lead-${leads.length - 1 - idx}`} className={`p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 ${!lead.read ? 'bg-blue-50' : ''}`}
+                        <div key={idx} id={`lead-${idx}`} className={`p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 ${!lead.read ? 'bg-blue-50' : ''}`}
                           onClick={() => {}}>
                           <div>
                             <div className="flex items-center gap-2">
-                              <span onClick={e => { e.stopPropagation(); handleMarkRead(leads.length - 1 - idx, !lead.read); }} className="cursor-pointer">
+                              <span onClick={e => { e.stopPropagation(); handleMarkRead(idx, !lead.read); }} className="cursor-pointer">
                                 {!lead.read ? <FiCircle className="text-blue-500" /> : <FiCheckCircle className="text-green-400" />}
                               </span>
                               <span className={`font-semibold ${!lead.read ? 'text-blue-900' : 'text-gray-900'}`}>{lead.name || 'No Name'}</span>
@@ -1005,10 +1021,10 @@ export default function DealerDashboard() {
                             {lead.email && (
                               <a href={getReplyMailto(lead)} className="px-4 py-2 rounded bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition flex items-center gap-2" target="_blank" rel="noopener noreferrer"><FiMail /> Reply</a>
                             )}
-                            <button onClick={e => { e.stopPropagation(); handleMarkRead(leads.length - 1 - idx, !lead.read); }} className="px-3 py-1 rounded bg-gray-200 text-gray-700 text-xs font-semibold hover:bg-gray-300 transition">
+                            <button onClick={e => { e.stopPropagation(); handleMarkRead(idx, !lead.read); }} className="px-3 py-1 rounded bg-gray-200 text-gray-700 text-xs font-semibold hover:bg-gray-300 transition">
                               Mark as {lead.read ? 'Unread' : 'Read'}
                             </button>
-                            <button onClick={e => { e.stopPropagation(); handleDeleteLead(leads.length - 1 - idx); }} className="px-3 py-1 rounded bg-red-100 text-red-700 text-xs font-semibold hover:bg-red-200 transition flex items-center gap-1"><FiTrash2 /> Delete</button>
+                            <button onClick={e => { e.stopPropagation(); handleDeleteLead(idx); }} className="px-3 py-1 rounded bg-red-100 text-red-700 text-xs font-semibold hover:bg-red-200 transition flex items-center gap-1"><FiTrash2 /> Delete</button>
                           </div>
                         </div>
                       ))}

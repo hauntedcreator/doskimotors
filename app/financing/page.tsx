@@ -98,7 +98,7 @@ export default function FinancingPage() {
         "Proof of income",
         "Valid CA driver's license"
       ],
-      website: "https://www.sdccu.com/loans/vehicle-loans/auto-loans/",
+      website: "https://www.sdccu.com/loans/auto-loan/",
       phone: "877-732-2848",
       logo: "/logos/sdccu.png"
     },

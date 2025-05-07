@@ -7,8 +7,18 @@ const leadsFile = path.join(process.cwd(), 'data', 'leads.json');
 export async function GET() {
   try {
     const data = await fs.readFile(leadsFile, 'utf-8');
-    return NextResponse.json(JSON.parse(data));
+    const leads = JSON.parse(data);
+    
+    // Sort leads by date in descending order (newest first)
+    leads.sort((a: any, b: any) => {
+      const dateA = new Date(a.date || 0).getTime();
+      const dateB = new Date(b.date || 0).getTime();
+      return dateB - dateA; // Newest first
+    });
+    
+    return NextResponse.json(leads);
   } catch (error) {
+    console.error('Error reading leads file:', error);
     return NextResponse.json([], { status: 200 });
   }
 }

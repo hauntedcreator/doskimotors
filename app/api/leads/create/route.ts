@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+// import prisma from '@/lib/prisma';
 import { promises as fs } from 'fs';
 import path from 'path';
 
@@ -34,6 +34,8 @@ export async function POST(request: Request) {
     }
 
     // Create new lead in database (if prisma is available)
+    // Temporarily disabled for build
+    /*
     try {
       await prisma.lead.create({
         data: {
@@ -50,6 +52,7 @@ export async function POST(request: Request) {
       console.warn('Warning: Unable to save to database, continuing with leads.json:', prismaError);
       // Continue with JSON file storage even if database fails
     }
+    */
 
     // Append to leads.json file (this is the primary storage used by the dashboard)
     try {

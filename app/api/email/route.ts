@@ -11,7 +11,8 @@ export async function POST(req: NextRequest) {
       phone, 
       source = 'contact-form',
       vehicleId = '',
-      vehicleTitle = '' 
+      vehicleTitle = '',
+      files = [] 
     } = await req.json();
 
     // Check required fields
@@ -33,12 +34,32 @@ export async function POST(req: NextRequest) {
       source === 'contact-page' ? 'Contact Form' : 
       source === 'services-page' ? 'Services Page' : 
       source === 'vehicle-contact' ? 'Vehicle Inquiry' : 
+      source === 'tesla-repairs-page' ? 'Tesla Repairs' :
       'Website';
 
     // Create email subject
     const emailSubject = vehicleTitle 
       ? `${sourceLabel}: Interest in ${vehicleTitle}`
       : `${sourceLabel}: ${subject || 'New Inquiry'}`;
+
+    // Create attachment section HTML if files are provided
+    const attachmentSection = files && files.length > 0 
+      ? `
+        <h3 style="color: #555; margin-top: 20px;">Attachments:</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+          ${files.map((file, index) => `
+            <div style="margin-bottom: 10px;">
+              <a href="${file}" target="_blank">
+                <img src="${file}" alt="Attachment ${index+1}" style="max-width: 200px; max-height: 150px; border-radius: 4px; border: 1px solid #ddd;">
+              </a>
+              <div style="font-size: 12px; margin-top: 4px;">
+                <a href="${file}" target="_blank" style="color: #3B82F6; text-decoration: underline;">View full image</a>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `
+      : '';
 
     // Create email content
     const emailContent = `
@@ -55,6 +76,7 @@ export async function POST(req: NextRequest) {
         <div style="background-color: #f9f9f9; padding: 15px; border-radius: 4px; margin-top: 10px;">
           ${(message || '').replace(/\n/g, '<br>')}
         </div>
+        ${attachmentSection}
         <p style="margin-top: 20px; font-size: 12px; color: #777;">
           <em>This email was sent from ${sourceLabel} on the Doski Motors website. 
           You can reply directly to this email to respond to the sender.</em>

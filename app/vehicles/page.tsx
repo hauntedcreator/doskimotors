@@ -15,7 +15,7 @@ import { HeartIcon } from '@heroicons/react/24/outline'
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid'
 
 // Create a separate component that uses useSearchParams
-function VehicleSearchContent({ children }) {
+function VehicleSearchContent({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams()
   
   // Use the search params here
@@ -115,6 +115,14 @@ export default function VehiclesPage() {
     setFilteredVehicles(filtered)
   }, [vehicles])
 
+  // Apply initial filters when vehicles change
+  useEffect(() => {
+    if (vehicles.length > 0) {
+      handleFilterChange(initialFilters)
+    }
+  }, [vehicles, initialFilters, handleFilterChange])
+
+  // Extract search params on initial load
   useEffect(() => {
     const query = searchParams.get('search')
     const brand = searchParams.get('brand')

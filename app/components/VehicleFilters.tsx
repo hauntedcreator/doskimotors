@@ -83,7 +83,7 @@ export default function VehicleFilters({ vehicles, onFilterChange, initialFilter
       setFilters(initialFilters)
       onFilterChange(initialFilters)
     }
-  }, [initialFilters])
+  }, [initialFilters, onFilterChange])
 
   const handleFilterChange = (category: string, value: string | string[] | { min: string, max: string }) => {
     const newFilters = {

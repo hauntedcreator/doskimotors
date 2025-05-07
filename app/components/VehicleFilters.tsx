@@ -43,21 +43,15 @@ export default function VehicleFilters({ vehicles, onFilterChange, initialFilter
 
   const [filters, setFilters] = useState(defaultFilters);
   const [counts, setCounts] = useState<FilterCounts>({});
-  const [debouncedFilters, setDebouncedFilters] = useState(filters);
 
-  // Apply debounced filters to parent component
-  useEffect(() => {
-    onFilterChange(debouncedFilters);
-  }, [debouncedFilters, onFilterChange]);
-
-  // Debounce filter changes
+  // Debounce filter changes and notify parent
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setDebouncedFilters(filters);
-    }, filters.search !== debouncedFilters.search ? 300 : 0);
+      onFilterChange(filters);
+    }, filters.search !== defaultFilters.search ? 300 : 0);
     
     return () => clearTimeout(timeoutId);
-  }, [filters, debouncedFilters.search]);
+  }, [filters, defaultFilters.search, onFilterChange]);
 
   // Calculate counts for each filter option
   useEffect(() => {
@@ -98,9 +92,9 @@ export default function VehicleFilters({ vehicles, onFilterChange, initialFilter
   useEffect(() => {
     if (initialFilters) {
       setFilters(initialFilters)
-      setDebouncedFilters(initialFilters)
+      onFilterChange(initialFilters)
     }
-  }, [initialFilters])
+  }, [initialFilters, onFilterChange])
 
   const handleFilterChange = useCallback((category: string, value: string | string[] | { min: string, max: string }) => {
     setFilters(prevFilters => ({
@@ -113,7 +107,7 @@ export default function VehicleFilters({ vehicles, onFilterChange, initialFilter
   const handleReset = useCallback(() => {
     setFilters(defaultFilters)
     setDebouncedFilters(defaultFilters)
-  }, [defaultFilters]);
+  }, [defaultFilters])
 
   const conditions = ['New', 'Used', 'Certified Pre-Owned']
   const bodyStyles = ['Sedan', 'SUV', 'Coupe', 'Truck', 'Van', 'Convertible']

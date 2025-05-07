@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Vehicle } from '../store/vehicleStore'
 
 interface FilterCounts {
@@ -23,7 +23,8 @@ type FilterProps = {
 }
 
 export default function VehicleFilters({ vehicles, onFilterChange, initialFilters }: FilterProps) {
-  const [filters, setFilters] = useState({
+  // Default filters - defined outside of state to maintain reference stability
+  const defaultFilters = useMemo(() => ({
     search: '',
     priceRange: {
       min: '',
@@ -38,9 +39,25 @@ export default function VehicleFilters({ vehicles, onFilterChange, initialFilter
     transmission: [] as string[],
     fuelType: [] as string[],
     make: [] as string[]
-  })
+  }), []);
 
-  const [counts, setCounts] = useState<FilterCounts>({})
+  const [filters, setFilters] = useState(defaultFilters);
+  const [counts, setCounts] = useState<FilterCounts>({});
+  const [debouncedFilters, setDebouncedFilters] = useState(filters);
+
+  // Apply debounced filters to parent component
+  useEffect(() => {
+    onFilterChange(debouncedFilters);
+  }, [debouncedFilters, onFilterChange]);
+
+  // Debounce filter changes
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setDebouncedFilters(filters);
+    }, filters.search !== debouncedFilters.search ? 300 : 0);
+    
+    return () => clearTimeout(timeoutId);
+  }, [filters, debouncedFilters.search]);
 
   // Calculate counts for each filter option
   useEffect(() => {
@@ -81,52 +98,30 @@ export default function VehicleFilters({ vehicles, onFilterChange, initialFilter
   useEffect(() => {
     if (initialFilters) {
       setFilters(initialFilters)
-      onFilterChange(initialFilters)
+      setDebouncedFilters(initialFilters)
     }
-  }, [initialFilters, onFilterChange])
+  }, [initialFilters])
 
-  const handleFilterChange = (category: string, value: string | string[] | { min: string, max: string }) => {
-    const newFilters = {
-      ...filters,
+  const handleFilterChange = useCallback((category: string, value: string | string[] | { min: string, max: string }) => {
+    setFilters(prevFilters => ({
+      ...prevFilters,
       [category]: value
-    }
-    setFilters(newFilters)
-    
-    // Debounce the filter change notification
-    const timeoutId = setTimeout(() => {
-      onFilterChange(newFilters)
-    }, category === 'search' ? 300 : 0)
-
-    return () => clearTimeout(timeoutId)
-  }
+    }))
+  }, []);
 
   // Reset filters
-  const handleReset = () => {
-    const initialFilters = {
-      search: '',
-      priceRange: {
-        min: '',
-        max: ''
-      },
-      year: {
-        min: '',
-        max: ''
-      },
-      condition: [],
-      bodyStyle: [],
-      transmission: [],
-      fuelType: [],
-      make: []
-    }
-    setFilters(initialFilters)
-    onFilterChange(initialFilters)
-  }
+  const handleReset = useCallback(() => {
+    setFilters(defaultFilters)
+    setDebouncedFilters(defaultFilters)
+  }, [defaultFilters]);
 
   const conditions = ['New', 'Used', 'Certified Pre-Owned']
   const bodyStyles = ['Sedan', 'SUV', 'Coupe', 'Truck', 'Van', 'Convertible']
   const transmissions = ['Automatic', 'Manual']
   const fuelTypes = ['Gasoline', 'Electric', 'Hybrid', 'Diesel']
-  const makes = Array.from(new Set(vehicles.map(v => v.make))).filter(Boolean).sort()
+  const makes = useMemo(() => 
+    Array.from(new Set(vehicles.map(v => v.make))).filter(Boolean).sort()
+  , [vehicles]);
 
   return (
     <div className="space-y-6 bg-white p-6 rounded-lg shadow-sm">

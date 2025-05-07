@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { useVehicleStore, Vehicle } from '../store/vehicleStore'
@@ -25,6 +25,7 @@ function VehicleSearchContent({ children }) {
 }
 
 export default function VehiclesPage() {
+  const searchParams = useSearchParams()
   const { vehicles, toggleFavorite, incrementViews } = useVehicleStore()
   const [filteredVehicles, setFilteredVehicles] = useState<Vehicle[]>(vehicles)
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null)
@@ -43,42 +44,7 @@ export default function VehiclesPage() {
     make: [] as string[]
   })
 
-  // Extract search params on initial load
-  useEffect(() => {
-    const query = searchParams.get('search')
-    const brand = searchParams.get('brand')
-    const price = searchParams.get('price')
-    
-    if (query || brand || price) {
-      const newFilters = { ...initialFilters }
-      
-      if (query) {
-        newFilters.search = query
-      }
-      
-      if (brand && brand !== 'all') {
-        newFilters.make = [brand]
-      }
-      
-      if (price && price !== 'all') {
-        const [min, max] = price.split('-')
-        if (min && max) {
-          newFilters.priceRange = { min, max }
-        } else if (min === '0' && max) {
-          newFilters.priceRange = { min: '0', max }
-        } else if (min && max === 'plus') {
-          newFilters.priceRange = { min, max: '' }
-        }
-      }
-      
-      setInitialFilters(newFilters)
-      handleFilterChange(newFilters)
-    } else {
-      handleFilterChange(initialFilters)
-    }
-  }, [searchParams])
-
-  const handleFilterChange = (filters: any) => {
+  const handleFilterChange = useCallback((filters: any) => {
     let filtered = [...vehicles].filter(vehicle => vehicle.status !== 'sold') // Show all vehicles except sold ones
 
     // Apply search filter
@@ -147,14 +113,41 @@ export default function VehiclesPage() {
     }
 
     setFilteredVehicles(filtered)
-  }
+  }, [vehicles])
 
-  // Apply initial filters when vehicles change
   useEffect(() => {
-    if (vehicles.length > 0) {
+    const query = searchParams.get('search')
+    const brand = searchParams.get('brand')
+    const price = searchParams.get('price')
+    
+    if (query || brand || price) {
+      const newFilters = { ...initialFilters }
+      
+      if (query) {
+        newFilters.search = query
+      }
+      
+      if (brand && brand !== 'all') {
+        newFilters.make = [brand]
+      }
+      
+      if (price && price !== 'all') {
+        const [min, max] = price.split('-')
+        if (min && max) {
+          newFilters.priceRange = { min, max }
+        } else if (min === '0' && max) {
+          newFilters.priceRange = { min: '0', max }
+        } else if (min && max === 'plus') {
+          newFilters.priceRange = { min, max: '' }
+        }
+      }
+      
+      setInitialFilters(newFilters)
+      handleFilterChange(newFilters)
+    } else {
       handleFilterChange(initialFilters)
     }
-  }, [vehicles])
+  }, [searchParams, initialFilters, handleFilterChange])
 
   const handleFavorite = (vehicleId: string, e?: React.MouseEvent) => {
     if (e) {

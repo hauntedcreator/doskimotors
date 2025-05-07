@@ -1,4 +1,5 @@
 import React, { memo } from 'react'
+import Image from 'next/image'
 
 interface LogoProps {
   className?: string
@@ -32,7 +33,7 @@ const Logo = memo(({ className = '', textColor = 'white', size = 'medium' }: Log
   return (
     <div className={`flex items-center ${className}`}>
       {/* Fixed dimensions for consistent sizing */}
-      <img 
+      <Image 
         src={logoSrc}
         alt="Doski Motors Logo"
         width={dimensions[size].width}
@@ -43,8 +44,7 @@ const Logo = memo(({ className = '', textColor = 'white', size = 'medium' }: Log
           marginRight: '-12px', // Consistent margin
         }}
         className="object-contain"
-        loading="eager"
-        fetchPriority="high"
+        priority
       />
 
       <div className="relative pl-2">

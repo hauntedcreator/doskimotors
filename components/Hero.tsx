@@ -48,8 +48,20 @@ const Hero = () => {
     video.muted = true;
     video.playbackRate = 0.8; // Slightly slowed playback for better effect
     
-    // Play the video
-    video.play().catch(e => console.error("Video playback error:", e));
+    // Play the video with error handling
+    const playVideo = async () => {
+      try {
+        await video.play();
+      } catch (e) {
+        console.error("Video playback error:", e);
+        // Try again after a short delay
+        setTimeout(() => {
+          video.play().catch(err => console.warn("Second attempt failed:", err));
+        }, 1000);
+      }
+    };
+    
+    playVideo();
     
     return () => {
       video.pause();
